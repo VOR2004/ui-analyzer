@@ -1,0 +1,58 @@
+package ru.itis.analyzer.rules.static.accessibility
+
+import ru.itis.analyzer.config.ComponentTypes
+import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.rules.base.Rule
+import ru.itis.analyzer.utils.ComponentUtils
+import ru.itis.analyzer.utils.DimensionUtils
+import ru.itis.model.AnalysisIssue
+import ru.itis.model.Severity
+import ru.itis.model.UiComponent
+
+class TouchTargetTooSmallRule : Rule {
+    override val id: String = AnalyzerStrings.RuleIds.TOUCH_TARGET_TOO_SMALL
+
+    override fun check(components: List<UiComponent>): List<AnalysisIssue> {
+        return ComponentUtils.flattenAll(components)
+            .filter { component -> isInteractive(component) }
+            .mapNotNull { component -> createIssueIfNeeded(component) }
+    }
+
+    private fun createIssueIfNeeded(component: UiComponent): AnalysisIssue? {
+        val width = DimensionUtils.parseDp(component.properties.width)
+        val height = DimensionUtils.parseDp(component.properties.height)
+
+        val widthTooSmall = width != null && width < MIN_TOUCH_TARGET_DP
+        val heightTooSmall = height != null && height < MIN_TOUCH_TARGET_DP
+
+        if (!widthTooSmall && !heightTooSmall) {
+            return null
+        }
+
+        return AnalysisIssue(
+            ruleId = id,
+            severity = Severity.WARNING,
+            componentId = component.id,
+            componentType = component.type,
+            filePath = component.filePath,
+            message = AnalyzerStrings.Messages.touchTargetTooSmall(
+                width = component.properties.width,
+                height = component.properties.height
+            ),
+            recommendation = AnalyzerStrings.Messages.TOUCH_TARGET_TOO_SMALL_RECOMMENDATION
+        )
+    }
+
+    private fun isInteractive(component: UiComponent): Boolean {
+        val type = component.type
+        return type == ComponentTypes.BUTTON ||
+            type == ComponentTypes.MATERIAL_BUTTON ||
+            type.endsWith(ComponentTypes.BUTTON_SUFFIX) ||
+            type == ComponentTypes.IMAGE_BUTTON ||
+            type.endsWith(ComponentTypes.IMAGE_BUTTON_SUFFIX)
+    }
+
+    private companion object {
+        const val MIN_TOUCH_TARGET_DP = 48f
+    }
+}

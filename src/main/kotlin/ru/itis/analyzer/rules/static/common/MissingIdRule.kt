@@ -1,0 +1,45 @@
+package ru.itis.analyzer.rules.static.common
+
+import ru.itis.analyzer.config.ComponentTypes
+import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.rules.base.Rule
+import ru.itis.analyzer.utils.ComponentUtils
+import ru.itis.model.AnalysisIssue
+import ru.itis.model.Severity
+import ru.itis.model.UiComponent
+
+class MissingIdRule : Rule {
+
+    override val id: String = AnalyzerStrings.RuleIds.MISSING_ID
+
+    override fun check(components: List<UiComponent>): List<AnalysisIssue> {
+        return ComponentUtils.flattenAll(components)
+            .filter { shouldHaveId(it) }
+            .filter { it.id.isNullOrBlank() }
+            .map { component ->
+                AnalysisIssue(
+                    ruleId = id,
+                    severity = Severity.INFO,
+                    componentId = component.id,
+                    componentType = component.type,
+                    filePath = component.filePath,
+                    message = AnalyzerStrings.Messages.missingId(component.type),
+                    recommendation = AnalyzerStrings.Messages.MISSING_ID_RECOMMENDATION
+                )
+            }
+    }
+
+    private fun shouldHaveId(component: UiComponent): Boolean {
+        return when (component.type) {
+            ComponentTypes.LINEAR_LAYOUT,
+            ComponentTypes.CONSTRAINT_LAYOUT,
+            ComponentTypes.FRAME_LAYOUT,
+            ComponentTypes.RELATIVE_LAYOUT,
+            ComponentTypes.SCROLL_VIEW,
+            ComponentTypes.HORIZONTAL_SCROLL_VIEW,
+            ComponentTypes.ANDROIDX_CONSTRAINT_LAYOUT -> false
+
+            else -> true
+        }
+    }
+}
