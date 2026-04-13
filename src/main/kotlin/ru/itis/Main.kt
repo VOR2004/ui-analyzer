@@ -57,7 +57,7 @@ fun main(args: Array<String>) {
             MissingIdRule(),
             HardcodedDimensionRule(),
             ImageWithoutContentDescriptionRule(),
-            HardcodedTextRule(resourceRepository),
+            HardcodedTextRule(),
             TouchTargetTooSmallRule(resourceRepository),
             AdaptiveTextStyleOutlierRule(),
             TooManyTextStylesOnScreenRule(),

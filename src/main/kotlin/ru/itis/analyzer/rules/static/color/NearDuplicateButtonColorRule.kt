@@ -13,7 +13,7 @@ import ru.itis.model.UiComponent
 import kotlin.collections.plusAssign
 
 class NearDuplicateButtonColorRule(
-    private val resourceRepository: ResourceRepository = ResourceRepository.empty(),
+    resourceRepository: ResourceRepository = ResourceRepository.empty(),
     private val threshold: Double = AnalyzerThresholds.NEAR_COLOR_DISTANCE
 ) : Rule {
 

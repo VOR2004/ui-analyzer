@@ -9,7 +9,8 @@ class ResourceRepository(
     private val colors: Map<String, String>,
     private val dimensions: Map<String, String> = emptyMap(),
     private val strings: Map<String, String> = emptyMap(),
-    private val styles: Map<String, StyleResource> = emptyMap()
+    private val styles: Map<String, StyleResource> = emptyMap(),
+    private val manifestInfo: AndroidManifestInfo = AndroidManifestInfo(applicationTheme = null)
 ) {
 
     fun resolveColor(value: String?): String? {
@@ -91,6 +92,10 @@ class ResourceRepository(
             return null
         }
 
+        manifestInfo.applicationTheme
+            ?.let { themeName -> resolveThemeAttributeFromStyle(themeName, attributeNames) }
+            ?.let { return it }
+
         val candidates = styles.values
             .flatMap { style ->
                 attributeNames.mapNotNull { attributeName ->
@@ -100,6 +105,15 @@ class ResourceRepository(
             .distinct()
 
         return candidates.singleOrNull()
+    }
+
+    private fun resolveThemeAttributeFromStyle(
+        styleName: String,
+        attributeNames: List<String>
+    ): String? {
+        return attributeNames.firstNotNullOfOrNull { attributeName ->
+            resolveStyleItem(styleName, attributeName)
+        }
     }
 
     private fun resolveStyleItem(
@@ -154,16 +168,27 @@ class ResourceRepository(
                 colors = emptyMap(),
                 dimensions = emptyMap(),
                 strings = emptyMap(),
-                styles = emptyMap()
+                styles = emptyMap(),
+                manifestInfo = AndroidManifestInfo(applicationTheme = null)
             )
         }
 
         fun load(projectRoot: File): ResourceRepository {
             val parser = ValuesResourceParser()
+            val manifestParser = AndroidManifestParser()
             val allColors = mutableMapOf<String, String>()
             val allDimensions = mutableMapOf<String, String>()
             val allStrings = mutableMapOf<String, String>()
             val allStyles = mutableMapOf<String, StyleResource>()
+            val manifestInfo = projectRoot
+                .walkTopDown()
+                .firstOrNull { file ->
+                    file.isFile && file.name == ProjectStructure.ANDROID_MANIFEST_FILE
+                }
+                ?.let { manifestFile ->
+                    runCatching { manifestParser.parse(manifestFile) }.getOrNull()
+                }
+                ?: AndroidManifestInfo(applicationTheme = null)
 
             val valuesFiles = projectRoot
                 .walkTopDown()
@@ -189,7 +214,8 @@ class ResourceRepository(
                 colors = allColors,
                 dimensions = allDimensions,
                 strings = allStrings,
-                styles = allStyles
+                styles = allStyles,
+                manifestInfo = manifestInfo
             )
         }
     }

@@ -30,7 +30,7 @@ class ResourceAwareRulesTest {
             TouchTargetTooSmallRule(resourceRepository),
             SuspiciousTextSizeRule(resourceRepository),
             TextContrastRule(resourceRepository),
-            HardcodedTextRule(resourceRepository),
+            HardcodedTextRule(),
             NearDuplicateButtonColorRule(resourceRepository)
         )
 

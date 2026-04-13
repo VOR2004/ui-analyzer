@@ -2,16 +2,13 @@ package ru.itis.analyzer.rules.static.text
 
 import ru.itis.analyzer.config.ResourcePatterns
 import ru.itis.analyzer.messages.AnalyzerStrings
-import ru.itis.analyzer.resource.ResourceRepository
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.Severity
 import ru.itis.model.UiComponent
 
-class HardcodedTextRule(
-    private val resourceRepository: ResourceRepository = ResourceRepository.empty()
-) : Rule {
+class HardcodedTextRule: Rule {
 
     override val id: String = AnalyzerStrings.RuleIds.HARDCODED_TEXT
 

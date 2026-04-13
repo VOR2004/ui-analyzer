@@ -1,6 +1,7 @@
 package ru.itis.analyzer.config
 
 object ProjectStructure {
+    const val ANDROID_MANIFEST_FILE = "AndroidManifest.xml"
     const val XML_EXTENSION = "xml"
     const val LAYOUT_DIRECTORY = "layout"
     const val LAYOUT_DIRECTORY_PREFIX = "layout-"

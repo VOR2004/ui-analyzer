@@ -13,6 +13,7 @@ class ResourceRepositoryTest {
         val repository = ResourceRepository.load(projectRoot)
 
         assertEquals("#3366FF", repository.resolveColor("@color/demo_primary"))
+        assertEquals("#123456", repository.resolveColor("?attr/manifestOnlyColor"))
         assertEquals("#FFFFFF", repository.resolveColor("?attr/colorOnPrimary"))
         assertEquals("#FFFFFF", repository.resolveColor("?android:attr/textColorPrimary"))
         assertEquals("48dp", repository.resolveDimension("@dimen/demo_button_height"))
