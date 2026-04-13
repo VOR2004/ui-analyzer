@@ -21,6 +21,7 @@ class StyleProfiler(
 
         return ProjectStyleProfile(
             textSizeClusters = profileData.textSizeClusters,
+            textSizeClustersByRole = profileData.textSizeClustersByRole,
             paddingClusters = profileData.paddingClusters,
             marginClusters = profileData.marginClusters,
             spacingScale = profileData.spacingScale,
@@ -39,6 +40,7 @@ class StyleProfiler(
                 ScreenStyleProfile(
                     filePath = filePath,
                     textSizeClusters = profileData.textSizeClusters,
+                    textSizeClustersByRole = profileData.textSizeClustersByRole,
                     paddingClusters = profileData.paddingClusters,
                     marginClusters = profileData.marginClusters,
                     spacingScale = profileData.spacingScale,
@@ -53,11 +55,13 @@ class StyleProfiler(
         val features = featureExtractor.extractFeatures(components)
 
         val textSizeClusters = dimensionClusterer.cluster(features.textSizes, TEXT_SIZE_TOLERANCE_DP)
+        val textSizeClustersByRole = buildTextSizeClustersByRole(features.textStyleSignatures)
         val paddingClusters = dimensionClusterer.cluster(features.paddings, SPACING_TOLERANCE_DP)
         val marginClusters = dimensionClusterer.cluster(features.margins, SPACING_TOLERANCE_DP)
 
         return ProfileData(
             textSizeClusters = textSizeClusters,
+            textSizeClustersByRole = textSizeClustersByRole,
             paddingClusters = paddingClusters,
             marginClusters = marginClusters,
             spacingScale = buildSpacingScale(paddingClusters, marginClusters),
@@ -102,6 +106,18 @@ class StyleProfiler(
                 dominant?.let { role to it }
             }
             .toMap()
+    }
+
+    private fun buildTextSizeClustersByRole(
+        signatures: List<TextStyleSignature>
+    ): Map<PredictedTextRole, List<DimensionCluster>> {
+        return signatures
+            .filter { signature -> signature.role != null && signature.textSize != null }
+            .groupBy { signature -> signature.role!! }
+            .mapValues { (_, roleSignatures) ->
+                val sizes = roleSignatures.mapNotNull { signature -> signature.textSize }
+                dimensionClusterer.cluster(sizes, TEXT_SIZE_TOLERANCE_DP)
+            }
     }
 
     private fun buildSpacingScale(
@@ -149,6 +165,7 @@ class StyleProfiler(
 
     private data class ProfileData(
         val textSizeClusters: List<DimensionCluster>,
+        val textSizeClustersByRole: Map<PredictedTextRole, List<DimensionCluster>>,
         val paddingClusters: List<DimensionCluster>,
         val marginClusters: List<DimensionCluster>,
         val spacingScale: SpacingScale,

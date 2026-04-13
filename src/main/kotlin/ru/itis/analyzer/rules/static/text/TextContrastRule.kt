@@ -68,7 +68,10 @@ class TextContrastRule(
         val contrast = ContrastUtils.calculateContrastRatio(textColor, backgroundColor)
             ?: return null
 
-        val textSize = DimensionUtils.parseSp(component.properties.textSize)
+        val textSize = DimensionUtils.parseSp(
+            resourceRepository.resolveDimension(component.properties.textSize)
+                ?: component.properties.textSize
+        )
         val minContrast = if (textSize != null && textSize >= AnalyzerThresholds.LARGE_TEXT_THRESHOLD_SP) {
             AnalyzerThresholds.LARGE_TEXT_MIN_CONTRAST
         } else {

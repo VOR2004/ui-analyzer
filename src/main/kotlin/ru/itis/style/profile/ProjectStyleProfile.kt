@@ -7,6 +7,7 @@ import ru.itis.style.signature.TextStyleSignature
 
 data class ProjectStyleProfile(
     val textSizeClusters: List<DimensionCluster>,
+    val textSizeClustersByRole: Map<PredictedTextRole, List<DimensionCluster>>,
     val paddingClusters: List<DimensionCluster>,
     val marginClusters: List<DimensionCluster>,
     val spacingScale: SpacingScale,

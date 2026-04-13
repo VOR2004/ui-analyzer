@@ -6,47 +6,47 @@
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/style_one"
+        android:id="@+id/body_style_one"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Title"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:fontFamily="sans-serif" />
-
-    <TextView
-        android:id="@+id/style_two"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Body"
+        android:text="This is a regular body paragraph with the first visual style."
         android:textSize="16sp"
         android:textStyle="normal"
         android:fontFamily="sans-serif" />
 
     <TextView
-        android:id="@+id/style_three"
+        android:id="@+id/body_style_two"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Caption"
-        android:textSize="12sp"
+        android:text="This is another body paragraph, but it uses a second visual style."
+        android:textSize="15sp"
         android:textStyle="normal"
-        android:fontFamily="sans-serif" />
-
-    <TextView
-        android:id="@+id/style_four"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Quote"
-        android:textSize="18sp"
-        android:textStyle="italic"
         android:fontFamily="serif" />
 
     <TextView
-        android:id="@+id/style_five"
+        android:id="@+id/body_style_three"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Label"
-        android:textSize="14sp"
-        android:textStyle="bold"
+        android:text="This body paragraph uses a third style and makes the role fragmented."
+        android:textSize="16sp"
+        android:textStyle="italic"
+        android:fontFamily="sans-serif" />
+
+    <TextView
+        android:id="@+id/body_style_four"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This fourth body paragraph keeps the same role but another style."
+        android:textSize="17sp"
+        android:textStyle="normal"
         android:fontFamily="monospace" />
+
+    <TextView
+        android:id="@+id/body_style_five"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This fifth body paragraph is intentionally styled differently too."
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif" />
 </LinearLayout>

@@ -49,6 +49,8 @@ object AnalyzerStrings {
     }
 
     object PropertyNames {
+        const val WIDTH = "width"
+        const val HEIGHT = "height"
         const val BACKGROUND = "background"
         const val BACKGROUND_TINT = "backgroundTint"
         const val TINT = "tint"
@@ -87,8 +89,10 @@ object AnalyzerStrings {
         fun adaptiveSpacingOutlierRecommendation(expected: String): String =
             "Проверьте, должен ли элемент использовать один из типичных отступов: $expected."
 
-        fun adaptiveTextSizeOutlier(actualValue: Float): String =
-            "Размер текста ${actualValue}sp выбивается из типичных размеров текста на этом экране."
+        fun adaptiveTextSizeOutlier(actualValue: Float, predictedRole: String? = null): String {
+            val roleSuffix = predictedRole?.let { " для predicted text role $it" }.orEmpty()
+            return "Размер текста ${actualValue}sp выбивается из типичных размеров текста$roleSuffix на этом экране."
+        }
 
         fun adaptiveTextSizeOutlierRecommendation(expected: String): String =
             "Проверьте, должен ли элемент использовать один из типичных размеров текста: $expected."

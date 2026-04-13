@@ -24,7 +24,7 @@ class AdaptiveTextStyleOutlierRule : ContextualRule {
 
         for (component in textViews) {
             val screenProfile = context.screenProfiles[component.filePath] ?: continue
-            val actualStyle = extractSignature(component) ?: continue
+            val actualStyle = extractSignature(context, component) ?: continue
             val dominantStyle = actualStyle.role
                 ?.let { role -> screenProfile.dominantTextStylesByRole[role] }
                 ?: screenProfile.dominantTextStyle
@@ -51,12 +51,20 @@ class AdaptiveTextStyleOutlierRule : ContextualRule {
         return issues
     }
 
-    private fun extractSignature(component: UiComponent): TextStyleSignature? {
-        val textSize = DimensionUtils.parseSp(component.properties.textSize)
+    private fun extractSignature(
+        context: AnalysisContext,
+        component: UiComponent
+    ): TextStyleSignature? {
+        val textSize = DimensionUtils.parseSp(
+            context.resourceRepository.resolveDimension(component.properties.textSize)
+                ?: component.properties.textSize
+        )
+        val text = context.resourceRepository.resolveString(component.properties.text)
+            ?: component.properties.text
         val signature = TextStyleSignature(
             role = textRolePredictor.predict(
                 textSize = textSize,
-                text = component.properties.text,
+                text = text,
                 textStyle = component.properties.textStyle
             ),
             textSize = textSize,

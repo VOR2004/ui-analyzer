@@ -1,5 +1,6 @@
 package ru.itis.analyzer.rules.static.common
 
+import ru.itis.analyzer.config.ResourcePatterns
 import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.utils.ComponentUtils
@@ -17,6 +18,18 @@ class HardcodedDimensionRule : Rule {
         val issues = mutableListOf<AnalysisIssue>()
 
         for (component in flatComponents) {
+            issues += checkDimensionProperty(
+                component = component,
+                propertyName = AnalyzerStrings.PropertyNames.WIDTH,
+                propertyValue = component.properties.width
+            )
+
+            issues += checkDimensionProperty(
+                component = component,
+                propertyName = AnalyzerStrings.PropertyNames.HEIGHT,
+                propertyValue = component.properties.height
+            )
+
             issues += checkDimensionProperty(
                 component = component,
                 propertyName = AnalyzerStrings.PropertyNames.TEXT_SIZE,
@@ -60,6 +73,17 @@ class HardcodedDimensionRule : Rule {
     }
 
     private fun isHardcodedDimension(value: String?): Boolean {
-        return DimensionUtils.isSp(value) || DimensionUtils.isDp(value)
+        val normalized = value?.trim() ?: return false
+        if (isResourceReference(normalized)) {
+            return false
+        }
+
+        return DimensionUtils.isSp(normalized) || DimensionUtils.isDp(normalized)
+    }
+
+    private fun isResourceReference(value: String): Boolean {
+        return value.startsWith(ResourcePatterns.DIMEN_REF_PREFIX) ||
+            value.startsWith(ResourcePatterns.ATTR_REF_PREFIX) ||
+            value.startsWith(ResourcePatterns.ANDROID_ATTR_REF_PREFIX)
     }
 }

@@ -12,12 +12,14 @@ import ru.itis.analyzer.rules.static.color.ButtonColorPerLayoutConsistencyRule
 import ru.itis.analyzer.rules.static.color.ButtonColorProjectConsistencyRule
 import ru.itis.analyzer.rules.static.accessibility.TouchTargetTooSmallRule
 import ru.itis.analyzer.rules.static.color.HardcodedColorRule
+import ru.itis.analyzer.rules.static.color.NearDuplicateButtonColorRule
 import ru.itis.analyzer.rules.static.common.HardcodedDimensionRule
 import ru.itis.analyzer.rules.static.common.MissingIdRule
 import ru.itis.analyzer.rules.static.image.ImageWithoutContentDescriptionRule
 import ru.itis.analyzer.rules.static.text.HardcodedTextRule
 import ru.itis.analyzer.rules.static.text.SuspiciousTextSizeRule
 import ru.itis.analyzer.rules.static.text.TextContrastRule
+import ru.itis.analyzer.rules.static.text.TextSizeConsistencyRule
 import ru.itis.importer.ProjectImporter
 import ru.itis.parser.XmlLayoutParser
 import ru.itis.report.JsonReportGenerator
@@ -43,22 +45,25 @@ fun main(args: Array<String>) {
     val resourceRepository = ResourceRepository.load(projectRoot)
 
     val analyzer = Analyzer(
+        resourceRepository = resourceRepository,
         rules = listOf(
-//            SuspiciousTextSizeRule(),
-//            ButtonColorPerLayoutConsistencyRule(resourceRepository),
-//            ButtonColorProjectConsistencyRule(resourceRepository),
-//            TextContrastRule(resourceRepository),
-//            HardcodedColorRule(),
-//            MissingIdRule(),
-//            HardcodedDimensionRule(),
-//            ImageWithoutContentDescriptionRule(),
-//            HardcodedTextRule(),
-//            TouchTargetTooSmallRule(),
-//            AdaptiveTextStyleOutlierRule(),
-//            TooManyTextStylesOnScreenRule(),
-//            AdaptiveTextSizeOutlierRule(),
-//            AdaptiveSpacingOutlierRule(),
-//            AdaptiveButtonStyleOutlierRule()
+            SuspiciousTextSizeRule(resourceRepository),
+            ButtonColorPerLayoutConsistencyRule(resourceRepository),
+            ButtonColorProjectConsistencyRule(resourceRepository),
+            TextContrastRule(resourceRepository),
+            TextSizeConsistencyRule(resourceRepository),
+            HardcodedColorRule(),
+            NearDuplicateButtonColorRule(resourceRepository),
+            MissingIdRule(),
+            HardcodedDimensionRule(),
+            ImageWithoutContentDescriptionRule(),
+            HardcodedTextRule(resourceRepository),
+            TouchTargetTooSmallRule(resourceRepository),
+            AdaptiveTextStyleOutlierRule(),
+            TooManyTextStylesOnScreenRule(),
+            AdaptiveTextSizeOutlierRule(),
+            AdaptiveSpacingOutlierRule(),
+            AdaptiveButtonStyleOutlierRule()
         )
     )
 

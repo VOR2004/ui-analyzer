@@ -27,7 +27,10 @@ class AdaptiveSpacingOutlierRule : ContextualRule {
                 continue
             }
 
-            val padding = DimensionUtils.parseDp(component.properties.padding)
+            val padding = DimensionUtils.parseDp(
+                context.resourceRepository.resolveDimension(component.properties.padding)
+                    ?: component.properties.padding
+            )
             if (padding != null && isOutlier(padding, commonSpacingValues)) {
                 issues += createIssue(
                     component = component,
@@ -37,7 +40,10 @@ class AdaptiveSpacingOutlierRule : ContextualRule {
                 )
             }
 
-            val margin = DimensionUtils.parseDp(component.properties.margin)
+            val margin = DimensionUtils.parseDp(
+                context.resourceRepository.resolveDimension(component.properties.margin)
+                    ?: component.properties.margin
+            )
             if (margin != null && isOutlier(margin, commonSpacingValues)) {
                 issues += createIssue(
                     component = component,

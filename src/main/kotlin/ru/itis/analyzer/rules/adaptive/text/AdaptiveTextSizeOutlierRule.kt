@@ -9,9 +9,13 @@ import ru.itis.analyzer.utils.DimensionUtils
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.Severity
 import ru.itis.model.UiComponent
+import ru.itis.style.cluster.DimensionCluster
+import ru.itis.style.signature.PredictedTextRole
+import ru.itis.style.signature.TextRolePredictor
 
 class AdaptiveTextSizeOutlierRule : ContextualRule {
     override val id: String = AnalyzerStrings.RuleIds.ADAPTIVE_TEXT_SIZE_OUTLIER
+    private val textRolePredictor = TextRolePredictor()
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> = emptyList()
 
@@ -21,16 +25,30 @@ class AdaptiveTextSizeOutlierRule : ContextualRule {
 
         for (component in textViews) {
             val screenProfile = context.screenProfiles[component.filePath] ?: continue
-            val textSize = DimensionUtils.parseSp(component.properties.textSize) ?: continue
-            val commonValues = screenProfile.textSizeClusters
-                .filter { cluster -> cluster.frequency > MIN_COMMON_CLUSTER_FREQUENCY }
-                .map { cluster -> cluster.representativeValue }
+            val textSize = DimensionUtils.parseSp(
+                context.resourceRepository.resolveDimension(component.properties.textSize)
+                    ?: component.properties.textSize
+            ) ?: continue
+            val text = context.resourceRepository.resolveString(component.properties.text)
+                ?: component.properties.text
+            val predictedRole = textRolePredictor.predict(
+                textSize = textSize,
+                text = text,
+                textStyle = component.properties.textStyle
+            )
+            val roleClusters = predictedRole
+                ?.let { role -> screenProfile.textSizeClustersByRole[role] }
+                .orEmpty()
+            val roleCommonValues = commonValues(roleClusters)
+            val fallbackCommonValues = commonValues(screenProfile.textSizeClusters)
+            val commonValues = roleCommonValues.ifEmpty { fallbackCommonValues }
 
             if (isOutlier(textSize, commonValues)) {
                 issues += createIssue(
                     component = component,
                     actualValue = textSize,
-                    expectedValues = commonValues
+                    expectedValues = commonValues,
+                    predictedRole = predictedRole.takeIf { roleCommonValues.isNotEmpty() }
                 )
             }
         }
@@ -46,10 +64,17 @@ class AdaptiveTextSizeOutlierRule : ContextualRule {
         return commonValues.none { abs(it - value) <= TEXT_SIZE_TOLERANCE_SP }
     }
 
+    private fun commonValues(clusters: List<DimensionCluster>): List<Float> {
+        return clusters
+            .filter { cluster -> cluster.frequency > MIN_COMMON_CLUSTER_FREQUENCY }
+            .map { cluster -> cluster.representativeValue }
+    }
+
     private fun createIssue(
         component: UiComponent,
         actualValue: Float,
-        expectedValues: List<Float>
+        expectedValues: List<Float>,
+        predictedRole: PredictedTextRole?
     ): AnalysisIssue {
         val expected = expectedValues.joinToString(", ") { "${it}sp" }
 
@@ -59,7 +84,10 @@ class AdaptiveTextSizeOutlierRule : ContextualRule {
             componentId = component.id,
             componentType = component.type,
             filePath = component.filePath,
-            message = AnalyzerStrings.Messages.adaptiveTextSizeOutlier(actualValue),
+            message = AnalyzerStrings.Messages.adaptiveTextSizeOutlier(
+                actualValue = actualValue,
+                predictedRole = predictedRole?.name
+            ),
             recommendation = AnalyzerStrings.Messages.adaptiveTextSizeOutlierRecommendation(expected)
         )
     }

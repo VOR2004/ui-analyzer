@@ -1,6 +1,7 @@
 package ru.itis.analyzer.rules.static.image
 
 import ru.itis.analyzer.config.ComponentTypes
+import ru.itis.analyzer.config.ResourcePatterns
 import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.utils.ComponentUtils
@@ -15,7 +16,7 @@ class ImageWithoutContentDescriptionRule : Rule {
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
         return ComponentUtils.findImageComponents(components)
             .filter { shouldHaveContentDescription(it) }
-            .filter { it.properties.contentDescription.isNullOrBlank() }
+            .filter { hasMissingAccessibleDescription(it) }
             .map { component ->
                 AnalysisIssue(
                     ruleId = id,
@@ -43,5 +44,27 @@ class ImageWithoutContentDescriptionRule : Rule {
             else -> component.type.endsWith(ComponentTypes.IMAGE_VIEW_SUFFIX) ||
                     component.type.endsWith(ComponentTypes.IMAGE_BUTTON_SUFFIX)
         }
+    }
+
+    private fun hasMissingAccessibleDescription(component: UiComponent): Boolean {
+        val contentDescription = component.properties.contentDescription?.trim()
+
+        if (contentDescription.isNullOrBlank()) {
+            return true
+        }
+
+        if (contentDescription == ResourcePatterns.NULL_REF && isImageButton(component)) {
+            return true
+        }
+
+        return false
+    }
+
+    private fun isImageButton(component: UiComponent): Boolean {
+        return component.type == ComponentTypes.IMAGE_BUTTON ||
+            component.type == ComponentTypes.ANDROID_WIDGET_IMAGE_BUTTON ||
+            component.type == ComponentTypes.APP_COMPAT_IMAGE_BUTTON ||
+            component.type == ComponentTypes.ANDROIDX_APP_COMPAT_IMAGE_BUTTON ||
+            component.type.endsWith(ComponentTypes.IMAGE_BUTTON_SUFFIX)
     }
 }

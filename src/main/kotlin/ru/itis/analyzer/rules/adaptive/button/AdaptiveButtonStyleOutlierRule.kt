@@ -3,6 +3,7 @@ package ru.itis.analyzer.rules.adaptive.button
 import kotlin.math.abs
 import ru.itis.analyzer.core.AnalysisContext
 import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.resource.ResourceRepository
 import ru.itis.analyzer.rules.base.ContextualRule
 import ru.itis.analyzer.utils.ColorUtils
 import ru.itis.analyzer.utils.ComponentUtils
@@ -24,7 +25,7 @@ class AdaptiveButtonStyleOutlierRule : ContextualRule {
         for (button in buttons) {
             val screenProfile = context.screenProfiles[button.filePath] ?: continue
             val dominantStyle = screenProfile.dominantButtonStyle ?: continue
-            val actualStyle = extractSignature(button) ?: continue
+            val actualStyle = extractSignature(context.resourceRepository, button) ?: continue
             val differences = collectDifferences(actualStyle, dominantStyle)
 
             if (differences.size >= MIN_DIFFERENCE_COUNT) {
@@ -47,17 +48,34 @@ class AdaptiveButtonStyleOutlierRule : ContextualRule {
         return issues
     }
 
-    private fun extractSignature(component: UiComponent): ButtonStyleSignature? {
+    private fun extractSignature(
+        resourceRepository: ResourceRepository,
+        component: UiComponent
+    ): ButtonStyleSignature? {
         val signature = ButtonStyleSignature(
-            background = ColorUtils.extractComparableColor(
+            background = resolveColor(
+                resourceRepository,
                 component.properties.backgroundTint ?: component.properties.backgroundColor
             ),
-            textColor = ColorUtils.extractComparableColor(component.properties.textColor),
-            textSize = DimensionUtils.parseSp(component.properties.textSize),
-            padding = DimensionUtils.parseDp(component.properties.padding)
+            textColor = resolveColor(resourceRepository, component.properties.textColor),
+            textSize = DimensionUtils.parseSp(
+                resourceRepository.resolveDimension(component.properties.textSize)
+                    ?: component.properties.textSize
+            ),
+            padding = DimensionUtils.parseDp(
+                resourceRepository.resolveDimension(component.properties.padding)
+                    ?: component.properties.padding
+            )
         )
 
         return signature.takeIf { it.isCompleteEnough() }
+    }
+
+    private fun resolveColor(
+        resourceRepository: ResourceRepository,
+        value: String?
+    ): String? {
+        return resourceRepository.resolveColor(value) ?: ColorUtils.extractComparableColor(value)
     }
 
     private fun collectDifferences(

@@ -4,6 +4,7 @@ import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertTrue
 import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.resource.ResourceRepository
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.rules.adaptive.button.AdaptiveButtonStyleOutlierRule
 import ru.itis.analyzer.rules.adaptive.layout.AdaptiveSpacingOutlierRule
@@ -21,9 +22,10 @@ class AdaptiveRulesFixtureTest {
         val projectRoot = File("src/test/resources/demo-project")
         val importer = ProjectImporter()
         val parser = XmlLayoutParser()
+        val resourceRepository = ResourceRepository.load(projectRoot)
 
         val rules: List<Rule> = listOf(
-            TouchTargetTooSmallRule(),
+            TouchTargetTooSmallRule(resourceRepository),
             AdaptiveButtonStyleOutlierRule(),
             AdaptiveTextStyleOutlierRule(),
             TooManyTextStylesOnScreenRule(),
@@ -31,7 +33,10 @@ class AdaptiveRulesFixtureTest {
             AdaptiveSpacingOutlierRule()
         )
 
-        val analyzer = Analyzer(rules)
+        val analyzer = Analyzer(
+            rules = rules,
+            resourceRepository = resourceRepository
+        )
         val components = importer.findLayoutXmlFiles(projectRoot).map { parser.parse(it) }
         val issues = analyzer.analyze(components)
 

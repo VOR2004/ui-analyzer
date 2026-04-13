@@ -21,13 +21,16 @@ class TooManyTextStylesOnScreenRule : ContextualRule {
 
     override fun check(context: AnalysisContext): List<AnalysisIssue> {
         return context.components.flatMap { root ->
-            analyzeScreen(root)
+            analyzeScreen(context, root)
         }
     }
 
-    private fun analyzeScreen(root: UiComponent): List<AnalysisIssue> {
+    private fun analyzeScreen(
+        context: AnalysisContext,
+        root: UiComponent
+    ): List<AnalysisIssue> {
         val textStylesByRole = ComponentUtils.findTextViews(listOf(root))
-            .mapNotNull { component -> extractSignature(component) }
+            .mapNotNull { component -> extractSignature(context, component) }
             .groupBy { signature -> signature.role ?: PredictedTextRole.BODY }
 
         return textStylesByRole.mapNotNull { (role, styles) ->
@@ -74,12 +77,20 @@ class TooManyTextStylesOnScreenRule : ContextualRule {
         )
     }
 
-    private fun extractSignature(component: UiComponent): TextStyleSignature? {
-        val textSize = DimensionUtils.parseSp(component.properties.textSize)
+    private fun extractSignature(
+        context: AnalysisContext,
+        component: UiComponent
+    ): TextStyleSignature? {
+        val textSize = DimensionUtils.parseSp(
+            context.resourceRepository.resolveDimension(component.properties.textSize)
+                ?: component.properties.textSize
+        )
+        val text = context.resourceRepository.resolveString(component.properties.text)
+            ?: component.properties.text
         val signature = TextStyleSignature(
             role = textRolePredictor.predict(
                 textSize = textSize,
-                text = component.properties.text,
+                text = text,
                 textStyle = component.properties.textStyle
             ),
             textSize = textSize,

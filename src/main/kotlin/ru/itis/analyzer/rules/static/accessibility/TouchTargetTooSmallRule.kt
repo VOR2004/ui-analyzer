@@ -2,6 +2,7 @@ package ru.itis.analyzer.rules.static.accessibility
 
 import ru.itis.analyzer.config.ComponentTypes
 import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.resource.ResourceRepository
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.analyzer.utils.DimensionUtils
@@ -9,7 +10,9 @@ import ru.itis.model.AnalysisIssue
 import ru.itis.model.Severity
 import ru.itis.model.UiComponent
 
-class TouchTargetTooSmallRule : Rule {
+class TouchTargetTooSmallRule(
+    private val resourceRepository: ResourceRepository = ResourceRepository.empty()
+) : Rule {
     override val id: String = AnalyzerStrings.RuleIds.TOUCH_TARGET_TOO_SMALL
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
@@ -19,8 +22,8 @@ class TouchTargetTooSmallRule : Rule {
     }
 
     private fun createIssueIfNeeded(component: UiComponent): AnalysisIssue? {
-        val width = DimensionUtils.parseDp(component.properties.width)
-        val height = DimensionUtils.parseDp(component.properties.height)
+        val width = DimensionUtils.parseDp(resolveDimension(component.properties.width))
+        val height = DimensionUtils.parseDp(resolveDimension(component.properties.height))
 
         val widthTooSmall = width != null && width < MIN_TOUCH_TARGET_DP
         val heightTooSmall = height != null && height < MIN_TOUCH_TARGET_DP
@@ -50,6 +53,10 @@ class TouchTargetTooSmallRule : Rule {
             type.endsWith(ComponentTypes.BUTTON_SUFFIX) ||
             type == ComponentTypes.IMAGE_BUTTON ||
             type.endsWith(ComponentTypes.IMAGE_BUTTON_SUFFIX)
+    }
+
+    private fun resolveDimension(value: String?): String? {
+        return resourceRepository.resolveDimension(value) ?: value
     }
 
     private companion object {
