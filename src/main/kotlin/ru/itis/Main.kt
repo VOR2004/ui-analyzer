@@ -4,7 +4,7 @@ import ru.itis.analyzer.Analyzer
 import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.analyzer.rules.adaptive.button.AdaptiveButtonStyleOutlierRule
 import ru.itis.analyzer.rules.adaptive.layout.AdaptiveSpacingOutlierRule
-import ru.itis.analyzer.resource.ResourceRepository
+import ru.itis.source.xml.resource.ResourceRepository
 import ru.itis.analyzer.rules.adaptive.text.AdaptiveTextSizeOutlierRule
 import ru.itis.analyzer.rules.adaptive.text.AdaptiveTextStyleOutlierRule
 import ru.itis.analyzer.rules.adaptive.text.TooManyTextStylesOnScreenRule
@@ -16,13 +16,16 @@ import ru.itis.analyzer.rules.static.color.NearDuplicateButtonColorRule
 import ru.itis.analyzer.rules.static.common.HardcodedDimensionRule
 import ru.itis.analyzer.rules.static.common.MissingIdRule
 import ru.itis.analyzer.rules.static.image.ImageWithoutContentDescriptionRule
+import ru.itis.analyzer.rules.static.structure.DeepLayoutNestingRule
 import ru.itis.analyzer.rules.static.text.HardcodedTextRule
 import ru.itis.analyzer.rules.static.text.SuspiciousTextSizeRule
 import ru.itis.analyzer.rules.static.text.TextContrastRule
 import ru.itis.analyzer.rules.static.text.TextSizeConsistencyRule
-import ru.itis.importer.ProjectImporter
-import ru.itis.parser.XmlLayoutParser
 import ru.itis.report.JsonReportGenerator
+import ru.itis.source.compose.importer.ComposeProjectImporter
+import ru.itis.source.compose.parser.ComposeLayoutParser
+import ru.itis.source.xml.importer.XmlProjectImporter
+import ru.itis.source.xml.parser.XmlLayoutParser
 import java.io.File
 
 fun main(args: Array<String>) {
@@ -40,8 +43,10 @@ fun main(args: Array<String>) {
         return
     }
 
-    val importer = ProjectImporter()
-    val parser = XmlLayoutParser()
+    val xmlImporter = XmlProjectImporter()
+    val xmlParser = XmlLayoutParser()
+    val composeImporter = ComposeProjectImporter()
+    val composeParser = ComposeLayoutParser()
     val resourceRepository = ResourceRepository.load(projectRoot)
 
     val analyzer = Analyzer(
@@ -57,6 +62,7 @@ fun main(args: Array<String>) {
             MissingIdRule(),
             HardcodedDimensionRule(),
             ImageWithoutContentDescriptionRule(),
+            DeepLayoutNestingRule(),
             HardcodedTextRule(),
             TouchTargetTooSmallRule(resourceRepository),
             AdaptiveTextStyleOutlierRule(),
@@ -69,17 +75,27 @@ fun main(args: Array<String>) {
 
     val reportGenerator = JsonReportGenerator()
 
-    val xmlFiles = importer.findLayoutXmlFiles(projectRoot)
+    val xmlFiles = xmlImporter.findLayoutXmlFiles(projectRoot)
     println(AnalyzerStrings.Cli.foundLayoutXmlFiles(xmlFiles.size))
 
-    val components = xmlFiles.mapNotNull { file ->
-        runCatching { parser.parse(file) }
+    val xmlComponents = xmlFiles.mapNotNull { file ->
+        runCatching { xmlParser.parse(file) }
             .onFailure { error ->
                 println(AnalyzerStrings.Cli.failedToParse(file.path, error.message))
             }
             .getOrNull()
     }
 
+    val composeFiles = composeImporter.findComposeKotlinFiles(projectRoot)
+    val composeComponents = composeFiles.flatMap { file ->
+        runCatching { composeParser.parse(file) }
+            .onFailure { error ->
+                println(AnalyzerStrings.Cli.failedToParse(file.path, error.message))
+            }
+            .getOrDefault(emptyList())
+    }
+
+    val components = xmlComponents + composeComponents
     val issues = analyzer.analyze(components)
     reportGenerator.writeReport(File(outputPath), components, issues)
 

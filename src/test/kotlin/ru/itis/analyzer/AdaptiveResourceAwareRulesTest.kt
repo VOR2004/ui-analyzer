@@ -4,13 +4,13 @@ import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertTrue
 import ru.itis.analyzer.messages.AnalyzerStrings
-import ru.itis.analyzer.resource.ResourceRepository
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.rules.adaptive.button.AdaptiveButtonStyleOutlierRule
 import ru.itis.analyzer.rules.adaptive.layout.AdaptiveSpacingOutlierRule
 import ru.itis.analyzer.rules.adaptive.text.AdaptiveTextSizeOutlierRule
 import ru.itis.analyzer.rules.adaptive.text.AdaptiveTextStyleOutlierRule
-import ru.itis.parser.XmlLayoutParser
+import ru.itis.source.xml.parser.XmlLayoutParser
+import ru.itis.source.xml.resource.ResourceRepository
 
 class AdaptiveResourceAwareRulesTest {
 

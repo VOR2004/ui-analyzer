@@ -4,8 +4,9 @@ import ru.itis.analyzer.config.AnalyzerFormat
 import ru.itis.analyzer.config.AnalyzerThresholds
 import ru.itis.analyzer.helpers.ButtonColorAnalysisHelper
 import ru.itis.analyzer.messages.AnalyzerStrings
-import ru.itis.analyzer.resource.ResourceRepository
+import ru.itis.source.xml.resource.ResourceRepository
 import ru.itis.analyzer.rules.base.Rule
+import ru.itis.analyzer.rules.base.onlyXmlRoots
 import ru.itis.analyzer.utils.ColorUtils
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.Severity
@@ -21,7 +22,7 @@ class NearDuplicateButtonColorRule(
     private val helper = ButtonColorAnalysisHelper(resourceRepository)
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
-        val buttonsWithColors = helper.resolveButtonEntries(components)
+        val buttonsWithColors = helper.resolveButtonEntries(components.onlyXmlRoots())
             .map { entry -> entry.button to entry.color }
 
         if (buttonsWithColors.size < 2) return emptyList()

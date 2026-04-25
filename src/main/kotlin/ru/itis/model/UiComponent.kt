@@ -8,6 +8,7 @@ data class UiComponent(
     val type: String,
     val sourceType: SourceType,
     val filePath: String,
+    val treePath: String? = null,
     val properties: UiProperties,
     val children: List<UiComponent> = emptyList()
 )

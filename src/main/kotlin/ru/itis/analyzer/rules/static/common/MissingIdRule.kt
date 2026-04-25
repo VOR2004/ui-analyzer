@@ -6,6 +6,7 @@ import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.Severity
+import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 
 class MissingIdRule : Rule {
@@ -30,6 +31,10 @@ class MissingIdRule : Rule {
     }
 
     private fun shouldHaveId(component: UiComponent): Boolean {
+        if (component.sourceType == SourceType.COMPOSE) {
+            return false
+        }
+
         return when (component.type) {
             ComponentTypes.LINEAR_LAYOUT,
             ComponentTypes.CONSTRAINT_LAYOUT,

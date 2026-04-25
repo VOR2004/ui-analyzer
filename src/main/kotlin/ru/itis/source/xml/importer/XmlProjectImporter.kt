@@ -1,9 +1,9 @@
-package ru.itis.importer
+package ru.itis.source.xml.importer
 
 import ru.itis.analyzer.config.ProjectStructure
 import java.io.File
 
-class ProjectImporter {
+class XmlProjectImporter {
 
     fun findLayoutXmlFiles(projectRoot: File): List<File> {
         if (!projectRoot.exists() || !projectRoot.isDirectory) {

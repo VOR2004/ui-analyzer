@@ -2,7 +2,7 @@ package ru.itis.analyzer.rules.static.text
 
 import ru.itis.analyzer.config.AnalyzerThresholds
 import ru.itis.analyzer.messages.AnalyzerStrings
-import ru.itis.analyzer.resource.ResourceRepository
+import ru.itis.source.xml.resource.ResourceRepository
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.analyzer.utils.DimensionUtils

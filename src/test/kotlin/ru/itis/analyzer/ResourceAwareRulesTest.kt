@@ -5,14 +5,14 @@ import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import ru.itis.analyzer.messages.AnalyzerStrings
-import ru.itis.analyzer.resource.ResourceRepository
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.rules.static.accessibility.TouchTargetTooSmallRule
 import ru.itis.analyzer.rules.static.color.NearDuplicateButtonColorRule
 import ru.itis.analyzer.rules.static.text.HardcodedTextRule
 import ru.itis.analyzer.rules.static.text.SuspiciousTextSizeRule
 import ru.itis.analyzer.rules.static.text.TextContrastRule
-import ru.itis.parser.XmlLayoutParser
+import ru.itis.source.xml.parser.XmlLayoutParser
+import ru.itis.source.xml.resource.ResourceRepository
 
 class ResourceAwareRulesTest {
 

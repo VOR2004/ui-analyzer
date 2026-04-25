@@ -6,6 +6,7 @@ import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.Severity
+import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 
 class HardcodedTextRule: Rule {
@@ -15,6 +16,8 @@ class HardcodedTextRule: Rule {
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
         return ComponentUtils.flattenAll(components)
             .mapNotNull { component ->
+                if (component.sourceType != SourceType.XML) return@mapNotNull null
+
                 val text = component.properties.text ?: return@mapNotNull null
 
                 if (!isHardcodedText(text)) return@mapNotNull null

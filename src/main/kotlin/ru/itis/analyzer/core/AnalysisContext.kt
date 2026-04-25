@@ -1,6 +1,6 @@
 package ru.itis.analyzer.core
 
-import ru.itis.analyzer.resource.ResourceRepository
+import ru.itis.source.xml.resource.ResourceRepository
 import ru.itis.model.UiComponent
 import ru.itis.style.profile.ProjectStyleProfile
 import ru.itis.style.profile.ScreenStyleProfile

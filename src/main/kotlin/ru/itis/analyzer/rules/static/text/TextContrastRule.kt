@@ -3,8 +3,9 @@ package ru.itis.analyzer.rules.static.text
 import ru.itis.analyzer.config.AnalyzerThresholds
 import ru.itis.analyzer.config.ComponentTypes
 import ru.itis.analyzer.messages.AnalyzerStrings
-import ru.itis.analyzer.resource.ResourceRepository
+import ru.itis.source.xml.resource.ResourceRepository
 import ru.itis.analyzer.rules.base.Rule
+import ru.itis.analyzer.rules.base.onlyXmlRoots
 import ru.itis.analyzer.utils.ContrastUtils
 import ru.itis.analyzer.utils.DimensionUtils
 import ru.itis.analyzer.utils.TreeUtils
@@ -25,7 +26,7 @@ class TextContrastRule(
         val issues = mutableListOf<AnalysisIssue>()
         val effectiveBackgrounds = mutableMapOf<UiComponent, String?>()
 
-        TreeUtils.traverse(components) { context ->
+        TreeUtils.traverse(components.onlyXmlRoots()) { context ->
             val effectiveBackground = resolveEffectiveBackground(context, effectiveBackgrounds)
             effectiveBackgrounds[context.component] = effectiveBackground
 

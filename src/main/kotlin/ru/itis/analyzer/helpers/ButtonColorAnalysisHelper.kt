@@ -2,7 +2,7 @@ package ru.itis.analyzer.helpers
 
 import ru.itis.analyzer.config.AnalyzerFormat
 import ru.itis.analyzer.config.ComponentTypes
-import ru.itis.analyzer.resource.ResourceRepository
+import ru.itis.source.xml.resource.ResourceRepository
 import ru.itis.analyzer.utils.ColorUtils
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.model.UiComponent

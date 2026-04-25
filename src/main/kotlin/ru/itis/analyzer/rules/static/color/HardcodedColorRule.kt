@@ -2,8 +2,8 @@ package ru.itis.analyzer.rules.static.color
 
 import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.analyzer.rules.base.Rule
+import ru.itis.analyzer.rules.base.onlyXmlFlatComponents
 import ru.itis.analyzer.utils.ColorUtils
-import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.Severity
 import ru.itis.model.UiComponent
@@ -13,7 +13,7 @@ class HardcodedColorRule : Rule {
     override val id: String = AnalyzerStrings.RuleIds.HARDCODED_COLOR
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
-        val flatComponents = ComponentUtils.flattenAll(components)
+        val flatComponents = components.onlyXmlFlatComponents()
         val issues = mutableListOf<AnalysisIssue>()
 
         for (component in flatComponents) {

@@ -1,7 +1,7 @@
 package ru.itis.analyzer
 
 import ru.itis.analyzer.core.AnalysisContext
-import ru.itis.analyzer.resource.ResourceRepository
+import ru.itis.source.xml.resource.ResourceRepository
 import ru.itis.analyzer.rules.base.ContextualRule
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.model.AnalysisIssue

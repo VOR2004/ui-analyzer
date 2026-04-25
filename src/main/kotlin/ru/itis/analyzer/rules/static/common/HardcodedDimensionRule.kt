@@ -3,7 +3,7 @@ package ru.itis.analyzer.rules.static.common
 import ru.itis.analyzer.config.ResourcePatterns
 import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.analyzer.rules.base.Rule
-import ru.itis.analyzer.utils.ComponentUtils
+import ru.itis.analyzer.rules.base.onlyXmlFlatComponents
 import ru.itis.analyzer.utils.DimensionUtils
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.Severity
@@ -14,7 +14,7 @@ class HardcodedDimensionRule : Rule {
     override val id: String = AnalyzerStrings.RuleIds.HARDCODED_DIMENSION
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
-        val flatComponents = ComponentUtils.flattenAll(components)
+        val flatComponents = components.onlyXmlFlatComponents()
         val issues = mutableListOf<AnalysisIssue>()
 
         for (component in flatComponents) {

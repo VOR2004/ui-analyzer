@@ -20,6 +20,7 @@ object AnalyzerStrings {
         const val TEXT_CONTRAST = "text-contrast"
         const val TEXT_SIZE_CONSISTENCY = "text-size-consistency"
         const val TOUCH_TARGET_TOO_SMALL = "touch-target-too-small"
+        const val DEEP_LAYOUT_NESTING = "deep-layout-nesting"
 
         fun nearDuplicateCluster(baseId: String): String = "$baseId-near-duplicate-cluster"
     }
@@ -210,6 +211,12 @@ object AnalyzerStrings {
 
         fun textSizeConsistency(size: String, dominantSize: String?): String =
             "Размер текста $size отличается от наиболее часто используемого размера $dominantSize."
+
+        fun deepLayoutNesting(depth: Int): String =
+            "Глубина вложенности layout-дерева слишком большая: $depth уровней."
+
+        const val DEEP_LAYOUT_NESTING_RECOMMENDATION =
+            "Проверьте структуру разметки: глубокую вложенность стоит упростить через ConstraintLayout, include/merge или более плоскую композицию."
 
         const val TEXT_SIZE_CONSISTENCY_RECOMMENDATION =
             "Проверьте, должен ли этот текст использовать общий типографический стиль."

@@ -2,8 +2,9 @@ package ru.itis.analyzer.rules.static.text
 
 import ru.itis.analyzer.config.ComponentTypes
 import ru.itis.analyzer.messages.AnalyzerStrings
-import ru.itis.analyzer.resource.ResourceRepository
+import ru.itis.source.xml.resource.ResourceRepository
 import ru.itis.analyzer.rules.base.Rule
+import ru.itis.analyzer.rules.base.onlyXmlFlatComponents
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.Severity
 import ru.itis.model.UiComponent
@@ -14,7 +15,7 @@ class TextSizeConsistencyRule(
     override val id: String = AnalyzerStrings.RuleIds.TEXT_SIZE_CONSISTENCY
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
-        val flat = components.flatMap { flatten(it) }
+        val flat = components.onlyXmlFlatComponents()
         val textViews = flat.filter {
             it.type.endsWith(ComponentTypes.TEXT_VIEW_SUFFIX) || it.type == ComponentTypes.TEXT_VIEW
         }
@@ -46,10 +47,6 @@ class TextSizeConsistencyRule(
                     recommendation = AnalyzerStrings.Messages.TEXT_SIZE_CONSISTENCY_RECOMMENDATION
                 )
             }
-    }
-
-    private fun flatten(component: UiComponent): List<UiComponent> {
-        return listOf(component) + component.children.flatMap { flatten(it) }
     }
 
     private fun resolveDimension(value: String): String {

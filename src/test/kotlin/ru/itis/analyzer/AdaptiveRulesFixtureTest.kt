@@ -4,7 +4,6 @@ import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertTrue
 import ru.itis.analyzer.messages.AnalyzerStrings
-import ru.itis.analyzer.resource.ResourceRepository
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.rules.adaptive.button.AdaptiveButtonStyleOutlierRule
 import ru.itis.analyzer.rules.adaptive.layout.AdaptiveSpacingOutlierRule
@@ -12,15 +11,16 @@ import ru.itis.analyzer.rules.adaptive.text.AdaptiveTextSizeOutlierRule
 import ru.itis.analyzer.rules.adaptive.text.AdaptiveTextStyleOutlierRule
 import ru.itis.analyzer.rules.adaptive.text.TooManyTextStylesOnScreenRule
 import ru.itis.analyzer.rules.static.accessibility.TouchTargetTooSmallRule
-import ru.itis.importer.ProjectImporter
-import ru.itis.parser.XmlLayoutParser
+import ru.itis.source.xml.importer.XmlProjectImporter
+import ru.itis.source.xml.parser.XmlLayoutParser
+import ru.itis.source.xml.resource.ResourceRepository
 
 class AdaptiveRulesFixtureTest {
 
     @Test
     fun `adaptive demo project produces issues for spacing and text size outliers`() {
         val projectRoot = File("src/test/resources/demo-project")
-        val importer = ProjectImporter()
+        val importer = XmlProjectImporter()
         val parser = XmlLayoutParser()
         val resourceRepository = ResourceRepository.load(projectRoot)
 

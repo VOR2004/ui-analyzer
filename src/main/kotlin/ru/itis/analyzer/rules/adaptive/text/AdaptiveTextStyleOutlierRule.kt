@@ -5,26 +5,25 @@ import ru.itis.analyzer.core.AnalysisContext
 import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.analyzer.rules.base.ContextualRule
 import ru.itis.analyzer.utils.ComponentUtils
-import ru.itis.analyzer.utils.DimensionUtils
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.Severity
 import ru.itis.model.UiComponent
+import ru.itis.style.extractor.TextStyleSignatureExtractor
 import ru.itis.style.signature.TextStyleSignature
-import ru.itis.style.signature.TextRolePredictor
 
 class AdaptiveTextStyleOutlierRule : ContextualRule {
     override val id: String = AnalyzerStrings.RuleIds.ADAPTIVE_TEXT_STYLE_OUTLIER
-    private val textRolePredictor = TextRolePredictor()
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> = emptyList()
 
     override fun check(context: AnalysisContext): List<AnalysisIssue> {
         val issues = mutableListOf<AnalysisIssue>()
         val textViews = ComponentUtils.findTextViews(context.components)
+        val signatureExtractor = TextStyleSignatureExtractor(context.resourceRepository)
 
         for (component in textViews) {
             val screenProfile = context.screenProfiles[component.filePath] ?: continue
-            val actualStyle = extractSignature(context, component) ?: continue
+            val actualStyle = signatureExtractor.extract(component) ?: continue
             val dominantStyle = actualStyle.role
                 ?.let { role -> screenProfile.dominantTextStylesByRole[role] }
                 ?: screenProfile.dominantTextStyle
@@ -49,30 +48,6 @@ class AdaptiveTextStyleOutlierRule : ContextualRule {
         }
 
         return issues
-    }
-
-    private fun extractSignature(
-        context: AnalysisContext,
-        component: UiComponent
-    ): TextStyleSignature? {
-        val textSize = DimensionUtils.parseSp(
-            context.resourceRepository.resolveDimension(component.properties.textSize)
-                ?: component.properties.textSize
-        )
-        val text = context.resourceRepository.resolveString(component.properties.text)
-            ?: component.properties.text
-        val signature = TextStyleSignature(
-            role = textRolePredictor.predict(
-                textSize = textSize,
-                text = text,
-                textStyle = component.properties.textStyle
-            ),
-            textSize = textSize,
-            textStyle = component.properties.textStyle?.trim()?.ifBlank { null },
-            fontFamily = component.properties.fontFamily?.trim()?.ifBlank { null }
-        )
-
-        return signature.takeIf { it.isCompleteEnough() }
     }
 
     private fun collectDifferences(

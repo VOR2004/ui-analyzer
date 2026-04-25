@@ -19,7 +19,9 @@ object ComponentUtils {
 
     fun findTextViews(components: List<UiComponent>): List<UiComponent> {
         return flattenAll(components).filter {
-            it.type == ComponentTypes.TEXT_VIEW || it.type.endsWith(ComponentTypes.TEXT_VIEW_SUFFIX)
+            it.type == ComponentTypes.TEXT_VIEW ||
+                    it.type.endsWith(ComponentTypes.TEXT_VIEW_SUFFIX) ||
+                    it.type == ComponentTypes.COMPOSE_TEXT
         }
     }
 
@@ -27,7 +29,8 @@ object ComponentUtils {
         return flattenAll(components).filter {
             it.type == ComponentTypes.BUTTON ||
                     it.type.endsWith(ComponentTypes.BUTTON_SUFFIX) ||
-                    it.type == ComponentTypes.MATERIAL_BUTTON
+                    it.type == ComponentTypes.MATERIAL_BUTTON ||
+                    it.type == ComponentTypes.COMPOSE_BUTTON
         }
     }
 
@@ -36,7 +39,9 @@ object ComponentUtils {
             it.type == ComponentTypes.IMAGE_VIEW ||
                     it.type.endsWith(ComponentTypes.IMAGE_VIEW_SUFFIX) ||
                     it.type == ComponentTypes.IMAGE_BUTTON ||
-                    it.type.endsWith(ComponentTypes.IMAGE_BUTTON_SUFFIX)
+                    it.type.endsWith(ComponentTypes.IMAGE_BUTTON_SUFFIX) ||
+                    it.type == ComponentTypes.COMPOSE_IMAGE ||
+                    it.type == ComponentTypes.COMPOSE_ICON
         }
     }
 }

@@ -1,9 +1,9 @@
-package ru.itis.analyzer.resource
+package ru.itis.source.xml.resource
 
 import org.w3c.dom.Element
 import java.io.File
-import javax.xml.parsers.DocumentBuilderFactory
 import ru.itis.analyzer.config.ResourcePatterns
+import ru.itis.source.xml.parser.SecureXmlDocumentParser
 
 class ValuesResourceParser {
 
@@ -13,10 +13,8 @@ class ValuesResourceParser {
         val strings = mutableMapOf<String, String>()
         val styles = mutableMapOf<String, StyleResource>()
 
-        val builder = createDocumentBuilderFactory().newDocumentBuilder()
-        val document = builder.parse(file)
+        val document = SecureXmlDocumentParser.parse(file)
         val root = document.documentElement
-        root.normalize()
 
         val childNodes = root.childNodes
         for (i in 0 until childNodes.length) {
@@ -85,28 +83,5 @@ class ValuesResourceParser {
             parent = parent,
             items = items
         )
-    }
-
-    private fun createDocumentBuilderFactory(): DocumentBuilderFactory {
-        return DocumentBuilderFactory.newInstance().apply {
-            isNamespaceAware = true
-            isXIncludeAware = false
-            isExpandEntityReferences = false
-            setFeature(XML_FEATURE_DISALLOW_DOCTYPE, true)
-            setFeature(XML_FEATURE_EXTERNAL_GENERAL_ENTITIES, false)
-            setFeature(XML_FEATURE_EXTERNAL_PARAMETER_ENTITIES, false)
-            setFeature(XML_FEATURE_LOAD_EXTERNAL_DTD, false)
-        }
-    }
-
-    private companion object {
-        const val XML_FEATURE_DISALLOW_DOCTYPE =
-            "http://apache.org/xml/features/disallow-doctype-decl"
-        const val XML_FEATURE_EXTERNAL_GENERAL_ENTITIES =
-            "http://xml.org/sax/features/external-general-entities"
-        const val XML_FEATURE_EXTERNAL_PARAMETER_ENTITIES =
-            "http://xml.org/sax/features/external-parameter-entities"
-        const val XML_FEATURE_LOAD_EXTERNAL_DTD =
-            "http://apache.org/xml/features/nonvalidating/load-external-dtd"
     }
 }

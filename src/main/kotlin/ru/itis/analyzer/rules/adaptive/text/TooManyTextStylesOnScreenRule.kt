@@ -4,18 +4,15 @@ import ru.itis.analyzer.core.AnalysisContext
 import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.analyzer.rules.base.ContextualRule
 import ru.itis.analyzer.utils.ComponentUtils
-import ru.itis.analyzer.utils.DimensionUtils
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.Severity
 import ru.itis.model.UiComponent
+import ru.itis.style.extractor.TextStyleSignatureExtractor
 import ru.itis.style.signature.PredictedTextRole
-import ru.itis.style.signature.TextRolePredictor
 import ru.itis.style.signature.TextStyleSignature
 
 class TooManyTextStylesOnScreenRule : ContextualRule {
     override val id: String = AnalyzerStrings.RuleIds.TOO_MANY_TEXT_STYLES_ON_SCREEN
-
-    private val textRolePredictor = TextRolePredictor()
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> = emptyList()
 
@@ -29,8 +26,9 @@ class TooManyTextStylesOnScreenRule : ContextualRule {
         context: AnalysisContext,
         root: UiComponent
     ): List<AnalysisIssue> {
+        val signatureExtractor = TextStyleSignatureExtractor(context.resourceRepository)
         val textStylesByRole = ComponentUtils.findTextViews(listOf(root))
-            .mapNotNull { component -> extractSignature(context, component) }
+            .mapNotNull { component -> signatureExtractor.extract(component) }
             .groupBy { signature -> signature.role ?: PredictedTextRole.BODY }
 
         return textStylesByRole.mapNotNull { (role, styles) ->
@@ -75,30 +73,6 @@ class TooManyTextStylesOnScreenRule : ContextualRule {
                 role = role.name
             )
         )
-    }
-
-    private fun extractSignature(
-        context: AnalysisContext,
-        component: UiComponent
-    ): TextStyleSignature? {
-        val textSize = DimensionUtils.parseSp(
-            context.resourceRepository.resolveDimension(component.properties.textSize)
-                ?: component.properties.textSize
-        )
-        val text = context.resourceRepository.resolveString(component.properties.text)
-            ?: component.properties.text
-        val signature = TextStyleSignature(
-            role = textRolePredictor.predict(
-                textSize = textSize,
-                text = text,
-                textStyle = component.properties.textStyle
-            ),
-            textSize = textSize,
-            textStyle = component.properties.textStyle?.trim()?.ifBlank { null },
-            fontFamily = component.properties.fontFamily?.trim()?.ifBlank { null }
-        )
-
-        return signature.takeIf { it.isCompleteEnough() }
     }
 
     private companion object {

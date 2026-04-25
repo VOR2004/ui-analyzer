@@ -7,6 +7,7 @@ data class AnalysisIssue(
     val ruleId: String,
     val severity: Severity,
     val componentId: String?,
+    val componentLocator: String? = null,
     val componentType: String,
     val filePath: String,
     val message: String?,

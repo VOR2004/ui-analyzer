@@ -3,7 +3,7 @@ package ru.itis.analyzer.rules.adaptive.button
 import kotlin.math.abs
 import ru.itis.analyzer.core.AnalysisContext
 import ru.itis.analyzer.messages.AnalyzerStrings
-import ru.itis.analyzer.resource.ResourceRepository
+import ru.itis.source.xml.resource.ResourceRepository
 import ru.itis.analyzer.rules.base.ContextualRule
 import ru.itis.analyzer.utils.ColorUtils
 import ru.itis.analyzer.utils.ComponentUtils

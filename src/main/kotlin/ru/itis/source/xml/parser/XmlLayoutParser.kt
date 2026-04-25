@@ -1,4 +1,4 @@
-package ru.itis.parser
+package ru.itis.source.xml.parser
 
 import ru.itis.analyzer.config.XmlAttributes
 import ru.itis.model.SourceType
@@ -7,20 +7,25 @@ import ru.itis.model.UiProperties
 import ru.itis.analyzer.utils.IdUtils
 import org.w3c.dom.Element
 import java.io.File
-import javax.xml.parsers.DocumentBuilderFactory
 
 class XmlLayoutParser {
 
     fun parse(file: File): UiComponent {
-        val builder = createDocumentBuilderFactory().newDocumentBuilder()
-        val document = builder.parse(file)
+        val document = SecureXmlDocumentParser.parse(file)
         val root = document.documentElement
-        root.normalize()
 
-        return parseElement(root, file.absolutePath)
+        return parseElement(
+            element = root,
+            filePath = file.absolutePath,
+            treePath = buildTreePath(parentPath = "", tagName = root.tagName, index = 0)
+        )
     }
 
-    private fun parseElement(element: Element, filePath: String): UiComponent {
+    private fun parseElement(
+        element: Element,
+        filePath: String,
+        treePath: String
+    ): UiComponent {
         val attributes = mutableMapOf<String, String>()
 
         val attrMap = element.attributes
@@ -29,20 +34,25 @@ class XmlLayoutParser {
             attributes[node.nodeName] = node.nodeValue
         }
 
-        val children = mutableListOf<UiComponent>()
-        val childNodes = element.childNodes
-        for (i in 0 until childNodes.length) {
-            val node = childNodes.item(i)
-            if (node is Element) {
-                children += parseElement(node, filePath)
+        val children = elementChildElements(element)
+            .mapIndexed { index, childElement ->
+                parseElement(
+                    element = childElement,
+                    filePath = filePath,
+                    treePath = buildTreePath(
+                        parentPath = treePath,
+                        tagName = childElement.tagName,
+                        index = index
+                    )
+                )
             }
-        }
 
         return UiComponent(
             id = IdUtils.normalizeId(getAttribute(element, XmlAttributes.ANDROID_ID)),
             type = element.tagName,
             sourceType = SourceType.XML,
             filePath = filePath,
+            treePath = treePath,
             properties = UiProperties(
                 width = getAttribute(element, XmlAttributes.ANDROID_LAYOUT_WIDTH),
                 height = getAttribute(element, XmlAttributes.ANDROID_LAYOUT_HEIGHT),
@@ -93,6 +103,18 @@ class XmlLayoutParser {
         )
     }
 
+    private fun elementChildElements(element: Element): List<Element> {
+        val result = mutableListOf<Element>()
+        val childNodes = element.childNodes
+        for (i in 0 until childNodes.length) {
+            val node = childNodes.item(i)
+            if (node is Element) {
+                result += node
+            }
+        }
+        return result
+    }
+
     private fun getAttribute(element: Element, name: String): String? {
         return if (element.hasAttribute(name)) {
             element.getAttribute(name).takeIf { it.isNotBlank() }
@@ -105,28 +127,7 @@ class XmlLayoutParser {
         return values.firstOrNull { !it.isNullOrBlank() }
     }
 
-    private fun createDocumentBuilderFactory(): DocumentBuilderFactory {
-        return DocumentBuilderFactory.newInstance().apply {
-            isNamespaceAware = true
-            isXIncludeAware = false
-            isExpandEntityReferences = false
-
-            // Secure XML parsing: disable DTDs and external entities.
-            setFeature(XML_FEATURE_DISALLOW_DOCTYPE, true)
-            setFeature(XML_FEATURE_EXTERNAL_GENERAL_ENTITIES, false)
-            setFeature(XML_FEATURE_EXTERNAL_PARAMETER_ENTITIES, false)
-            setFeature(XML_FEATURE_LOAD_EXTERNAL_DTD, false)
-        }
-    }
-
-    private companion object {
-        const val XML_FEATURE_DISALLOW_DOCTYPE =
-            "http://apache.org/xml/features/disallow-doctype-decl"
-        const val XML_FEATURE_EXTERNAL_GENERAL_ENTITIES =
-            "http://xml.org/sax/features/external-general-entities"
-        const val XML_FEATURE_EXTERNAL_PARAMETER_ENTITIES =
-            "http://xml.org/sax/features/external-parameter-entities"
-        const val XML_FEATURE_LOAD_EXTERNAL_DTD =
-            "http://apache.org/xml/features/nonvalidating/load-external-dtd"
+    private fun buildTreePath(parentPath: String, tagName: String, index: Int): String {
+        return "$parentPath/$tagName[$index]"
     }
 }

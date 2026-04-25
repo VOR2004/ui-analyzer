@@ -2,9 +2,9 @@ package ru.itis.analyzer.rules.static.accessibility
 
 import ru.itis.analyzer.config.ComponentTypes
 import ru.itis.analyzer.messages.AnalyzerStrings
-import ru.itis.analyzer.resource.ResourceRepository
+import ru.itis.source.xml.resource.ResourceRepository
 import ru.itis.analyzer.rules.base.Rule
-import ru.itis.analyzer.utils.ComponentUtils
+import ru.itis.analyzer.rules.base.onlyXmlFlatComponents
 import ru.itis.analyzer.utils.DimensionUtils
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.Severity
@@ -16,7 +16,7 @@ class TouchTargetTooSmallRule(
     override val id: String = AnalyzerStrings.RuleIds.TOUCH_TARGET_TOO_SMALL
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
-        return ComponentUtils.flattenAll(components)
+        return components.onlyXmlFlatComponents()
             .filter { component -> isInteractive(component) }
             .mapNotNull { component -> createIssueIfNeeded(component) }
     }
