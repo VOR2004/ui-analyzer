@@ -46,6 +46,10 @@ class ComposeProjectImporter {
         val composeFunctionNames = setOf(
             ComponentTypes.COMPOSE_TEXT,
             ComponentTypes.COMPOSE_BUTTON,
+            ComponentTypes.COMPOSE_ICON_BUTTON,
+            ComponentTypes.COMPOSE_OUTLINED_BUTTON,
+            ComponentTypes.COMPOSE_TEXT_BUTTON,
+            ComponentTypes.COMPOSE_FLOATING_ACTION_BUTTON,
             ComponentTypes.COMPOSE_IMAGE,
             ComponentTypes.COMPOSE_ICON,
             ComponentTypes.COMPOSE_COLUMN,

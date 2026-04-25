@@ -7,6 +7,7 @@ import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.Severity
+import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 
 class ImageWithoutContentDescriptionRule : Rule {
@@ -15,6 +16,7 @@ class ImageWithoutContentDescriptionRule : Rule {
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
         return ComponentUtils.findImageComponents(components)
+            .filter { component -> component.sourceType == SourceType.XML }
             .filter { shouldHaveContentDescription(it) }
             .filter { hasMissingAccessibleDescription(it) }
             .map { component ->

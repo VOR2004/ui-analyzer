@@ -96,6 +96,7 @@ class ComposeLayoutParser {
         rawAttributes: Map<String, String>
     ): UiProperties {
         val modifier = rawAttributes[MODIFIER_ARGUMENT].orEmpty()
+        val colors = rawAttributes[COLORS_ARGUMENT].orEmpty()
         val fontWeight = rawAttributes[FONT_WEIGHT_ARGUMENT]
         val fontStyle = rawAttributes[FONT_STYLE_ARGUMENT]
 
@@ -106,8 +107,11 @@ class ComposeLayoutParser {
                 ?: extractModifierDimension(modifier, SIZE_MODIFIER),
             padding = extractModifierDimension(modifier, PADDING_MODIFIER),
             backgroundColor = extractModifierValue(modifier, BACKGROUND_MODIFIER)
-                ?: rawAttributes[CONTAINER_COLOR_ARGUMENT],
-            textColor = rawAttributes[COLOR_ARGUMENT] ?: rawAttributes[CONTENT_COLOR_ARGUMENT],
+                ?: rawAttributes[CONTAINER_COLOR_ARGUMENT]
+                ?: extractNamedArgumentValue(colors, CONTAINER_COLOR_ARGUMENT),
+            textColor = rawAttributes[COLOR_ARGUMENT]
+                ?: rawAttributes[CONTENT_COLOR_ARGUMENT]
+                ?: extractNamedArgumentValue(colors, CONTENT_COLOR_ARGUMENT),
             textSize = rawAttributes[FONT_SIZE_ARGUMENT],
             fontFamily = rawAttributes[FONT_FAMILY_ARGUMENT],
             textStyle = listOfNotNull(fontWeight, fontStyle).joinToString(" ").ifBlank { null },
@@ -115,6 +119,19 @@ class ComposeLayoutParser {
             contentDescription = rawAttributes[CONTENT_DESCRIPTION_ARGUMENT]?.trimStringLiteralIfNeeded(),
             rawAttributes = rawAttributes
         )
+    }
+
+    private fun extractNamedArgumentValue(arguments: String, name: String): String? {
+        val normalizedArguments = unwrapCallArguments(arguments) ?: arguments
+        return parseNamedArguments(normalizedArguments)[name]
+    }
+
+    private fun unwrapCallArguments(value: String): String? {
+        val openParen = value.indexOf('(')
+        if (openParen < 0) return null
+
+        val closeParen = findMatching(value, openParen, '(', ')', value.length) ?: return null
+        return value.substring(openParen + 1, closeParen)
     }
 
     private fun extractComposeText(
@@ -333,6 +350,7 @@ class ComposeLayoutParser {
 
     private companion object {
         const val MODIFIER_ARGUMENT = "modifier"
+        const val COLORS_ARGUMENT = "colors"
         const val TEST_TAG_ARGUMENT = "testTag"
         const val TEXT_ARGUMENT = "text"
         const val COLOR_ARGUMENT = "color"
@@ -353,6 +371,10 @@ class ComposeLayoutParser {
         val composeFunctionNames = setOf(
             ComponentTypes.COMPOSE_TEXT,
             ComponentTypes.COMPOSE_BUTTON,
+            ComponentTypes.COMPOSE_ICON_BUTTON,
+            ComponentTypes.COMPOSE_OUTLINED_BUTTON,
+            ComponentTypes.COMPOSE_TEXT_BUTTON,
+            ComponentTypes.COMPOSE_FLOATING_ACTION_BUTTON,
             ComponentTypes.COMPOSE_IMAGE,
             ComponentTypes.COMPOSE_ICON,
             ComponentTypes.COMPOSE_COLUMN,

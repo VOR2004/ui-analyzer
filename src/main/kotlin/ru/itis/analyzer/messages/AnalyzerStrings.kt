@@ -21,6 +21,10 @@ object AnalyzerStrings {
         const val TEXT_SIZE_CONSISTENCY = "text-size-consistency"
         const val TOUCH_TARGET_TOO_SMALL = "touch-target-too-small"
         const val DEEP_LAYOUT_NESTING = "deep-layout-nesting"
+        const val COMPOSE_IMAGE_CONTENT_DESCRIPTION = "compose-image-content-description"
+        const val COMPOSE_HARDCODED_TEXT = "compose-hardcoded-text"
+        const val COMPOSE_HARDCODED_COLOR = "compose-hardcoded-color"
+        const val COMPOSE_MISSING_MODIFIER_PARAMETER = "compose-missing-modifier-parameter"
 
         fun nearDuplicateCluster(baseId: String): String = "$baseId-near-duplicate-cluster"
     }
@@ -179,6 +183,36 @@ object AnalyzerStrings {
 
         const val IMAGE_WITHOUT_CONTENT_DESCRIPTION_RECOMMENDATION =
             "Добавьте contentDescription для улучшения доступности. Если изображение декоративное, явно укажите @null."
+
+        fun composeImageContentDescription(componentType: String, isInteractive: Boolean): String {
+            val context = if (isInteractive) {
+                "в интерактивном Compose-контейнере"
+            } else {
+                "в Compose"
+            }
+            return "$componentType $context не содержит осмысленный contentDescription."
+        }
+
+        const val COMPOSE_IMAGE_CONTENT_DESCRIPTION_RECOMMENDATION =
+            "Добавьте contentDescription для смыслового изображения или иконки. Для декоративного элемента явно оставьте null; для пользовательского текста предпочтительно использовать stringResource(R.string...)."
+
+        fun composeHardcodedText(text: String): String =
+            "Compose Text использует строковый литерал: \"$text\"."
+
+        const val COMPOSE_HARDCODED_TEXT_RECOMMENDATION =
+            "Если это пользовательский текст, вынесите его в строковые ресурсы и используйте stringResource(R.string...). Динамические значения и технические подписи выносить не требуется."
+
+        fun composeHardcodedColor(propertyName: String, value: String): String =
+            "Compose-свойство $propertyName использует inline-цвет $value."
+
+        const val COMPOSE_HARDCODED_COLOR_RECOMMENDATION =
+            "Используйте MaterialTheme.colorScheme, Compose theme token или colorResource(R.color...) вместо inline-цвета, если цвет относится к UI-стилю."
+
+        fun composeMissingModifierParameter(functionName: String, predictedRole: String): String =
+            "Composable-функция $functionName не принимает modifier-параметр. predictedRole=$predictedRole."
+
+        const val COMPOSE_MISSING_MODIFIER_PARAMETER_RECOMMENDATION =
+            "Если функция является переиспользуемым UI-компонентом, добавьте параметр modifier: Modifier = Modifier и примените его к корневому элементу."
 
         fun hardcodedText(componentType: String, text: String): String =
             "Компонент $componentType использует захардкоженный текст: \"$text\"."

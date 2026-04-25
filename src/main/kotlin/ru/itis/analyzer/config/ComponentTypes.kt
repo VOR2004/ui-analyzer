@@ -22,6 +22,10 @@ object ComponentTypes {
 
     const val COMPOSE_TEXT = "Text"
     const val COMPOSE_BUTTON = "Button"
+    const val COMPOSE_ICON_BUTTON = "IconButton"
+    const val COMPOSE_OUTLINED_BUTTON = "OutlinedButton"
+    const val COMPOSE_TEXT_BUTTON = "TextButton"
+    const val COMPOSE_FLOATING_ACTION_BUTTON = "FloatingActionButton"
     const val COMPOSE_IMAGE = "Image"
     const val COMPOSE_ICON = "Icon"
     const val COMPOSE_COLUMN = "Column"
