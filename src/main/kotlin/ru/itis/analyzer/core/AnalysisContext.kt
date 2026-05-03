@@ -1,9 +1,9 @@
 package ru.itis.analyzer.core
 
-import ru.itis.source.xml.resource.ResourceRepository
+import ru.itis.xml.source.resource.ResourceRepository
 import ru.itis.model.UiComponent
-import ru.itis.style.profile.ProjectStyleProfile
-import ru.itis.style.profile.ScreenStyleProfile
+import ru.itis.xml.style.profile.ProjectStyleProfile
+import ru.itis.xml.style.profile.ScreenStyleProfile
 
 data class AnalysisContext(
     val components: List<UiComponent>,

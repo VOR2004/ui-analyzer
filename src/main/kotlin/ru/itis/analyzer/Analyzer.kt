@@ -2,15 +2,15 @@ package ru.itis.analyzer
 
 import ru.itis.analyzer.core.AnalysisContext
 import ru.itis.analyzer.core.ComposeSourceAnalysisContext
-import ru.itis.source.xml.resource.ResourceRepository
+import ru.itis.xml.source.resource.ResourceRepository
 import ru.itis.analyzer.rules.base.ComposeSourceRule
 import ru.itis.analyzer.rules.base.ContextualRule
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.UiComponent
-import ru.itis.source.compose.model.ComposeFunction
-import ru.itis.style.extractor.StyleFeatureExtractor
-import ru.itis.style.profiler.StyleProfiler
+import ru.itis.compose.source.model.ComposeFunction
+import ru.itis.xml.style.extractor.StyleFeatureExtractor
+import ru.itis.xml.style.profiler.StyleProfiler
 
 class Analyzer(
     private val rules: List<Rule>,

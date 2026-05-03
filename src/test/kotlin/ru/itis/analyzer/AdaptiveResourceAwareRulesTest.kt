@@ -5,12 +5,12 @@ import kotlin.test.Test
 import kotlin.test.assertTrue
 import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.analyzer.rules.base.Rule
-import ru.itis.analyzer.rules.adaptive.button.AdaptiveButtonStyleOutlierRule
-import ru.itis.analyzer.rules.adaptive.layout.AdaptiveSpacingOutlierRule
-import ru.itis.analyzer.rules.adaptive.text.AdaptiveTextSizeOutlierRule
-import ru.itis.analyzer.rules.adaptive.text.AdaptiveTextStyleOutlierRule
-import ru.itis.source.xml.parser.XmlLayoutParser
-import ru.itis.source.xml.resource.ResourceRepository
+import ru.itis.xml.rules.adaptive.button.XmlAdaptiveButtonStyleOutlierRule
+import ru.itis.xml.rules.adaptive.layout.XmlAdaptiveSpacingOutlierRule
+import ru.itis.xml.rules.adaptive.text.XmlAdaptiveTextSizeOutlierRule
+import ru.itis.xml.rules.adaptive.text.XmlAdaptiveTextStyleOutlierRule
+import ru.itis.xml.source.parser.XmlLayoutParser
+import ru.itis.xml.source.resource.ResourceRepository
 
 class AdaptiveResourceAwareRulesTest {
 
@@ -25,10 +25,10 @@ class AdaptiveResourceAwareRulesTest {
         val component = XmlLayoutParser().parse(layoutFile)
 
         val rules: List<Rule> = listOf(
-            AdaptiveButtonStyleOutlierRule(),
-            AdaptiveTextStyleOutlierRule(),
-            AdaptiveTextSizeOutlierRule(),
-            AdaptiveSpacingOutlierRule()
+            XmlAdaptiveButtonStyleOutlierRule(),
+            XmlAdaptiveTextStyleOutlierRule(),
+            XmlAdaptiveTextSizeOutlierRule(),
+            XmlAdaptiveSpacingOutlierRule()
         )
 
         val issues = Analyzer(

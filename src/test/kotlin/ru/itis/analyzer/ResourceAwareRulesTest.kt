@@ -6,13 +6,13 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.analyzer.rules.base.Rule
-import ru.itis.analyzer.rules.static.accessibility.TouchTargetTooSmallRule
-import ru.itis.analyzer.rules.static.color.NearDuplicateButtonColorRule
-import ru.itis.analyzer.rules.static.text.HardcodedTextRule
-import ru.itis.analyzer.rules.static.text.SuspiciousTextSizeRule
-import ru.itis.analyzer.rules.static.text.TextContrastRule
-import ru.itis.source.xml.parser.XmlLayoutParser
-import ru.itis.source.xml.resource.ResourceRepository
+import ru.itis.xml.rules.static.accessibility.XmlTouchTargetTooSmallRule
+import ru.itis.xml.rules.static.color.XmlNearDuplicateButtonColorRule
+import ru.itis.xml.rules.static.text.XmlHardcodedTextRule
+import ru.itis.xml.rules.static.text.XmlSuspiciousTextSizeRule
+import ru.itis.xml.rules.static.text.XmlTextContrastRule
+import ru.itis.xml.source.parser.XmlLayoutParser
+import ru.itis.xml.source.resource.ResourceRepository
 
 class ResourceAwareRulesTest {
 
@@ -27,11 +27,11 @@ class ResourceAwareRulesTest {
         val component = XmlLayoutParser().parse(layoutFile)
 
         val rules: List<Rule> = listOf(
-            TouchTargetTooSmallRule(resourceRepository),
-            SuspiciousTextSizeRule(resourceRepository),
-            TextContrastRule(resourceRepository),
-            HardcodedTextRule(),
-            NearDuplicateButtonColorRule(resourceRepository)
+            XmlTouchTargetTooSmallRule(resourceRepository),
+            XmlSuspiciousTextSizeRule(resourceRepository),
+            XmlTextContrastRule(resourceRepository),
+            XmlHardcodedTextRule(),
+            XmlNearDuplicateButtonColorRule(resourceRepository)
         )
 
         val issues = Analyzer(

@@ -5,15 +5,15 @@ import kotlin.test.Test
 import kotlin.test.assertTrue
 import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.analyzer.rules.base.Rule
-import ru.itis.analyzer.rules.adaptive.button.AdaptiveButtonStyleOutlierRule
-import ru.itis.analyzer.rules.adaptive.layout.AdaptiveSpacingOutlierRule
-import ru.itis.analyzer.rules.adaptive.text.AdaptiveTextSizeOutlierRule
-import ru.itis.analyzer.rules.adaptive.text.AdaptiveTextStyleOutlierRule
-import ru.itis.analyzer.rules.adaptive.text.TooManyTextStylesOnScreenRule
-import ru.itis.analyzer.rules.static.accessibility.TouchTargetTooSmallRule
-import ru.itis.source.xml.importer.XmlProjectImporter
-import ru.itis.source.xml.parser.XmlLayoutParser
-import ru.itis.source.xml.resource.ResourceRepository
+import ru.itis.xml.rules.adaptive.button.XmlAdaptiveButtonStyleOutlierRule
+import ru.itis.xml.rules.adaptive.layout.XmlAdaptiveSpacingOutlierRule
+import ru.itis.xml.rules.adaptive.text.XmlAdaptiveTextSizeOutlierRule
+import ru.itis.xml.rules.adaptive.text.XmlAdaptiveTextStyleOutlierRule
+import ru.itis.xml.rules.adaptive.text.XmlTooManyTextStylesOnScreenRule
+import ru.itis.xml.rules.static.accessibility.XmlTouchTargetTooSmallRule
+import ru.itis.xml.source.importer.XmlProjectImporter
+import ru.itis.xml.source.parser.XmlLayoutParser
+import ru.itis.xml.source.resource.ResourceRepository
 
 class AdaptiveRulesFixtureTest {
 
@@ -25,12 +25,12 @@ class AdaptiveRulesFixtureTest {
         val resourceRepository = ResourceRepository.load(projectRoot)
 
         val rules: List<Rule> = listOf(
-            TouchTargetTooSmallRule(resourceRepository),
-            AdaptiveButtonStyleOutlierRule(),
-            AdaptiveTextStyleOutlierRule(),
-            TooManyTextStylesOnScreenRule(),
-            AdaptiveTextSizeOutlierRule(),
-            AdaptiveSpacingOutlierRule()
+            XmlTouchTargetTooSmallRule(resourceRepository),
+            XmlAdaptiveButtonStyleOutlierRule(),
+            XmlAdaptiveTextStyleOutlierRule(),
+            XmlTooManyTextStylesOnScreenRule(),
+            XmlAdaptiveTextSizeOutlierRule(),
+            XmlAdaptiveSpacingOutlierRule()
         )
 
         val analyzer = Analyzer(

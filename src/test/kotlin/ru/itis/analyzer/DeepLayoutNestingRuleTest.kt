@@ -4,10 +4,10 @@ import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertTrue
 import ru.itis.analyzer.messages.AnalyzerStrings
-import ru.itis.analyzer.rules.static.structure.DeepLayoutNestingRule
-import ru.itis.source.xml.parser.XmlLayoutParser
+import ru.itis.xml.rules.static.structure.XmlDeepLayoutNestingRule
+import ru.itis.xml.source.parser.XmlLayoutParser
 
-class DeepLayoutNestingRuleTest {
+class XmlDeepLayoutNestingRuleTest {
 
     @Test
     fun `reports deeply nested layout trees`() {
@@ -15,7 +15,7 @@ class DeepLayoutNestingRuleTest {
         val layoutFile = File(projectRoot, "app/src/main/res/layout/deep_layout_nesting_demo.xml")
         val component = XmlLayoutParser().parse(layoutFile)
 
-        val issues = DeepLayoutNestingRule().check(listOf(component))
+        val issues = XmlDeepLayoutNestingRule().check(listOf(component))
 
         assertTrue(
             issues.any { issue ->

@@ -2,35 +2,44 @@ package ru.itis
 
 import ru.itis.analyzer.Analyzer
 import ru.itis.analyzer.messages.AnalyzerStrings
-import ru.itis.analyzer.rules.adaptive.button.AdaptiveButtonStyleOutlierRule
-import ru.itis.analyzer.rules.adaptive.layout.AdaptiveSpacingOutlierRule
-import ru.itis.analyzer.rules.compose.accessibility.ComposeImageContentDescriptionRule
-import ru.itis.analyzer.rules.compose.api.ComposeMissingModifierParameterRule
-import ru.itis.analyzer.rules.compose.color.ComposeHardcodedColorRule
-import ru.itis.analyzer.rules.compose.text.ComposeHardcodedTextRule
-import ru.itis.source.xml.resource.ResourceRepository
-import ru.itis.analyzer.rules.adaptive.text.AdaptiveTextSizeOutlierRule
-import ru.itis.analyzer.rules.adaptive.text.AdaptiveTextStyleOutlierRule
-import ru.itis.analyzer.rules.adaptive.text.TooManyTextStylesOnScreenRule
-import ru.itis.analyzer.rules.static.color.ButtonColorPerLayoutConsistencyRule
-import ru.itis.analyzer.rules.static.color.ButtonColorProjectConsistencyRule
-import ru.itis.analyzer.rules.static.accessibility.TouchTargetTooSmallRule
-import ru.itis.analyzer.rules.static.color.HardcodedColorRule
-import ru.itis.analyzer.rules.static.color.NearDuplicateButtonColorRule
-import ru.itis.analyzer.rules.static.common.HardcodedDimensionRule
-import ru.itis.analyzer.rules.static.common.MissingIdRule
-import ru.itis.analyzer.rules.static.image.ImageWithoutContentDescriptionRule
-import ru.itis.analyzer.rules.static.structure.DeepLayoutNestingRule
-import ru.itis.analyzer.rules.static.text.HardcodedTextRule
-import ru.itis.analyzer.rules.static.text.SuspiciousTextSizeRule
-import ru.itis.analyzer.rules.static.text.TextContrastRule
-import ru.itis.analyzer.rules.static.text.TextSizeConsistencyRule
+import ru.itis.xml.rules.adaptive.button.XmlAdaptiveButtonStyleOutlierRule
+import ru.itis.xml.rules.adaptive.layout.XmlAdaptiveSpacingOutlierRule
+import ru.itis.xml.rules.adaptive.layout.XmlNearDuplicateSpacingClusterRule
+import ru.itis.compose.rules.accessibility.ComposeImageContentDescriptionRule
+import ru.itis.compose.rules.accessibility.ComposeTouchTargetTooSmallRule
+import ru.itis.compose.rules.api.ComposeMissingModifierParameterRule
+import ru.itis.compose.rules.color.ComposeButtonColorPerFileConsistencyRule
+import ru.itis.compose.rules.color.ComposeHardcodedColorRule
+import ru.itis.compose.rules.layout.ComposeAdaptiveSpacingOutlierRule
+import ru.itis.compose.rules.layout.ComposeNearDuplicateSpacingClusterRule
+import ru.itis.compose.rules.text.ComposeAdaptiveTextStyleOutlierRule
+import ru.itis.compose.rules.text.ComposeHardcodedTextRule
+import ru.itis.compose.rules.text.ComposeTextSizeNearDuplicateClusterRule
+import ru.itis.compose.rules.text.ComposeTooManyTextStylesOnScreenRule
+import ru.itis.xml.source.resource.ResourceRepository
+import ru.itis.xml.rules.adaptive.text.XmlAdaptiveTextSizeOutlierRule
+import ru.itis.xml.rules.adaptive.text.XmlAdaptiveTextStyleOutlierRule
+import ru.itis.xml.rules.adaptive.text.XmlTooManyTextStylesOnScreenRule
+import ru.itis.xml.rules.adaptive.text.XmlTextSizeNearDuplicateClusterRule
+import ru.itis.xml.rules.static.color.XmlButtonColorPerLayoutConsistencyRule
+import ru.itis.xml.rules.static.color.XmlButtonColorProjectConsistencyRule
+import ru.itis.xml.rules.static.accessibility.XmlTouchTargetTooSmallRule
+import ru.itis.xml.rules.static.color.XmlHardcodedColorRule
+import ru.itis.xml.rules.static.color.XmlNearDuplicateButtonColorRule
+import ru.itis.xml.rules.static.common.XmlHardcodedDimensionRule
+import ru.itis.xml.rules.static.common.XmlMissingIdRule
+import ru.itis.xml.rules.static.image.XmlImageWithoutContentDescriptionRule
+import ru.itis.xml.rules.static.structure.XmlDeepLayoutNestingRule
+import ru.itis.xml.rules.static.text.XmlHardcodedTextRule
+import ru.itis.xml.rules.static.text.XmlSuspiciousTextSizeRule
+import ru.itis.xml.rules.static.text.XmlTextContrastRule
+import ru.itis.xml.rules.static.text.XmlTextSizeConsistencyRule
 import ru.itis.report.JsonReportGenerator
-import ru.itis.source.compose.importer.ComposeProjectImporter
-import ru.itis.source.compose.parser.ComposeFunctionParser
-import ru.itis.source.compose.parser.ComposeLayoutParser
-import ru.itis.source.xml.importer.XmlProjectImporter
-import ru.itis.source.xml.parser.XmlLayoutParser
+import ru.itis.compose.source.importer.ComposeProjectImporter
+import ru.itis.compose.source.parser.ComposeFunctionParser
+import ru.itis.compose.source.parser.ComposeLayoutParser
+import ru.itis.xml.source.importer.XmlProjectImporter
+import ru.itis.xml.source.parser.XmlLayoutParser
 import java.io.File
 
 fun main(args: Array<String>) {
@@ -68,28 +77,37 @@ fun main(args: Array<String>) {
         resourceRepository = resourceRepository,
         composeFunctions = composeFunctions,
         rules = listOf(
-//            SuspiciousTextSizeRule(resourceRepository),
-//            ButtonColorPerLayoutConsistencyRule(resourceRepository),
-//            ButtonColorProjectConsistencyRule(resourceRepository),
-//            TextContrastRule(resourceRepository),
-//            TextSizeConsistencyRule(resourceRepository),
-//            HardcodedColorRule(),
-//            NearDuplicateButtonColorRule(resourceRepository),
-//            MissingIdRule(),
-//            HardcodedDimensionRule(),
-//            ImageWithoutContentDescriptionRule(),
+//            XmlSuspiciousTextSizeRule(resourceRepository),
+//            XmlButtonColorPerLayoutConsistencyRule(resourceRepository),
+//            XmlButtonColorProjectConsistencyRule(resourceRepository),
+//            XmlTextContrastRule(resourceRepository),
+//            XmlTextSizeConsistencyRule(resourceRepository),
+//            XmlHardcodedColorRule(),
+//            XmlNearDuplicateButtonColorRule(resourceRepository),
+//            XmlMissingIdRule(),
+//            XmlHardcodedDimensionRule(),
+//            XmlImageWithoutContentDescriptionRule(),
             ComposeImageContentDescriptionRule(),
+            ComposeTouchTargetTooSmallRule(),
             ComposeHardcodedTextRule(),
+            ComposeTooManyTextStylesOnScreenRule(),
+            ComposeAdaptiveTextStyleOutlierRule(),
+            ComposeTextSizeNearDuplicateClusterRule(),
             ComposeHardcodedColorRule(),
+            ComposeButtonColorPerFileConsistencyRule(),
             ComposeMissingModifierParameterRule(),
-//            DeepLayoutNestingRule(),
-//            HardcodedTextRule(),
-//            TouchTargetTooSmallRule(resourceRepository),
-//            AdaptiveTextStyleOutlierRule(),
-//            TooManyTextStylesOnScreenRule(),
-//            AdaptiveTextSizeOutlierRule(),
-//            AdaptiveSpacingOutlierRule(),
-//            AdaptiveButtonStyleOutlierRule()
+            ComposeAdaptiveSpacingOutlierRule(),
+            ComposeNearDuplicateSpacingClusterRule(),
+//            XmlDeepLayoutNestingRule(),
+//            XmlHardcodedTextRule(),
+//            XmlTouchTargetTooSmallRule(resourceRepository),
+//            XmlAdaptiveTextStyleOutlierRule(),
+//            XmlTooManyTextStylesOnScreenRule(),
+//            XmlAdaptiveTextSizeOutlierRule(),
+//            XmlTextSizeNearDuplicateClusterRule(),
+//            XmlAdaptiveSpacingOutlierRule(),
+//            XmlNearDuplicateSpacingClusterRule(),
+//            XmlAdaptiveButtonStyleOutlierRule()
         )
     )
 

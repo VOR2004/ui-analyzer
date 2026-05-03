@@ -21,10 +21,19 @@ object AnalyzerStrings {
         const val TEXT_SIZE_CONSISTENCY = "text-size-consistency"
         const val TOUCH_TARGET_TOO_SMALL = "touch-target-too-small"
         const val DEEP_LAYOUT_NESTING = "deep-layout-nesting"
+        const val XML_NEAR_DUPLICATE_SPACING_CLUSTER = "xml-near-duplicate-spacing-cluster"
+        const val XML_TEXT_SIZE_NEAR_DUPLICATE_CLUSTER = "xml-text-size-near-duplicate-cluster"
         const val COMPOSE_IMAGE_CONTENT_DESCRIPTION = "compose-image-content-description"
         const val COMPOSE_HARDCODED_TEXT = "compose-hardcoded-text"
         const val COMPOSE_HARDCODED_COLOR = "compose-hardcoded-color"
         const val COMPOSE_MISSING_MODIFIER_PARAMETER = "compose-missing-modifier-parameter"
+        const val COMPOSE_ADAPTIVE_SPACING_OUTLIER = "compose-adaptive-spacing-outlier"
+        const val COMPOSE_TOO_MANY_TEXT_STYLES_ON_SCREEN = "compose-too-many-text-styles-on-screen"
+        const val COMPOSE_ADAPTIVE_TEXT_STYLE_OUTLIER = "compose-adaptive-text-style-outlier"
+        const val COMPOSE_BUTTON_COLOR_PER_FILE_CONSISTENCY = "compose-button-color-per-file-consistency"
+        const val COMPOSE_TOUCH_TARGET_TOO_SMALL = "compose-touch-target-too-small"
+        const val COMPOSE_NEAR_DUPLICATE_SPACING_CLUSTER = "compose-near-duplicate-spacing-cluster"
+        const val COMPOSE_TEXT_SIZE_NEAR_DUPLICATE_CLUSTER = "compose-text-size-near-duplicate-cluster"
 
         fun nearDuplicateCluster(baseId: String): String = "$baseId-near-duplicate-cluster"
     }
@@ -93,6 +102,29 @@ object AnalyzerStrings {
 
         fun adaptiveSpacingOutlierRecommendation(expected: String): String =
             "Проверьте, должен ли элемент использовать один из типичных отступов: $expected."
+
+        fun xmlNearDuplicateSpacingCluster(
+            propertyName: String,
+            value: Float,
+            canonicalValue: Float
+        ): String =
+            "XML spacing-значение $propertyName=${value}dp очень близко к ${canonicalValue}dp, который чаще используется в этом layout-файле."
+
+        fun xmlNearDuplicateSpacingClusterRecommendation(canonicalValue: Float): String =
+            "Проверьте, можно ли заменить значение на ${canonicalValue}dp или общий @dimen-токен, чтобы уменьшить дробление spacing-шкалы."
+
+        fun xmlTextSizeNearDuplicateCluster(
+            value: Float,
+            canonicalValue: Float,
+            predictedRole: String
+        ): String =
+            "XML textSize=${value}sp очень близок к ${canonicalValue}sp внутри predicted text role $predictedRole."
+
+        fun xmlTextSizeNearDuplicateClusterRecommendation(
+            canonicalValue: Float,
+            predictedRole: String
+        ): String =
+            "Проверьте, можно ли использовать ${canonicalValue}sp или общий @dimen-токен для predictedRole=$predictedRole, чтобы уменьшить дробление типографической шкалы."
 
         fun adaptiveTextSizeOutlier(actualValue: Float, predictedRole: String? = null): String {
             val roleSuffix = predictedRole?.let { " для predicted text role $it" }.orEmpty()
@@ -213,6 +245,79 @@ object AnalyzerStrings {
 
         const val COMPOSE_MISSING_MODIFIER_PARAMETER_RECOMMENDATION =
             "Если функция является переиспользуемым UI-компонентом, добавьте параметр modifier: Modifier = Modifier и примените его к корневому элементу."
+
+        fun composeAdaptiveSpacingOutlier(propertyName: String, actualValue: Float): String =
+            "Compose-значение $propertyName = ${actualValue}dp выбивается из локальной шкалы spacing-значений этого файла."
+
+        fun composeAdaptiveSpacingOutlierRecommendation(expected: String): String =
+            "Проверьте, должен ли Compose-элемент использовать одно из типичных spacing-значений: $expected."
+
+        fun composeTooManyTextStylesOnScreen(
+            actualCount: Int,
+            dominantSharePercent: Int
+        ): String =
+            "В Compose-файле используется слишком много конкурирующих текстовых стилей: $actualCount. Доминирующий стиль покрывает только $dominantSharePercent% Text-компонентов."
+
+        const val COMPOSE_TOO_MANY_TEXT_STYLES_ON_SCREEN_RECOMMENDATION =
+            "Проверьте, можно ли привести Text-компоненты к общей типографической системе: MaterialTheme.typography, общим style-параметрам или переиспользуемым текстовым компонентам."
+
+        fun composeAdaptiveTextStyleOutlier(differences: String, predictedRole: String): String =
+            "Compose Text отличается от доминирующего стиля внутри predicted text role $predictedRole по признакам: $differences."
+
+        fun composeAdaptiveTextStyleOutlierRecommendation(dominantStyle: String): String =
+            "Проверьте, должен ли Text использовать доминирующий Compose-стиль: $dominantStyle."
+
+        fun composeButtonColorPerFileNearDuplicate(
+            color: String,
+            canonicalColor: String,
+            distance: String
+        ): String =
+            "В Compose-файле цвет кнопки $color очень близок к $canonicalColor (distance=$distance), который чаще встречается среди похожих цветов кнопок."
+
+        fun composeButtonColorPerFileNearDuplicateRecommendation(canonicalColor: String): String =
+            "Используйте $canonicalColor как единый оттенок для визуально одинаковых Compose-кнопок в этом файле."
+
+        fun composeButtonColorPerFileNearDominant(
+            color: String,
+            dominantColor: String,
+            distance: String
+        ): String =
+            "В Compose-файле используется цвет кнопки $color, который почти совпадает с основным цветом кнопок $dominantColor, но отличается (distance=$distance)."
+
+        fun composeButtonColorPerFileDifferent(color: String, dominantColor: String): String =
+            "В Compose-файле используется цвет кнопки $color, который отличается от наиболее частого цвета кнопок $dominantColor."
+
+        const val COMPOSE_BUTTON_COLOR_PER_FILE_RECOMMENDATION =
+            "Проверьте, соответствует ли эта Compose-кнопка локальной цветовой системе файла: MaterialTheme.colorScheme или общему buttonColors-токену."
+
+        fun composeTouchTargetTooSmall(width: String?, height: String?): String =
+            "Размер интерактивного Compose-элемента слишком мал для удобного нажатия: width=$width, height=$height."
+
+        const val COMPOSE_TOUCH_TARGET_TOO_SMALL_RECOMMENDATION =
+            "Рекомендуется делать интерактивные Compose-элементы не меньше 48.dp по ширине и высоте или обеспечить минимальную область нажатия через Modifier.sizeIn/minimumInteractiveComponentSize."
+
+        fun composeNearDuplicateSpacingCluster(
+            propertyName: String,
+            value: Float,
+            canonicalValue: Float
+        ): String =
+            "Compose spacing-значение $propertyName=${value}dp очень близко к ${canonicalValue}dp, который чаще используется в этом файле."
+
+        fun composeNearDuplicateSpacingClusterRecommendation(canonicalValue: Float): String =
+            "Проверьте, можно ли заменить значение на ${canonicalValue}dp, чтобы уменьшить дробление spacing-шкалы."
+
+        fun composeTextSizeNearDuplicateCluster(
+            value: Float,
+            canonicalValue: Float,
+            predictedRole: String
+        ): String =
+            "Compose textSize=${value}sp очень близок к ${canonicalValue}sp внутри predicted text role $predictedRole."
+
+        fun composeTextSizeNearDuplicateClusterRecommendation(
+            canonicalValue: Float,
+            predictedRole: String
+        ): String =
+            "Проверьте, можно ли использовать ${canonicalValue}sp для predictedRole=$predictedRole, чтобы уменьшить дробление типографической шкалы."
 
         fun hardcodedText(componentType: String, text: String): String =
             "Компонент $componentType использует захардкоженный текст: \"$text\"."

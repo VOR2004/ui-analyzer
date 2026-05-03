@@ -13,9 +13,11 @@ data class UiProperties(
     val tint: String? = null,
     val textColor: String? = null,
     val textSize: String? = null,
+    val typographyStyle: String? = null,
     val fontFamily: String? = null,
     val textStyle: String? = null,
     val text: String? = null,
     val contentDescription: String? = null,
+    val isClickable: Boolean = false,
     val rawAttributes: Map<String, String> = emptyMap()
 )
