@@ -34,6 +34,8 @@ object AnalyzerStrings {
         const val COMPOSE_TOUCH_TARGET_TOO_SMALL = "compose-touch-target-too-small"
         const val COMPOSE_NEAR_DUPLICATE_SPACING_CLUSTER = "compose-near-duplicate-spacing-cluster"
         const val COMPOSE_TEXT_SIZE_NEAR_DUPLICATE_CLUSTER = "compose-text-size-near-duplicate-cluster"
+        const val COMPOSE_COMPONENT_STYLE_OUTLIER = "compose-component-style-outlier"
+        const val COMPOSE_TEXT_CONTRAST = "compose-text-contrast"
 
         fun nearDuplicateCluster(baseId: String): String = "$baseId-near-duplicate-cluster"
     }
@@ -267,6 +269,17 @@ object AnalyzerStrings {
         fun composeAdaptiveTextStyleOutlierRecommendation(dominantStyle: String): String =
             "Проверьте, должен ли Text использовать доминирующий Compose-стиль: $dominantStyle."
 
+        fun composeInsufficientTextContrast(
+            textColor: String,
+            backgroundColor: String,
+            ratio: String,
+            minContrast: Double
+        ): String =
+            "Недостаточный контраст Compose Text ($textColor) и ближайшего фона ($backgroundColor): ratio=$ratio (требуется >= $minContrast)."
+
+        const val COMPOSE_INSUFFICIENT_TEXT_CONTRAST_RECOMMENDATION =
+            "Увеличьте контраст между Compose Text и фоном или используйте подходящие MaterialTheme.colorScheme-токены."
+
         fun composeButtonColorPerFileNearDuplicate(
             color: String,
             canonicalColor: String,
@@ -289,6 +302,12 @@ object AnalyzerStrings {
 
         const val COMPOSE_BUTTON_COLOR_PER_FILE_RECOMMENDATION =
             "Проверьте, соответствует ли эта Compose-кнопка локальной цветовой системе файла: MaterialTheme.colorScheme или общему buttonColors-токену."
+
+        fun composeComponentStyleOutlier(componentType: String, differences: String): String =
+            "Compose-компонент $componentType отличается от доминирующего локального стиля похожих компонентов по признакам: $differences."
+
+        fun composeComponentStyleOutlierRecommendation(dominantStyle: String): String =
+            "Проверьте, должен ли компонент использовать доминирующий Compose-стиль для похожих компонентов в этом файле: $dominantStyle."
 
         fun composeTouchTargetTooSmall(width: String?, height: String?): String =
             "Размер интерактивного Compose-элемента слишком мал для удобного нажатия: width=$width, height=$height."

@@ -1,4 +1,4 @@
-package ru.itis.compose.source.parser
+package ru.itis.compose.source.legacy.parser
 
 import java.io.File
 import kotlin.test.Test

@@ -4,6 +4,7 @@ import ru.itis.analyzer.config.AnalyzerFormat
 import ru.itis.analyzer.config.ComponentTypes
 import ru.itis.analyzer.utils.ColorUtils
 import ru.itis.analyzer.utils.ComponentUtils
+import ru.itis.compose.style.ComposeColorValueNormalizer
 import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 
@@ -14,7 +15,10 @@ class ComposeButtonColorAnalysisHelper {
             .filter { component -> component.sourceType == SourceType.COMPOSE }
             .filter { component -> component.type in composeButtonTypes }
             .mapNotNull { button ->
-                val color = normalizeComposeColor(button.properties.backgroundColor) ?: return@mapNotNull null
+                val color = ComposeColorValueNormalizer.normalize(
+                    value = button.properties.backgroundColor,
+                    includeThemeTokens = false
+                ) ?: return@mapNotNull null
                 ComposeButtonColorEntry(button = button, color = color)
             }
     }
@@ -128,23 +132,6 @@ class ComposeButtonColorAnalysisHelper {
         return clusters
     }
 
-    private fun normalizeComposeColor(value: String?): String? {
-        val trimmed = value?.trim() ?: return null
-        ColorUtils.normalizeHexColor(trimmed)?.let { color -> return color }
-
-        val constructorMatch = COLOR_CONSTRUCTOR_PATTERN.matchEntire(trimmed)
-        if (constructorMatch != null) {
-            return ColorUtils.normalizeHexColor("#${constructorMatch.groupValues[1]}")
-        }
-
-        val argbMatch = ARGB_LITERAL_PATTERN.matchEntire(trimmed)
-        if (argbMatch != null) {
-            return ColorUtils.normalizeHexColor("#${argbMatch.groupValues[1]}")
-        }
-
-        return null
-    }
-
     private companion object {
         val composeButtonTypes = setOf(
             ComponentTypes.COMPOSE_BUTTON,
@@ -154,8 +141,6 @@ class ComposeButtonColorAnalysisHelper {
             ComponentTypes.COMPOSE_FLOATING_ACTION_BUTTON
         )
 
-        val COLOR_CONSTRUCTOR_PATTERN = Regex("""Color\(0x([0-9A-Fa-f]{8})\)""")
-        val ARGB_LITERAL_PATTERN = Regex("""0x([0-9A-Fa-f]{8})""")
     }
 }
 
