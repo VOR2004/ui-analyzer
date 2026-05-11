@@ -38,13 +38,19 @@ object AnalyzerStrings {
         const val COMPOSE_TEXT_CONTRAST = "compose-text-contrast"
         const val COMPOSE_RUNTIME_OVERLAPPING_CLICKABLE_COMPONENTS =
             "compose-runtime-overlapping-clickable-components"
+        const val COMPOSE_RUNTIME_OFFSCREEN_OR_CLIPPED_COMPONENT =
+            "compose-runtime-offscreen-or-clipped-component"
+        const val RUNTIME_SYSTEM_APP_SNAPSHOT_WARNING =
+            "runtime-system-app-snapshot-warning"
+        const val RUNTIME_DUPLICATE_VISIBLE_TEXT_ACTIONS =
+            "runtime-duplicate-visible-text-actions"
 
         fun nearDuplicateCluster(baseId: String): String = "$baseId-near-duplicate-cluster"
     }
 
     object Cli {
         const val USAGE =
-            "Usage: ui-analyzer <path-to-android-project> [output-file] [runtime-snapshot-json|--runtime-adb] [adb-serial]"
+            "Usage: ui-analyzer <path-to-android-project> [output-file] [--rules=all|static|xml|compose|runtime] [runtime-snapshot-json|--runtime-adb] [adb-serial]"
         const val DEFAULT_OUTPUT_PATH = "analysis-report.json"
         const val ANALYSIS_COMPLETE = "Analysis complete"
 
@@ -333,6 +339,36 @@ object AnalyzerStrings {
 
         const val COMPOSE_RUNTIME_OVERLAPPING_CLICKABLE_COMPONENTS_RECOMMENDATION =
             "Проверьте фактические runtime bounds: пересекающиеся clickable-области могут вызывать неоднозначные нажатия и проблемы доступности."
+
+        fun composeRuntimeOffscreenOrClippedComponent(
+            component: String,
+            bounds: String,
+            screenBounds: String,
+            reason: String
+        ): String =
+            "Runtime-компонент $component имеет подозрительные bounds: bounds=$bounds, screenBounds=$screenBounds, reason=$reason."
+
+        const val COMPOSE_RUNTIME_OFFSCREEN_OR_CLIPPED_COMPONENT_RECOMMENDATION =
+            "Проверьте фактическую runtime-верстку: компонент может быть невидимым, обрезанным, вынесенным за экран или измеренным с некорректным размером."
+
+        fun runtimeSystemAppSnapshotWarning(
+            expectedPackage: String,
+            actualPackage: String
+        ): String =
+            "Runtime snapshot снят с пакета $actualPackage, хотя ожидается пакет проекта $expectedPackage."
+
+        const val RUNTIME_SYSTEM_APP_SNAPSHOT_WARNING_RECOMMENDATION =
+            "Перед runtime-анализом откройте приложение проекта на эмуляторе/устройстве и повторите snapshot. Например: adb shell monkey -p <applicationId> 1."
+
+        fun runtimeDuplicateVisibleTextActions(
+            label: String,
+            count: Int,
+            examples: String
+        ): String =
+            "На runtime-экране найдено $count кликабельных элементов с одинаковой видимой подписью \"$label\": $examples."
+
+        const val RUNTIME_DUPLICATE_VISIBLE_TEXT_ACTIONS_RECOMMENDATION =
+            "Проверьте, достаточно ли различимы эти действия для пользователя, accessibility и UI-тестов. Если элементы повторяются в списке, добавьте более конкретный contentDescription или другой доступный контекст."
 
         fun composeNearDuplicateSpacingCluster(
             propertyName: String,

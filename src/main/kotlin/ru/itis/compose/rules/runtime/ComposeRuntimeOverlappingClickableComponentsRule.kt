@@ -30,6 +30,10 @@ class ComposeRuntimeOverlappingClickableComponentsRule : Rule {
             for (secondIndex in firstIndex + 1 until components.size) {
                 val first = components[firstIndex]
                 val second = components[secondIndex]
+                if (first.isAncestorOf(second) || second.isAncestorOf(first)) {
+                    continue
+                }
+
                 val overlapArea = first.properties.bounds
                     ?.overlapArea(second.properties.bounds)
                     ?: 0f
@@ -79,6 +83,12 @@ class ComposeRuntimeOverlappingClickableComponentsRule : Rule {
             treePath?.let { path -> "path=$path" },
             properties.text?.let { text -> "text=$text" }
         ).joinToString(prefix = "[", postfix = "]")
+    }
+
+    private fun UiComponent.isAncestorOf(other: UiComponent): Boolean {
+        val currentPath = treePath ?: return false
+        val otherPath = other.treePath ?: return false
+        return otherPath.startsWith("$currentPath/")
     }
 
     private fun UiBounds.overlapArea(other: UiBounds?): Float {

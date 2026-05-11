@@ -8,7 +8,10 @@ import ru.itis.compose.rules.color.ComposeButtonColorPerFileConsistencyRule
 import ru.itis.compose.rules.color.ComposeHardcodedColorRule
 import ru.itis.compose.rules.layout.ComposeAdaptiveSpacingOutlierRule
 import ru.itis.compose.rules.layout.ComposeNearDuplicateSpacingClusterRule
+import ru.itis.compose.rules.runtime.ComposeRuntimeOffscreenOrClippedComponentRule
 import ru.itis.compose.rules.runtime.ComposeRuntimeOverlappingClickableComponentsRule
+import ru.itis.compose.rules.runtime.RuntimeDuplicateVisibleTextActionsRule
+import ru.itis.compose.rules.runtime.RuntimeSystemAppSnapshotWarningRule
 import ru.itis.compose.rules.style.ComposeComponentStyleOutlierRule
 import ru.itis.compose.rules.text.ComposeAdaptiveTextStyleOutlierRule
 import ru.itis.compose.rules.text.ComposeHardcodedTextRule
@@ -19,6 +22,10 @@ import ru.itis.compose.rules.text.ComposeTooManyTextStylesOnScreenRule
 object ComposeRuleSet {
 
     fun default(): List<Rule> {
+        return staticRules() + runtimeRules()
+    }
+
+    fun staticRules(): List<Rule> {
         return listOf(
             ComposeImageContentDescriptionRule(),
             ComposeTouchTargetTooSmallRule(),
@@ -30,10 +37,18 @@ object ComposeRuleSet {
             ComposeHardcodedColorRule(),
             ComposeButtonColorPerFileConsistencyRule(),
             ComposeComponentStyleOutlierRule(),
-            ComposeRuntimeOverlappingClickableComponentsRule(),
             ComposeMissingModifierParameterRule(),
             ComposeAdaptiveSpacingOutlierRule(),
             ComposeNearDuplicateSpacingClusterRule()
+        )
+    }
+
+    fun runtimeRules(expectedPackageName: String? = null): List<Rule> {
+        return listOf(
+            RuntimeSystemAppSnapshotWarningRule(expectedPackageName),
+            ComposeRuntimeOverlappingClickableComponentsRule(),
+            ComposeRuntimeOffscreenOrClippedComponentRule(),
+            RuntimeDuplicateVisibleTextActionsRule()
         )
     }
 }
