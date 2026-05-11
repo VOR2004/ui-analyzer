@@ -36,12 +36,15 @@ object AnalyzerStrings {
         const val COMPOSE_TEXT_SIZE_NEAR_DUPLICATE_CLUSTER = "compose-text-size-near-duplicate-cluster"
         const val COMPOSE_COMPONENT_STYLE_OUTLIER = "compose-component-style-outlier"
         const val COMPOSE_TEXT_CONTRAST = "compose-text-contrast"
+        const val COMPOSE_RUNTIME_OVERLAPPING_CLICKABLE_COMPONENTS =
+            "compose-runtime-overlapping-clickable-components"
 
         fun nearDuplicateCluster(baseId: String): String = "$baseId-near-duplicate-cluster"
     }
 
     object Cli {
-        const val USAGE = "Usage: ui-analyzer <path-to-android-project> [output-file]"
+        const val USAGE =
+            "Usage: ui-analyzer <path-to-android-project> [output-file] [runtime-snapshot-json|--runtime-adb] [adb-serial]"
         const val DEFAULT_OUTPUT_PATH = "analysis-report.json"
         const val ANALYSIS_COMPLETE = "Analysis complete"
 
@@ -50,6 +53,12 @@ object AnalyzerStrings {
 
         fun foundLayoutXmlFiles(count: Int): String =
             "Found $count layout XML files"
+
+        fun loadedRuntimeComponents(count: Int): String =
+            "Loaded $count runtime components"
+
+        fun capturingRuntimeWithAdb(serial: String?): String =
+            "Capturing Android runtime snapshot via ADB${serial?.let { " ($it)" }.orEmpty()}"
 
         fun failedToParse(path: String, message: String?): String =
             "Failed to parse $path: $message"
@@ -314,6 +323,16 @@ object AnalyzerStrings {
 
         const val COMPOSE_TOUCH_TARGET_TOO_SMALL_RECOMMENDATION =
             "Рекомендуется делать интерактивные Compose-элементы не меньше 48.dp по ширине и высоте или обеспечить минимальную область нажатия через Modifier.sizeIn/minimumInteractiveComponentSize."
+
+        fun composeRuntimeOverlappingClickableComponents(
+            firstComponent: String,
+            secondComponent: String,
+            overlapArea: String
+        ): String =
+            "Runtime Compose clickable-компоненты пересекаются: $firstComponent и $secondComponent, overlapArea=$overlapArea."
+
+        const val COMPOSE_RUNTIME_OVERLAPPING_CLICKABLE_COMPONENTS_RECOMMENDATION =
+            "Проверьте фактические runtime bounds: пересекающиеся clickable-области могут вызывать неоднозначные нажатия и проблемы доступности."
 
         fun composeNearDuplicateSpacingCluster(
             propertyName: String,

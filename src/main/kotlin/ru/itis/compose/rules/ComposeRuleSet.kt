@@ -8,6 +8,7 @@ import ru.itis.compose.rules.color.ComposeButtonColorPerFileConsistencyRule
 import ru.itis.compose.rules.color.ComposeHardcodedColorRule
 import ru.itis.compose.rules.layout.ComposeAdaptiveSpacingOutlierRule
 import ru.itis.compose.rules.layout.ComposeNearDuplicateSpacingClusterRule
+import ru.itis.compose.rules.runtime.ComposeRuntimeOverlappingClickableComponentsRule
 import ru.itis.compose.rules.style.ComposeComponentStyleOutlierRule
 import ru.itis.compose.rules.text.ComposeAdaptiveTextStyleOutlierRule
 import ru.itis.compose.rules.text.ComposeHardcodedTextRule
@@ -29,6 +30,7 @@ object ComposeRuleSet {
             ComposeHardcodedColorRule(),
             ComposeButtonColorPerFileConsistencyRule(),
             ComposeComponentStyleOutlierRule(),
+            ComposeRuntimeOverlappingClickableComponentsRule(),
             ComposeMissingModifierParameterRule(),
             ComposeAdaptiveSpacingOutlierRule(),
             ComposeNearDuplicateSpacingClusterRule()

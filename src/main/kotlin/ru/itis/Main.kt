@@ -1,16 +1,19 @@
 package ru.itis
 
+import java.io.File
 import ru.itis.analyzer.Analyzer
 import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.android.runtime.adb.AdbUiAutomatorSnapshotProvider
+import ru.itis.compose.runtime.importer.ComposeRuntimeSnapshotImporter
 import ru.itis.compose.rules.ComposeRuleSet
 import ru.itis.report.JsonReportGenerator
 import ru.itis.compose.source.importer.ComposeProjectImporter
 import ru.itis.compose.source.parser.ComposeFunctionParser
 import ru.itis.compose.source.psi.ComposePsiLayoutParser
+import ru.itis.xml.rules.XmlRuleSet
 import ru.itis.xml.source.importer.XmlProjectImporter
 import ru.itis.xml.source.parser.XmlLayoutParser
 import ru.itis.xml.source.resource.ResourceRepository
-import java.io.File
 
 fun main(args: Array<String>) {
     if (args.isEmpty()) {
@@ -20,6 +23,8 @@ fun main(args: Array<String>) {
 
     val projectPath = args[0]
     val outputPath = args.getOrNull(1) ?: AnalyzerStrings.Cli.DEFAULT_OUTPUT_PATH
+    val runtimeMode = args.getOrNull(2)
+    val adbSerial = args.getOrNull(3)
 
     val projectRoot = File(projectPath)
     if (!projectRoot.exists() || !projectRoot.isDirectory) {
@@ -32,6 +37,8 @@ fun main(args: Array<String>) {
     val composeImporter = ComposeProjectImporter()
     val composeParser = ComposePsiLayoutParser()
     val composeFunctionParser = ComposeFunctionParser()
+    val runtimeSnapshotImporter = ComposeRuntimeSnapshotImporter()
+    val adbSnapshotProvider = AdbUiAutomatorSnapshotProvider()
     val resourceRepository = ResourceRepository.load(projectRoot)
 
     val composeFiles = composeImporter.findComposeKotlinFiles(projectRoot)
@@ -46,7 +53,7 @@ fun main(args: Array<String>) {
     val analyzer = Analyzer(
         resourceRepository = resourceRepository,
         composeFunctions = composeFunctions,
-        rules = ComposeRuleSet.default()
+        rules = XmlRuleSet.default(resourceRepository) + ComposeRuleSet.default()
     )
 
     val reportGenerator = JsonReportGenerator()
@@ -70,7 +77,33 @@ fun main(args: Array<String>) {
             .getOrDefault(emptyList())
     }
 
-    val components = xmlComponents + composeComponents
+    val runtimeComponents = when {
+        runtimeMode == null -> emptyList()
+        runtimeMode == RUNTIME_ADB_ARGUMENT -> {
+            println(AnalyzerStrings.Cli.capturingRuntimeWithAdb(adbSerial))
+            runCatching { adbSnapshotProvider.capture(adbSerial) }
+                .onFailure { error -> println(error.message) }
+                .getOrDefault(emptyList())
+        }
+        else -> {
+            File(runtimeMode)
+                .takeIf { file -> file.exists() && file.isFile }
+                ?.let { file ->
+                    runCatching { runtimeSnapshotImporter.import(file) }
+                        .onFailure { error ->
+                            println(AnalyzerStrings.Cli.failedToParse(file.path, error.message))
+                        }
+                        .getOrDefault(emptyList())
+                }
+                .orEmpty()
+        }
+    }
+
+    if (runtimeMode != null) {
+        println(AnalyzerStrings.Cli.loadedRuntimeComponents(runtimeComponents.sumOf { countComponents(it) }))
+    }
+
+    val components = xmlComponents + composeComponents + runtimeComponents
     val issues = analyzer.analyze(components)
     reportGenerator.writeReport(File(outputPath), components, issues)
 
@@ -79,3 +112,9 @@ fun main(args: Array<String>) {
     println(AnalyzerStrings.Cli.issuesFound(issues.size))
     println(AnalyzerStrings.Cli.reportWrittenTo(outputPath))
 }
+
+private fun countComponents(component: ru.itis.model.UiComponent): Int {
+    return 1 + component.children.sumOf { child -> countComponents(child) }
+}
+
+private const val RUNTIME_ADB_ARGUMENT = "--runtime-adb"

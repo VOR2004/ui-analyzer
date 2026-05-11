@@ -19,5 +19,6 @@ data class UiProperties(
     val text: String? = null,
     val contentDescription: String? = null,
     val isClickable: Boolean = false,
+    val bounds: UiBounds? = null,
     val rawAttributes: Map<String, String> = emptyMap()
 )

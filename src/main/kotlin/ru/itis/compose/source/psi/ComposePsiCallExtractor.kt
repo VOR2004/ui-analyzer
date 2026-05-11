@@ -1,5 +1,6 @@
 package ru.itis.compose.source.psi
 
+import kotlin.math.max
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtFile
@@ -43,13 +44,28 @@ internal class ComposePsiCallExtractor {
         var current = parent
         while (current != null) {
             if (current is KtNamedFunction) {
-                return current.annotationEntries.any { annotation ->
-                    annotation.shortName?.asString() == COMPOSABLE_ANNOTATION_NAME
-                }
+                return current.isComposableFunction()
             }
             current = current.parent
         }
         return false
+    }
+
+    private fun KtNamedFunction.isComposableFunction(): Boolean {
+        return annotationEntries.any { annotation ->
+            annotation.shortName?.asString() == COMPOSABLE_ANNOTATION_NAME
+        } || hasLeadingComposableAnnotation()
+    }
+
+    private fun KtNamedFunction.hasLeadingComposableAnnotation(): Boolean {
+        val source = containingFile.text
+        val functionStart = textRange.startOffset
+        val leadingStart = max(0, functionStart - LEADING_ANNOTATION_LOOKBACK)
+        val leadingBlock = source
+            .substring(leadingStart, functionStart)
+            .substringAfterLast(DOUBLE_LINE_BREAK)
+
+        return COMPOSABLE_ANNOTATION_PATTERN.containsMatchIn(leadingBlock)
     }
 
     private fun PsiElement.nearestComposeCallAncestor(): KtCallExpression? {
@@ -65,6 +81,9 @@ internal class ComposePsiCallExtractor {
 
     private companion object {
         const val COMPOSABLE_ANNOTATION_NAME = "Composable"
+        const val LEADING_ANNOTATION_LOOKBACK = 500
+        const val DOUBLE_LINE_BREAK = "\n\n"
+        val COMPOSABLE_ANNOTATION_PATTERN = Regex("""@\s*(?:[\w.]+\.)?Composable\b""")
 
         val composeFunctionNames = setOf(
             ComponentTypes.COMPOSE_TEXT,

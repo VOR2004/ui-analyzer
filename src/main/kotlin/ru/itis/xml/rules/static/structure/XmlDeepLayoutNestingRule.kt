@@ -4,28 +4,31 @@ import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.Severity
+import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 
 class XmlDeepLayoutNestingRule : Rule {
     override val id: String = AnalyzerStrings.RuleIds.DEEP_LAYOUT_NESTING
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
-        return components.mapNotNull { root ->
-            val deepest = findDeepestComponent(root)
-            if (deepest.depth <= MAX_RECOMMENDED_DEPTH) {
-                return@mapNotNull null
-            }
+        return components
+            .filter { root -> root.sourceType == SourceType.XML }
+            .mapNotNull { root ->
+                val deepest = findDeepestComponent(root)
+                if (deepest.depth <= MAX_RECOMMENDED_DEPTH) {
+                    return@mapNotNull null
+                }
 
-            AnalysisIssue(
-                ruleId = id,
-                severity = Severity.WARNING,
-                componentId = deepest.component.id,
-                componentType = deepest.component.type,
-                filePath = deepest.component.filePath,
-                message = AnalyzerStrings.Messages.deepLayoutNesting(deepest.depth),
-                recommendation = AnalyzerStrings.Messages.DEEP_LAYOUT_NESTING_RECOMMENDATION
-            )
-        }
+                AnalysisIssue(
+                    ruleId = id,
+                    severity = Severity.WARNING,
+                    componentId = deepest.component.id,
+                    componentType = deepest.component.type,
+                    filePath = deepest.component.filePath,
+                    message = AnalyzerStrings.Messages.deepLayoutNesting(deepest.depth),
+                    recommendation = AnalyzerStrings.Messages.DEEP_LAYOUT_NESTING_RECOMMENDATION
+                )
+            }
     }
 
     private fun findDeepestComponent(root: UiComponent): ComponentDepth {

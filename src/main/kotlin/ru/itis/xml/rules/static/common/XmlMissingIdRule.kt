@@ -31,7 +31,7 @@ class XmlMissingIdRule : Rule {
     }
 
     private fun shouldHaveId(component: UiComponent): Boolean {
-        if (component.sourceType == SourceType.COMPOSE) {
+        if (component.sourceType != SourceType.XML) {
             return false
         }
 
