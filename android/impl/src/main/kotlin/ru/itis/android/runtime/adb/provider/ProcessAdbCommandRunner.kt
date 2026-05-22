@@ -1,7 +1,6 @@
 package ru.itis.android.runtime.adb.provider
 
 import ru.itis.android.runtime.adb.AdbCommandResult
-import ru.itis.android.runtime.adb.provider.AdbCommandRunner
 import ru.itis.android.runtime.adb.values.AdbCommands
 import ru.itis.android.runtime.adb.values.AdbRuntimeMessages
 import java.util.concurrent.TimeUnit

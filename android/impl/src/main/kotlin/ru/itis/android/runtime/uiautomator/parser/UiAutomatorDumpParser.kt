@@ -1,7 +1,6 @@
 package ru.itis.android.runtime.uiautomator.parser
 
 import org.w3c.dom.Element
-import ru.itis.android.runtime.uiautomator.parser.RuntimeDumpParser
 import ru.itis.android.runtime.uiautomator.schema.UiAutomatorDumpSchema
 import ru.itis.model.SourceType
 import ru.itis.model.UiComponent

@@ -1,7 +1,6 @@
 package ru.itis.android.runtime.adb.provider
 
 import ru.itis.android.runtime.uiautomator.parser.RuntimeDumpParser
-import ru.itis.android.runtime.adb.provider.AdbCommandRunner
 import ru.itis.android.runtime.adb.AdbDevice
 import ru.itis.android.runtime.adb.values.AdbCommands
 import ru.itis.android.runtime.adb.values.AdbRuntimeMessages
