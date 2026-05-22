@@ -1,10 +1,10 @@
-package ru.itis.compose.rules.text
+﻿package ru.itis.compose.rules.text
+import ru.itis.analyzer.messages.rules.RuleIds
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-import ru.itis.analyzer.config.ComponentTypes
-import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.model.Severity
 import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
@@ -24,7 +24,7 @@ class ComposeAdaptiveTextStyleOutlierRuleTest {
         val issues = ComposeAdaptiveTextStyleOutlierRule().check(components)
 
         assertEquals(1, issues.size)
-        assertEquals(AnalyzerStrings.RuleIds.COMPOSE_ADAPTIVE_TEXT_STYLE_OUTLIER, issues.single().ruleId)
+        assertEquals(RuleIds.COMPOSE_ADAPTIVE_TEXT_STYLE_OUTLIER, issues.single().ruleId)
         assertEquals("bodyOutlier", issues.single().componentId)
         assertEquals(Severity.INFO, issues.single().severity)
         assertTrue(issues.single().recommendation.contains("predictedRole=BODY"))
@@ -85,3 +85,5 @@ class ComposeAdaptiveTextStyleOutlierRuleTest {
         )
     }
 }
+
+

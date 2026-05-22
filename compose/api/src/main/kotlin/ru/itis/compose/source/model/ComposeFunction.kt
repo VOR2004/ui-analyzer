@@ -9,16 +9,16 @@ data class ComposeFunction(
 ) {
     val hasModifierParameter: Boolean
         get() = parameters.any { parameter ->
-            parameter.substringBefore(":").trim() == MODIFIER_PARAMETER_NAME
+            parameter.substringBefore(":").trim() == ComposeFunctionConstants.MODIFIER_PARAMETER_NAME
         }
 
     val isPrivate: Boolean
-        get() = PRIVATE_MODIFIER in modifiers
+        get() = ComposeFunctionConstants.PRIVATE_MODIFIER in modifiers
 
     val hasComposableContentParameter: Boolean
         get() = parameters.any { parameter ->
-            parameter.substringBefore(":").trim() == CONTENT_PARAMETER_NAME &&
-                parameter.contains(COMPOSABLE_ANNOTATION)
+            parameter.substringBefore(":").trim() == ComposeFunctionConstants.CONTENT_PARAMETER_NAME &&
+                parameter.contains(ComposeFunctionConstants.COMPOSABLE_ANNOTATION)
         }
 
     val normalizedParameterText: String
@@ -26,11 +26,4 @@ data class ComposeFunction(
 
     val normalizedBodyText: String
         get() = body.replace(Regex("""\s+"""), " ")
-
-    private companion object {
-        const val MODIFIER_PARAMETER_NAME = "modifier"
-        const val PRIVATE_MODIFIER = "private"
-        const val CONTENT_PARAMETER_NAME = "content"
-        const val COMPOSABLE_ANNOTATION = "@Composable"
-    }
 }

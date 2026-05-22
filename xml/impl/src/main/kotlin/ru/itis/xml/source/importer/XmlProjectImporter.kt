@@ -1,6 +1,6 @@
 package ru.itis.xml.source.importer
 
-import ru.itis.analyzer.config.ProjectStructure
+import ru.itis.analyzer.config.components.ProjectStructure
 import java.io.File
 
 class XmlProjectImporter {

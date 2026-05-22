@@ -1,8 +1,9 @@
-package ru.itis.xml.rules.static.image
+﻿package ru.itis.xml.rules.static.image
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
 
-import ru.itis.analyzer.config.ComponentTypes
-import ru.itis.analyzer.config.ResourcePatterns
-import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.config.components.ComponentTypes
+import ru.itis.analyzer.config.components.ResourcePatterns
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.model.AnalysisIssue
@@ -12,7 +13,7 @@ import ru.itis.model.UiComponent
 
 class XmlImageWithoutContentDescriptionRule : Rule {
 
-    override val id: String = AnalyzerStrings.RuleIds.IMAGE_WITHOUT_CONTENT_DESCRIPTION
+    override val id: String = RuleIds.IMAGE_WITHOUT_CONTENT_DESCRIPTION
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
         return ComponentUtils.findImageComponents(components)
@@ -26,8 +27,8 @@ class XmlImageWithoutContentDescriptionRule : Rule {
                     componentId = component.id,
                     componentType = component.type,
                     filePath = component.filePath,
-                    message = AnalyzerStrings.Messages.imageWithoutContentDescription(component.type),
-                    recommendation = AnalyzerStrings.Messages.IMAGE_WITHOUT_CONTENT_DESCRIPTION_RECOMMENDATION
+                    message = AnalyzerMessages.imageWithoutContentDescription(component.type),
+                    recommendation = AnalyzerMessages.IMAGE_WITHOUT_CONTENT_DESCRIPTION_RECOMMENDATION
                 )
             }
     }
@@ -70,3 +71,5 @@ class XmlImageWithoutContentDescriptionRule : Rule {
             component.type.endsWith(ComponentTypes.IMAGE_BUTTON_SUFFIX)
     }
 }
+
+

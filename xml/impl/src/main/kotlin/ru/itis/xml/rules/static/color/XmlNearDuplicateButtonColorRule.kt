@@ -1,9 +1,10 @@
-package ru.itis.xml.rules.static.color
+﻿package ru.itis.xml.rules.static.color
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
 
-import ru.itis.analyzer.config.AnalyzerFormat
-import ru.itis.analyzer.config.AnalyzerThresholds
+import ru.itis.analyzer.config.analyzer.AnalyzerFormat
+import ru.itis.analyzer.config.analyzer.AnalyzerThresholds
 import ru.itis.xml.helpers.ButtonColorAnalysisHelper
-import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.xml.source.resource.ResourceRepository
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.rules.base.onlyXmlRoots
@@ -18,7 +19,7 @@ class XmlNearDuplicateButtonColorRule(
     private val threshold: Double = AnalyzerThresholds.NEAR_COLOR_DISTANCE
 ) : Rule {
 
-    override val id: String = AnalyzerStrings.RuleIds.NEAR_DUPLICATE_BUTTON_COLORS
+    override val id: String = RuleIds.NEAR_DUPLICATE_BUTTON_COLORS
     private val helper = ButtonColorAnalysisHelper(resourceRepository)
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
@@ -54,8 +55,8 @@ class XmlNearDuplicateButtonColorRule(
                     componentId = firstButton.id,
                     componentType = firstButton.type,
                     filePath = firstButton.filePath,
-                    message = AnalyzerStrings.Messages.nearDuplicateButtonColors(firstColor, secondColor, distance),
-                    recommendation = AnalyzerStrings.Messages.NEAR_DUPLICATE_BUTTON_COLORS_RECOMMENDATION
+                    message = AnalyzerMessages.nearDuplicateButtonColors(firstColor, secondColor, distance),
+                    recommendation = AnalyzerMessages.NEAR_DUPLICATE_BUTTON_COLORS_RECOMMENDATION
                 )
             }
         }
@@ -76,3 +77,5 @@ class XmlNearDuplicateButtonColorRule(
         return listOf(left, right).sorted().joinToString(AnalyzerFormat.PAIR_KEY_DELIMITER)
     }
 }
+
+

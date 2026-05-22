@@ -1,6 +1,7 @@
-package ru.itis.compose.rules.runtime
+﻿package ru.itis.compose.rules.runtime
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
 
-import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.model.AnalysisIssue
@@ -9,7 +10,7 @@ import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 
 class RuntimeDuplicateVisibleTextActionsRule : Rule {
-    override val id: String = AnalyzerStrings.RuleIds.RUNTIME_DUPLICATE_VISIBLE_TEXT_ACTIONS
+    override val id: String = RuleIds.RUNTIME_DUPLICATE_VISIBLE_TEXT_ACTIONS
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
         return components
@@ -46,12 +47,12 @@ class RuntimeDuplicateVisibleTextActionsRule : Rule {
             componentLocator = firstComponent.treePath?.let { path -> "${firstComponent.type}[path=$path]" },
             componentType = firstComponent.type,
             filePath = firstComponent.filePath,
-            message = AnalyzerStrings.Messages.runtimeDuplicateVisibleTextActions(
+            message = AnalyzerMessages.runtimeDuplicateVisibleTextActions(
                 label = label,
                 count = entries.size,
                 examples = entries.take(MAX_EXAMPLES).joinToString { entry -> entry.component.describe() }
             ),
-            recommendation = AnalyzerStrings.Messages.RUNTIME_DUPLICATE_VISIBLE_TEXT_ACTIONS_RECOMMENDATION
+            recommendation = AnalyzerMessages.RUNTIME_DUPLICATE_VISIBLE_TEXT_ACTIONS_RECOMMENDATION
         )
     }
 
@@ -92,3 +93,5 @@ class RuntimeDuplicateVisibleTextActionsRule : Rule {
         val runtimeSourceTypes = setOf(SourceType.COMPOSE_RUNTIME, SourceType.ANDROID_RUNTIME)
     }
 }
+
+

@@ -1,9 +1,10 @@
-package ru.itis.xml.rules.static.color
+﻿package ru.itis.xml.rules.static.color
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
 
 import ru.itis.xml.helpers.ButtonColorAnalysisHelper
 import ru.itis.xml.helpers.ButtonColorEntry
-import ru.itis.analyzer.config.AnalyzerThresholds
-import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.config.analyzer.AnalyzerThresholds
 import ru.itis.xml.source.resource.ResourceRepository
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.rules.base.onlyXmlRoots
@@ -18,7 +19,7 @@ class XmlButtonColorPerLayoutConsistencyRule(
     private val nearThreshold: Double = AnalyzerThresholds.NEAR_COLOR_DISTANCE
 ) : Rule {
 
-    override val id: String = AnalyzerStrings.RuleIds.BUTTON_COLOR_PER_LAYOUT_CONSISTENCY
+    override val id: String = RuleIds.BUTTON_COLOR_PER_LAYOUT_CONSISTENCY
 
     private val helper = ButtonColorAnalysisHelper(resourceRepository)
 
@@ -52,17 +53,17 @@ class XmlButtonColorPerLayoutConsistencyRule(
 
         val nearDuplicateIssues = nearDuplicateResult.replacements.map { replacement ->
             AnalysisIssue(
-                ruleId = AnalyzerStrings.RuleIds.nearDuplicateCluster(id),
+                ruleId = RuleIds.nearDuplicateCluster(id),
                 severity = Severity.INFO,
                 componentId = replacement.entry.button.id,
                 componentType = replacement.entry.button.type,
                 filePath = filePath,
-                message = AnalyzerStrings.Messages.buttonColorPerLayoutNearDuplicate(
+                message = AnalyzerMessages.buttonColorPerLayoutNearDuplicate(
                     color = replacement.entry.color,
                     canonicalColor = replacement.canonicalColor,
                     distance = helper.formatDistance(replacement.distance)
                 ),
-                recommendation = AnalyzerStrings.Messages.buttonColorPerLayoutNearDuplicateRecommendation(
+                recommendation = AnalyzerMessages.buttonColorPerLayoutNearDuplicateRecommendation(
                     replacement.canonicalColor
                 )
             )
@@ -93,13 +94,13 @@ class XmlButtonColorPerLayoutConsistencyRule(
                 }
 
                 val message = if (distance != null && distance <= nearThreshold) {
-                    AnalyzerStrings.Messages.buttonColorPerLayoutNearDominant(
+                    AnalyzerMessages.buttonColorPerLayoutNearDominant(
                         color = entry.color,
                         dominantColor = dominantColor,
                         distance = helper.formatDistance(distance)
                     )
                 } else {
-                    AnalyzerStrings.Messages.buttonColorPerLayoutDifferent(
+                    AnalyzerMessages.buttonColorPerLayoutDifferent(
                         color = entry.color,
                         dominantColor = dominantColor
                     )
@@ -112,8 +113,10 @@ class XmlButtonColorPerLayoutConsistencyRule(
                     componentType = entry.button.type,
                     filePath = filePath,
                     message = message,
-                    recommendation = AnalyzerStrings.Messages.BUTTON_COLOR_PER_LAYOUT_RECOMMENDATION
+                    recommendation = AnalyzerMessages.BUTTON_COLOR_PER_LAYOUT_RECOMMENDATION
                 )
             }
     }
 }
+
+

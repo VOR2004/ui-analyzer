@@ -3,7 +3,7 @@ package ru.itis.xml.rules.static.text
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
-import ru.itis.analyzer.config.ComponentTypes
+import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 import ru.itis.model.UiProperties

@@ -1,9 +1,9 @@
-package ru.itis.analyzer
+﻿package ru.itis.analyzer
+import ru.itis.analyzer.messages.rules.RuleIds
 
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertTrue
-import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.xml.rules.static.structure.XmlDeepLayoutNestingRule
 import ru.itis.xml.source.parser.XmlLayoutParser
 
@@ -19,10 +19,12 @@ class XmlDeepLayoutNestingRuleTest {
 
         assertTrue(
             issues.any { issue ->
-                issue.ruleId == AnalyzerStrings.RuleIds.DEEP_LAYOUT_NESTING &&
+                issue.ruleId == RuleIds.DEEP_LAYOUT_NESTING &&
                     issue.componentId == "deep_text"
             },
             "Expected deep layout nesting warning for deepest component"
         )
     }
 }
+
+

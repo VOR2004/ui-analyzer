@@ -1,7 +1,8 @@
-package ru.itis.compose.rules.text
+﻿package ru.itis.compose.rules.text
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
 
-import ru.itis.analyzer.config.ComponentTypes
-import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.model.AnalysisIssue
@@ -10,7 +11,7 @@ import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 
 class ComposeTooManyTextStylesOnScreenRule : Rule {
-    override val id: String = AnalyzerStrings.RuleIds.COMPOSE_TOO_MANY_TEXT_STYLES_ON_SCREEN
+    override val id: String = RuleIds.COMPOSE_TOO_MANY_TEXT_STYLES_ON_SCREEN
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
         return ComponentUtils.flattenAll(components)
@@ -51,11 +52,11 @@ class ComposeTooManyTextStylesOnScreenRule : Rule {
             componentLocator = "ComposeFile[path=$filePath]",
             componentType = "ComposeFile",
             filePath = filePath,
-            message = AnalyzerStrings.Messages.composeTooManyTextStylesOnScreen(
+            message = AnalyzerMessages.composeTooManyTextStylesOnScreen(
                 actualCount = styleCounts.size,
                 dominantSharePercent = (dominantShare * 100).toInt()
             ),
-            recommendation = AnalyzerStrings.Messages.COMPOSE_TOO_MANY_TEXT_STYLES_ON_SCREEN_RECOMMENDATION
+            recommendation = AnalyzerMessages.COMPOSE_TOO_MANY_TEXT_STYLES_ON_SCREEN_RECOMMENDATION
         )
     }
 
@@ -89,3 +90,5 @@ class ComposeTooManyTextStylesOnScreenRule : Rule {
         const val MIN_DOMINANT_SHARE = 0.6
     }
 }
+
+

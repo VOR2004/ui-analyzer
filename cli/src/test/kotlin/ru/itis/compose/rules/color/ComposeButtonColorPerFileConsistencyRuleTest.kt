@@ -1,10 +1,10 @@
-package ru.itis.compose.rules.color
+﻿package ru.itis.compose.rules.color
+import ru.itis.analyzer.messages.rules.RuleIds
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-import ru.itis.analyzer.config.ComponentTypes
-import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.model.Severity
 import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
@@ -23,7 +23,7 @@ class ComposeButtonColorPerFileConsistencyRuleTest {
         val issues = ComposeButtonColorPerFileConsistencyRule().check(components)
 
         assertEquals(1, issues.size)
-        assertEquals(AnalyzerStrings.RuleIds.COMPOSE_BUTTON_COLOR_PER_FILE_CONSISTENCY, issues.single().ruleId)
+        assertEquals(RuleIds.COMPOSE_BUTTON_COLOR_PER_FILE_CONSISTENCY, issues.single().ruleId)
         assertEquals("danger", issues.single().componentId)
         assertEquals(Severity.WARNING, issues.single().severity)
     }
@@ -40,8 +40,8 @@ class ComposeButtonColorPerFileConsistencyRuleTest {
 
         assertEquals(1, issues.size)
         assertEquals(
-            AnalyzerStrings.RuleIds.nearDuplicateCluster(
-                AnalyzerStrings.RuleIds.COMPOSE_BUTTON_COLOR_PER_FILE_CONSISTENCY
+            RuleIds.nearDuplicateCluster(
+                RuleIds.COMPOSE_BUTTON_COLOR_PER_FILE_CONSISTENCY
             ),
             issues.single().ruleId
         )
@@ -95,3 +95,5 @@ class ComposeButtonColorPerFileConsistencyRuleTest {
         )
     }
 }
+
+

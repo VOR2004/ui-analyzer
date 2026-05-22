@@ -1,8 +1,10 @@
-package ru.itis.xml.rules.adaptive.button
+﻿package ru.itis.xml.rules.adaptive.button
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
+import ru.itis.analyzer.messages.ui.UiPropertyNames
 
 import kotlin.math.abs
 import ru.itis.analyzer.core.AnalysisContext
-import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.xml.source.resource.ResourceRepository
 import ru.itis.analyzer.rules.base.ContextualRule
 import ru.itis.analyzer.utils.ColorUtils
@@ -14,7 +16,7 @@ import ru.itis.model.UiComponent
 import ru.itis.xml.style.signature.ButtonStyleSignature
 
 class XmlAdaptiveButtonStyleOutlierRule : ContextualRule {
-    override val id: String = AnalyzerStrings.RuleIds.ADAPTIVE_BUTTON_STYLE_OUTLIER
+    override val id: String = RuleIds.ADAPTIVE_BUTTON_STYLE_OUTLIER
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> = emptyList()
 
@@ -35,10 +37,10 @@ class XmlAdaptiveButtonStyleOutlierRule : ContextualRule {
                     componentId = button.id,
                     componentType = button.type,
                     filePath = button.filePath,
-                    message = AnalyzerStrings.Messages.adaptiveButtonStyleOutlier(
+                    message = AnalyzerMessages.adaptiveButtonStyleOutlier(
                         differences = differences.joinToString(", ")
                     ),
-                    recommendation = AnalyzerStrings.Messages.adaptiveButtonStyleOutlierRecommendation(
+                    recommendation = AnalyzerMessages.adaptiveButtonStyleOutlierRecommendation(
                         dominantStyle = formatStyle(dominantStyle)
                     )
                 )
@@ -85,19 +87,19 @@ class XmlAdaptiveButtonStyleOutlierRule : ContextualRule {
         val differences = mutableListOf<String>()
 
         if (!sameColor(actual.background, dominant.background)) {
-            differences += AnalyzerStrings.PropertyNames.BACKGROUND
+            differences += UiPropertyNames.BACKGROUND
         }
 
         if (!sameColor(actual.textColor, dominant.textColor)) {
-            differences += AnalyzerStrings.PropertyNames.TEXT_COLOR
+            differences += UiPropertyNames.TEXT_COLOR
         }
 
         if (!sameDimension(actual.textSize, dominant.textSize, TEXT_SIZE_TOLERANCE_SP)) {
-            differences += AnalyzerStrings.PropertyNames.TEXT_SIZE
+            differences += UiPropertyNames.TEXT_SIZE
         }
 
         if (!sameDimension(actual.padding, dominant.padding, PADDING_TOLERANCE_DP)) {
-            differences += AnalyzerStrings.PropertyNames.PADDING
+            differences += UiPropertyNames.PADDING
         }
 
         return differences
@@ -134,3 +136,5 @@ class XmlAdaptiveButtonStyleOutlierRule : ContextualRule {
         const val PADDING_TOLERANCE_DP = 2f
     }
 }
+
+

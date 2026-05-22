@@ -2,7 +2,7 @@ package ru.itis.compose.source.analyzer
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import ru.itis.analyzer.config.ComponentTypes
+import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 import ru.itis.model.UiProperties

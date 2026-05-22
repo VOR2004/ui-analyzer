@@ -4,8 +4,9 @@ plugins {
 
 dependencies {
     implementation(project(":android:android-api"))
-    implementation(project(":common:common-api"))
+    implementation(project(":core:core-api"))
     implementation(project(":xml:xml-api"))
+    implementation(project(":xml:xml-impl"))
     implementation(kotlin("stdlib"))
 }
 

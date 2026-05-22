@@ -1,10 +1,10 @@
-package ru.itis.compose.rules.color
+﻿package ru.itis.compose.rules.color
+import ru.itis.analyzer.messages.rules.RuleIds
 
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
-import ru.itis.analyzer.config.ComponentTypes
-import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 import ru.itis.model.UiProperties
@@ -22,7 +22,7 @@ class ComposeHardcodedColorRuleTest {
         val issues = ComposeHardcodedColorRule().check(listOf(component))
 
         assertTrue(
-            issues.any { issue -> issue.ruleId == AnalyzerStrings.RuleIds.COMPOSE_HARDCODED_COLOR },
+            issues.any { issue -> issue.ruleId == RuleIds.COMPOSE_HARDCODED_COLOR },
             "Expected Compose hardcoded color issue"
         )
     }
@@ -50,7 +50,7 @@ class ComposeHardcodedColorRuleTest {
         val issues = ComposeHardcodedColorRule().check(listOf(component))
 
         assertTrue(
-            issues.any { issue -> issue.ruleId == AnalyzerStrings.RuleIds.COMPOSE_HARDCODED_COLOR },
+            issues.any { issue -> issue.ruleId == RuleIds.COMPOSE_HARDCODED_COLOR },
             "Expected Compose hex color literal issue"
         )
     }
@@ -91,3 +91,5 @@ class ComposeHardcodedColorRuleTest {
         )
     }
 }
+
+

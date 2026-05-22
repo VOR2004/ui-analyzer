@@ -1,7 +1,8 @@
-package ru.itis.xml.rules.static.text
+﻿package ru.itis.xml.rules.static.text
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
 
-import ru.itis.analyzer.config.ComponentTypes
-import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.xml.source.resource.ResourceRepository
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.rules.base.onlyXmlFlatComponents
@@ -12,7 +13,7 @@ import ru.itis.model.UiComponent
 class XmlTextSizeConsistencyRule(
     private val resourceRepository: ResourceRepository = ResourceRepository.empty()
 ) : Rule {
-    override val id: String = AnalyzerStrings.RuleIds.TEXT_SIZE_CONSISTENCY
+    override val id: String = RuleIds.TEXT_SIZE_CONSISTENCY
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
         val flat = components.onlyXmlFlatComponents()
@@ -43,8 +44,8 @@ class XmlTextSizeConsistencyRule(
                     componentId = component.id,
                     componentType = component.type,
                     filePath = component.filePath,
-                    message = AnalyzerStrings.Messages.textSizeConsistency(size, dominantSize),
-                    recommendation = AnalyzerStrings.Messages.TEXT_SIZE_CONSISTENCY_RECOMMENDATION
+                    message = AnalyzerMessages.textSizeConsistency(size, dominantSize),
+                    recommendation = AnalyzerMessages.TEXT_SIZE_CONSISTENCY_RECOMMENDATION
                 )
             }
     }
@@ -53,3 +54,5 @@ class XmlTextSizeConsistencyRule(
         return resourceRepository.resolveDimension(value) ?: value
     }
 }
+
+

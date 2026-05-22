@@ -1,6 +1,7 @@
-package ru.itis.compose.rules.runtime
+﻿package ru.itis.compose.rules.runtime
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
 
-import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.model.AnalysisIssue
@@ -11,7 +12,7 @@ import ru.itis.model.UiComponent
 class RuntimeSystemAppSnapshotWarningRule(
     private val expectedPackageName: String?
 ) : Rule {
-    override val id: String = AnalyzerStrings.RuleIds.RUNTIME_SYSTEM_APP_SNAPSHOT_WARNING
+    override val id: String = RuleIds.RUNTIME_SYSTEM_APP_SNAPSHOT_WARNING
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
         val expectedPackage = expectedPackageName?.takeIf { packageName -> packageName.isNotBlank() }
@@ -44,11 +45,11 @@ class RuntimeSystemAppSnapshotWarningRule(
             componentLocator = root.treePath?.let { path -> "${root.type}[path=$path]" },
             componentType = root.type,
             filePath = root.filePath,
-            message = AnalyzerStrings.Messages.runtimeSystemAppSnapshotWarning(
+            message = AnalyzerMessages.runtimeSystemAppSnapshotWarning(
                 expectedPackage = expectedPackage,
                 actualPackage = actualPackage
             ),
-            recommendation = AnalyzerStrings.Messages.RUNTIME_SYSTEM_APP_SNAPSHOT_WARNING_RECOMMENDATION
+            recommendation = AnalyzerMessages.RUNTIME_SYSTEM_APP_SNAPSHOT_WARNING_RECOMMENDATION
         )
     }
 

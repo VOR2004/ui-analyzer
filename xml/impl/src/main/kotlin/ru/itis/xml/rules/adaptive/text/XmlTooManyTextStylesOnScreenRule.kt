@@ -1,7 +1,8 @@
-package ru.itis.xml.rules.adaptive.text
+﻿package ru.itis.xml.rules.adaptive.text
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
 
 import ru.itis.analyzer.core.AnalysisContext
-import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.analyzer.rules.base.ContextualRule
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.model.AnalysisIssue
@@ -12,7 +13,7 @@ import ru.itis.xml.style.signature.PredictedTextRole
 import ru.itis.xml.style.signature.TextStyleSignature
 
 class XmlTooManyTextStylesOnScreenRule : ContextualRule {
-    override val id: String = AnalyzerStrings.RuleIds.TOO_MANY_TEXT_STYLES_ON_SCREEN
+    override val id: String = RuleIds.TOO_MANY_TEXT_STYLES_ON_SCREEN
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> = emptyList()
 
@@ -64,12 +65,12 @@ class XmlTooManyTextStylesOnScreenRule : ContextualRule {
             componentId = root.id,
             componentType = root.type,
             filePath = root.filePath,
-            message = AnalyzerStrings.Messages.tooManyTextStylesOnScreen(
+            message = AnalyzerMessages.tooManyTextStylesOnScreen(
                 role = role.name,
                 actualCount = styleCounts.size,
                 dominantSharePercent = (dominantShare * 100).toInt()
             ),
-            recommendation = AnalyzerStrings.Messages.tooManyTextStylesOnScreenRecommendation(
+            recommendation = AnalyzerMessages.tooManyTextStylesOnScreenRecommendation(
                 role = role.name
             )
         )
@@ -82,3 +83,5 @@ class XmlTooManyTextStylesOnScreenRule : ContextualRule {
         const val MIN_DOMINANT_SHARE = 0.6
     }
 }
+
+

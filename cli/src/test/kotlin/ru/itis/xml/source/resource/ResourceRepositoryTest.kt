@@ -10,7 +10,7 @@ class ResourceRepositoryTest {
     fun `loads colors dimensions strings and styles from values resources`() {
         val projectRoot = File("src/test/resources/demo-project")
 
-        val repository = ResourceRepository.load(projectRoot)
+        val repository = DefaultResourceRepository.load(projectRoot)
 
         assertEquals("#3366FF", repository.resolveColor("@color/demo_primary"))
         assertEquals("#123456", repository.resolveColor("?attr/manifestOnlyColor"))

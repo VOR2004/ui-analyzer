@@ -4,7 +4,7 @@ import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-import ru.itis.analyzer.config.ComponentTypes
+import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.analyzer.utils.ComponentUtils
 
 class ComposePsiLayoutParserTest {

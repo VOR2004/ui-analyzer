@@ -1,6 +1,7 @@
-package ru.itis.compose.rules.runtime
+﻿package ru.itis.compose.rules.runtime
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
 
-import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.Severity
@@ -9,7 +10,7 @@ import ru.itis.model.UiBounds
 import ru.itis.model.UiComponent
 
 class ComposeRuntimeOffscreenOrClippedComponentRule : Rule {
-    override val id: String = AnalyzerStrings.RuleIds.COMPOSE_RUNTIME_OFFSCREEN_OR_CLIPPED_COMPONENT
+    override val id: String = RuleIds.COMPOSE_RUNTIME_OFFSCREEN_OR_CLIPPED_COMPONENT
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
         return components
@@ -66,13 +67,13 @@ class ComposeRuntimeOffscreenOrClippedComponentRule : Rule {
             componentLocator = component.treePath?.let { path -> "${component.type}[path=$path]" },
             componentType = component.type,
             filePath = component.filePath,
-            message = AnalyzerStrings.Messages.composeRuntimeOffscreenOrClippedComponent(
+            message = AnalyzerMessages.composeRuntimeOffscreenOrClippedComponent(
                 component = component.describe(),
                 bounds = component.properties.bounds.toBoundsString(),
                 screenBounds = screenBounds.toBoundsString(),
                 reason = problem.reason
             ),
-            recommendation = AnalyzerStrings.Messages.COMPOSE_RUNTIME_OFFSCREEN_OR_CLIPPED_COMPONENT_RECOMMENDATION
+            recommendation = AnalyzerMessages.COMPOSE_RUNTIME_OFFSCREEN_OR_CLIPPED_COMPONENT_RECOMMENDATION
         )
     }
 
@@ -116,3 +117,5 @@ class ComposeRuntimeOffscreenOrClippedComponentRule : Rule {
         val runtimeSourceTypes = setOf(SourceType.COMPOSE_RUNTIME, SourceType.ANDROID_RUNTIME)
     }
 }
+
+

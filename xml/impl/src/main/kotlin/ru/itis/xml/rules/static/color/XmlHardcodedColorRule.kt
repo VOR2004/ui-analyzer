@@ -1,6 +1,8 @@
-package ru.itis.xml.rules.static.color
+﻿package ru.itis.xml.rules.static.color
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
+import ru.itis.analyzer.messages.ui.UiPropertyNames
 
-import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.rules.base.onlyXmlFlatComponents
 import ru.itis.analyzer.utils.ColorUtils
@@ -10,17 +12,17 @@ import ru.itis.model.UiComponent
 
 class XmlHardcodedColorRule : Rule {
 
-    override val id: String = AnalyzerStrings.RuleIds.HARDCODED_COLOR
+    override val id: String = RuleIds.HARDCODED_COLOR
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
         val flatComponents = components.onlyXmlFlatComponents()
         val issues = mutableListOf<AnalysisIssue>()
 
         for (component in flatComponents) {
-            issues += checkColorProperty(component, AnalyzerStrings.PropertyNames.BACKGROUND, component.properties.backgroundColor)
-            issues += checkColorProperty(component, AnalyzerStrings.PropertyNames.BACKGROUND_TINT, component.properties.backgroundTint)
-            issues += checkColorProperty(component, AnalyzerStrings.PropertyNames.TINT, component.properties.tint)
-            issues += checkColorProperty(component, AnalyzerStrings.PropertyNames.TEXT_COLOR, component.properties.textColor)
+            issues += checkColorProperty(component, UiPropertyNames.BACKGROUND, component.properties.backgroundColor)
+            issues += checkColorProperty(component, UiPropertyNames.BACKGROUND_TINT, component.properties.backgroundTint)
+            issues += checkColorProperty(component, UiPropertyNames.TINT, component.properties.tint)
+            issues += checkColorProperty(component, UiPropertyNames.TEXT_COLOR, component.properties.textColor)
         }
 
         return issues
@@ -40,9 +42,11 @@ class XmlHardcodedColorRule : Rule {
                 componentId = component.id,
                 componentType = component.type,
                 filePath = component.filePath,
-                message = AnalyzerStrings.Messages.hardcodedColor(propertyName, normalizedColor),
-                recommendation = AnalyzerStrings.Messages.HARDCODED_COLOR_RECOMMENDATION
+                message = AnalyzerMessages.hardcodedColor(propertyName, normalizedColor),
+                recommendation = AnalyzerMessages.HARDCODED_COLOR_RECOMMENDATION
             )
         )
     }
 }
+
+

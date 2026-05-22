@@ -2,6 +2,7 @@ package ru.itis.compose.runtime.importer
 
 import java.io.File
 import kotlinx.serialization.json.Json
+import ru.itis.compose.runtime.model.ComposeRuntimeAttributes
 import ru.itis.compose.runtime.model.ComposeRuntimeComponent
 import ru.itis.compose.runtime.model.ComposeRuntimeSnapshot
 import ru.itis.model.SourceType
@@ -64,12 +65,12 @@ class ComposeRuntimeSnapshotImporter {
             bounds = bounds,
             rawAttributes = buildMap {
                 putAll(attributes)
-                put(SCREEN_ATTRIBUTE, snapshot.screen)
-                snapshot.state?.let { state -> put(STATE_ATTRIBUTE, state) }
-                locator?.let { locator -> put(LOCATOR_ATTRIBUTE, locator) }
+                put(ComposeRuntimeAttributes.SCREEN, snapshot.screen)
+                snapshot.state?.let { state -> put(ComposeRuntimeAttributes.STATE, state) }
+                locator?.let { locator -> put(ComposeRuntimeAttributes.LOCATOR, locator) }
                 bounds?.let { bounds ->
-                    put(BOUNDS_X_ATTRIBUTE, bounds.x.toPixelString())
-                    put(BOUNDS_Y_ATTRIBUTE, bounds.y.toPixelString())
+                    put(ComposeRuntimeAttributes.BOUNDS_X, bounds.x.toPixelString())
+                    put(ComposeRuntimeAttributes.BOUNDS_Y, bounds.y.toPixelString())
                 }
             }
         )
@@ -81,13 +82,5 @@ class ComposeRuntimeSnapshotImporter {
         } else {
             "${this}px"
         }
-    }
-
-    private companion object {
-        const val SCREEN_ATTRIBUTE = "runtime:screen"
-        const val STATE_ATTRIBUTE = "runtime:state"
-        const val LOCATOR_ATTRIBUTE = "runtime:locator"
-        const val BOUNDS_X_ATTRIBUTE = "runtime:boundsX"
-        const val BOUNDS_Y_ATTRIBUTE = "runtime:boundsY"
     }
 }

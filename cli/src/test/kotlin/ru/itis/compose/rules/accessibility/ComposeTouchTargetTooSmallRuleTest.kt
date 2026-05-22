@@ -1,10 +1,10 @@
-package ru.itis.compose.rules.accessibility
+﻿package ru.itis.compose.rules.accessibility
+import ru.itis.analyzer.messages.rules.RuleIds
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-import ru.itis.analyzer.config.ComponentTypes
-import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 import ru.itis.model.UiProperties
@@ -21,7 +21,7 @@ class ComposeTouchTargetTooSmallRuleTest {
         val issues = ComposeTouchTargetTooSmallRule().check(listOf(component))
 
         assertEquals(1, issues.size)
-        assertEquals(AnalyzerStrings.RuleIds.COMPOSE_TOUCH_TARGET_TOO_SMALL, issues.single().ruleId)
+        assertEquals(RuleIds.COMPOSE_TOUCH_TARGET_TOO_SMALL, issues.single().ruleId)
         assertEquals("smallButton", issues.single().componentId)
     }
 
@@ -96,3 +96,5 @@ class ComposeTouchTargetTooSmallRuleTest {
         )
     }
 }
+
+

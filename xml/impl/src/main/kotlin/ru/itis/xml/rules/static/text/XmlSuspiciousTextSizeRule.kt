@@ -1,7 +1,8 @@
-package ru.itis.xml.rules.static.text
+﻿package ru.itis.xml.rules.static.text
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
 
-import ru.itis.analyzer.config.AnalyzerThresholds
-import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.config.analyzer.AnalyzerThresholds
 import ru.itis.xml.source.resource.ResourceRepository
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.utils.ComponentUtils
@@ -14,7 +15,7 @@ class XmlSuspiciousTextSizeRule(
     private val resourceRepository: ResourceRepository = ResourceRepository.empty()
 ) : Rule {
 
-    override val id: String = AnalyzerStrings.RuleIds.SUSPICIOUS_TEXT_SIZE
+    override val id: String = RuleIds.SUSPICIOUS_TEXT_SIZE
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
         val textViews = ComponentUtils.findTextViews(components)
@@ -31,8 +32,8 @@ class XmlSuspiciousTextSizeRule(
                     componentId = component.id,
                     componentType = component.type,
                     filePath = component.filePath,
-                    message = AnalyzerStrings.Messages.suspiciousTextSizeTooSmall(resolvedTextSize),
-                    recommendation = AnalyzerStrings.Messages.SUSPICIOUS_TEXT_SIZE_TOO_SMALL_RECOMMENDATION
+                    message = AnalyzerMessages.suspiciousTextSizeTooSmall(resolvedTextSize),
+                    recommendation = AnalyzerMessages.SUSPICIOUS_TEXT_SIZE_TOO_SMALL_RECOMMENDATION
                 )
 
                 textSizeValue > AnalyzerThresholds.MAX_SUSPICIOUS_TEXT_SIZE_SP -> AnalysisIssue(
@@ -41,8 +42,8 @@ class XmlSuspiciousTextSizeRule(
                     componentId = component.id,
                     componentType = component.type,
                     filePath = component.filePath,
-                    message = AnalyzerStrings.Messages.suspiciousTextSizeTooLarge(resolvedTextSize),
-                    recommendation = AnalyzerStrings.Messages.SUSPICIOUS_TEXT_SIZE_TOO_LARGE_RECOMMENDATION
+                    message = AnalyzerMessages.suspiciousTextSizeTooLarge(resolvedTextSize),
+                    recommendation = AnalyzerMessages.SUSPICIOUS_TEXT_SIZE_TOO_LARGE_RECOMMENDATION
                 )
 
                 else -> null
@@ -54,3 +55,5 @@ class XmlSuspiciousTextSizeRule(
         return resourceRepository.resolveDimension(value) ?: value
     }
 }
+
+

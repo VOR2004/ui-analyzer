@@ -1,10 +1,10 @@
-package ru.itis.compose.rules.text
+﻿package ru.itis.compose.rules.text
+import ru.itis.analyzer.messages.rules.RuleIds
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-import ru.itis.analyzer.config.ComponentTypes
-import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 import ru.itis.model.UiProperties
@@ -22,7 +22,7 @@ class ComposeTextSizeNearDuplicateClusterRuleTest {
         val issues = ComposeTextSizeNearDuplicateClusterRule().check(components)
 
         assertEquals(1, issues.size)
-        assertEquals(AnalyzerStrings.RuleIds.COMPOSE_TEXT_SIZE_NEAR_DUPLICATE_CLUSTER, issues.single().ruleId)
+        assertEquals(RuleIds.COMPOSE_TEXT_SIZE_NEAR_DUPLICATE_CLUSTER, issues.single().ruleId)
         assertEquals("body3", issues.single().componentId)
         assertTrue(issues.single().recommendation.contains("predictedRole=BODY"))
     }
@@ -74,3 +74,5 @@ class ComposeTextSizeNearDuplicateClusterRuleTest {
         )
     }
 }
+
+

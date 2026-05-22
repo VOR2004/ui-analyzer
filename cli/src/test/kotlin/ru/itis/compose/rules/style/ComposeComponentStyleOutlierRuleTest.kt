@@ -1,10 +1,10 @@
-package ru.itis.compose.rules.style
+﻿package ru.itis.compose.rules.style
+import ru.itis.analyzer.messages.rules.RuleIds
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-import ru.itis.analyzer.config.ComponentTypes
-import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.model.Severity
 import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
@@ -41,7 +41,7 @@ class ComposeComponentStyleOutlierRuleTest {
         val issues = ComposeComponentStyleOutlierRule().check(components)
 
         assertEquals(1, issues.size)
-        assertEquals(AnalyzerStrings.RuleIds.COMPOSE_COMPONENT_STYLE_OUTLIER, issues.single().ruleId)
+        assertEquals(RuleIds.COMPOSE_COMPONENT_STYLE_OUTLIER, issues.single().ruleId)
         assertEquals("danger", issues.single().componentId)
         assertEquals(Severity.WARNING, issues.single().severity)
         val message = issues.single().message.orEmpty()
@@ -128,3 +128,5 @@ class ComposeComponentStyleOutlierRuleTest {
         )
     }
 }
+
+

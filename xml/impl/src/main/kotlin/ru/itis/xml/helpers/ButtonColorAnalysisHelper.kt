@@ -1,6 +1,6 @@
 package ru.itis.xml.helpers
 
-import ru.itis.analyzer.config.AnalyzerFormat
+import ru.itis.analyzer.config.analyzer.AnalyzerFormat
 import ru.itis.xml.source.resource.ResourceRepository
 import ru.itis.analyzer.utils.ColorUtils
 import ru.itis.analyzer.utils.ComponentUtils

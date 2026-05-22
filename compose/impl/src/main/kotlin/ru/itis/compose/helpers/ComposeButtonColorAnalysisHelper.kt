@@ -1,9 +1,12 @@
 package ru.itis.compose.helpers
 
-import ru.itis.analyzer.config.AnalyzerFormat
-import ru.itis.analyzer.config.ComponentTypes
+import ru.itis.analyzer.config.analyzer.AnalyzerFormat
+import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.analyzer.utils.ColorUtils
 import ru.itis.analyzer.utils.ComponentUtils
+import ru.itis.compose.helpers.model.ComposeButtonColorEntry
+import ru.itis.compose.helpers.model.ComposeClusterReplacement
+import ru.itis.compose.helpers.model.ComposeNearDuplicateClusterResult
 import ru.itis.compose.style.ComposeColorValueNormalizer
 import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
@@ -143,19 +146,3 @@ class ComposeButtonColorAnalysisHelper {
 
     }
 }
-
-data class ComposeButtonColorEntry(
-    val button: UiComponent,
-    val color: String
-)
-
-data class ComposeClusterReplacement(
-    val entry: ComposeButtonColorEntry,
-    val canonicalColor: String,
-    val distance: Double
-)
-
-data class ComposeNearDuplicateClusterResult(
-    val replacements: List<ComposeClusterReplacement> = emptyList(),
-    val flaggedKeys: Set<String> = emptySet()
-)

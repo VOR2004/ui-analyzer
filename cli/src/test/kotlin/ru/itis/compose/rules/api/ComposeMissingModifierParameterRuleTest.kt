@@ -1,10 +1,10 @@
-package ru.itis.compose.rules.api
+﻿package ru.itis.compose.rules.api
+import ru.itis.analyzer.messages.rules.RuleIds
 
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import ru.itis.analyzer.core.ComposeSourceAnalysisContext
-import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.compose.source.model.ComposeFunction
 
 class ComposeMissingModifierParameterRuleTest {
@@ -22,7 +22,7 @@ class ComposeMissingModifierParameterRuleTest {
 
         assertTrue(
             issues.any { issue ->
-                issue.ruleId == AnalyzerStrings.RuleIds.COMPOSE_MISSING_MODIFIER_PARAMETER
+                issue.ruleId == RuleIds.COMPOSE_MISSING_MODIFIER_PARAMETER
             }
         )
     }
@@ -98,3 +98,5 @@ class ComposeMissingModifierParameterRuleTest {
         assertFalse(issues.any())
     }
 }
+
+

@@ -1,7 +1,8 @@
-package ru.itis.xml.rules.static.text
+﻿package ru.itis.xml.rules.static.text
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
 
-import ru.itis.analyzer.config.ResourcePatterns
-import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.config.components.ResourcePatterns
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.model.AnalysisIssue
@@ -11,7 +12,7 @@ import ru.itis.model.UiComponent
 
 class XmlHardcodedTextRule: Rule {
 
-    override val id: String = AnalyzerStrings.RuleIds.HARDCODED_TEXT
+    override val id: String = RuleIds.HARDCODED_TEXT
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
         return ComponentUtils.flattenAll(components)
@@ -28,8 +29,8 @@ class XmlHardcodedTextRule: Rule {
                     componentId = component.id,
                     componentType = component.type,
                     filePath = component.filePath,
-                    message = AnalyzerStrings.Messages.hardcodedText(component.type, text),
-                    recommendation = AnalyzerStrings.Messages.HARDCODED_TEXT_RECOMMENDATION
+                    message = AnalyzerMessages.hardcodedText(component.type, text),
+                    recommendation = AnalyzerMessages.HARDCODED_TEXT_RECOMMENDATION
                 )
             }
     }
@@ -47,3 +48,5 @@ class XmlHardcodedTextRule: Rule {
         return true
     }
 }
+
+

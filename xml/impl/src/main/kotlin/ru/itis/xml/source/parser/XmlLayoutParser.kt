@@ -1,6 +1,6 @@
 package ru.itis.xml.source.parser
 
-import ru.itis.analyzer.config.XmlAttributes
+import ru.itis.analyzer.config.components.XmlAttributes
 import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 import ru.itis.model.UiProperties
@@ -8,10 +8,12 @@ import ru.itis.analyzer.utils.IdUtils
 import org.w3c.dom.Element
 import java.io.File
 
-class XmlLayoutParser {
+class XmlLayoutParser(
+    private val documentParser: SecureXmlDocumentParser = SecureXmlDocumentParser()
+) {
 
     fun parse(file: File): UiComponent {
-        val document = SecureXmlDocumentParser.parse(file)
+        val document = documentParser.parse(file)
         val root = document.documentElement
 
         return parseElement(

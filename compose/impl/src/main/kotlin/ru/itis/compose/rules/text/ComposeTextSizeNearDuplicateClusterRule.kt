@@ -1,8 +1,9 @@
-package ru.itis.compose.rules.text
+﻿package ru.itis.compose.rules.text
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
 
 import kotlin.math.abs
-import ru.itis.analyzer.config.ComponentTypes
-import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.analyzer.utils.DimensionUtils
@@ -14,7 +15,7 @@ import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 
 class ComposeTextSizeNearDuplicateClusterRule : Rule {
-    override val id: String = AnalyzerStrings.RuleIds.COMPOSE_TEXT_SIZE_NEAR_DUPLICATE_CLUSTER
+    override val id: String = RuleIds.COMPOSE_TEXT_SIZE_NEAR_DUPLICATE_CLUSTER
 
     private val rolePredictor = ComposeTextRolePredictor()
 
@@ -90,12 +91,12 @@ class ComposeTextSizeNearDuplicateClusterRule : Rule {
             componentLocator = entry.component.treePath?.let { path -> "${entry.component.type}[path=$path]" },
             componentType = entry.component.type,
             filePath = entry.component.filePath,
-            message = AnalyzerStrings.Messages.composeTextSizeNearDuplicateCluster(
+            message = AnalyzerMessages.composeTextSizeNearDuplicateCluster(
                 value = entry.value,
                 canonicalValue = canonicalValue,
                 predictedRole = entry.role.name
             ),
-            recommendation = AnalyzerStrings.Messages.composeTextSizeNearDuplicateClusterRecommendation(
+            recommendation = AnalyzerMessages.composeTextSizeNearDuplicateClusterRecommendation(
                 canonicalValue = canonicalValue,
                 predictedRole = entry.role.name
             )
@@ -116,3 +117,5 @@ class ComposeTextSizeNearDuplicateClusterRule : Rule {
         const val NEAR_DUPLICATE_DISTANCE_SP = 1f
     }
 }
+
+

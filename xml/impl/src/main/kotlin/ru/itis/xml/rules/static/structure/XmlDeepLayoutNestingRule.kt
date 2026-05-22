@@ -1,6 +1,7 @@
-package ru.itis.xml.rules.static.structure
+﻿package ru.itis.xml.rules.static.structure
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
 
-import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.Severity
@@ -8,7 +9,7 @@ import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 
 class XmlDeepLayoutNestingRule : Rule {
-    override val id: String = AnalyzerStrings.RuleIds.DEEP_LAYOUT_NESTING
+    override val id: String = RuleIds.DEEP_LAYOUT_NESTING
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
         return components
@@ -25,8 +26,8 @@ class XmlDeepLayoutNestingRule : Rule {
                     componentId = deepest.component.id,
                     componentType = deepest.component.type,
                     filePath = deepest.component.filePath,
-                    message = AnalyzerStrings.Messages.deepLayoutNesting(deepest.depth),
-                    recommendation = AnalyzerStrings.Messages.DEEP_LAYOUT_NESTING_RECOMMENDATION
+                    message = AnalyzerMessages.deepLayoutNesting(deepest.depth),
+                    recommendation = AnalyzerMessages.DEEP_LAYOUT_NESTING_RECOMMENDATION
                 )
             }
     }
@@ -49,3 +50,5 @@ class XmlDeepLayoutNestingRule : Rule {
         const val MAX_RECOMMENDED_DEPTH = 8
     }
 }
+
+

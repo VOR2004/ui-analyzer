@@ -1,8 +1,9 @@
-package ru.itis.xml.rules.static.text
+﻿package ru.itis.xml.rules.static.text
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
 
-import ru.itis.analyzer.config.AnalyzerThresholds
-import ru.itis.analyzer.config.ComponentTypes
-import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.config.analyzer.AnalyzerThresholds
+import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.xml.source.resource.ResourceRepository
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.rules.base.onlyXmlRoots
@@ -20,7 +21,7 @@ class XmlTextContrastRule(
     private val resourceRepository: ResourceRepository
 ) : Rule {
 
-    override val id: String = AnalyzerStrings.RuleIds.TEXT_CONTRAST
+    override val id: String = RuleIds.TEXT_CONTRAST
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
         val issues = mutableListOf<AnalysisIssue>()
@@ -87,13 +88,13 @@ class XmlTextContrastRule(
             componentId = component.id,
             componentType = component.type,
             filePath = component.filePath,
-            message = AnalyzerStrings.Messages.insufficientTextContrast(
+            message = AnalyzerMessages.insufficientTextContrast(
                 textColor = textColor,
                 backgroundColor = backgroundColor,
                 ratio = formatRatio(contrast),
                 minContrast = minContrast
             ),
-            recommendation = AnalyzerStrings.Messages.INSUFFICIENT_TEXT_CONTRAST_RECOMMENDATION
+            recommendation = AnalyzerMessages.INSUFFICIENT_TEXT_CONTRAST_RECOMMENDATION
         )
     }
 
@@ -109,3 +110,5 @@ class XmlTextContrastRule(
         return format(Locale.US, "%.2f", value)
     }
 }
+
+

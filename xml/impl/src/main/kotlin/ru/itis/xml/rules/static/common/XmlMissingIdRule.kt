@@ -1,7 +1,8 @@
-package ru.itis.xml.rules.static.common
+﻿package ru.itis.xml.rules.static.common
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
 
-import ru.itis.analyzer.config.ComponentTypes
-import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.model.AnalysisIssue
@@ -11,7 +12,7 @@ import ru.itis.model.UiComponent
 
 class XmlMissingIdRule : Rule {
 
-    override val id: String = AnalyzerStrings.RuleIds.MISSING_ID
+    override val id: String = RuleIds.MISSING_ID
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
         return ComponentUtils.flattenAll(components)
@@ -24,8 +25,8 @@ class XmlMissingIdRule : Rule {
                     componentId = component.id,
                     componentType = component.type,
                     filePath = component.filePath,
-                    message = AnalyzerStrings.Messages.missingId(component.type),
-                    recommendation = AnalyzerStrings.Messages.MISSING_ID_RECOMMENDATION
+                    message = AnalyzerMessages.missingId(component.type),
+                    recommendation = AnalyzerMessages.MISSING_ID_RECOMMENDATION
                 )
             }
     }
@@ -48,3 +49,5 @@ class XmlMissingIdRule : Rule {
         }
     }
 }
+
+

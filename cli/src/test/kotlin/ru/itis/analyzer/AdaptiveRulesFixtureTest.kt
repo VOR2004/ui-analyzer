@@ -1,9 +1,9 @@
-package ru.itis.analyzer
+﻿package ru.itis.analyzer
+import ru.itis.analyzer.messages.rules.RuleIds
 
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertTrue
-import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.xml.rules.adaptive.button.XmlAdaptiveButtonStyleOutlierRule
 import ru.itis.xml.rules.adaptive.layout.XmlAdaptiveSpacingOutlierRule
@@ -13,7 +13,7 @@ import ru.itis.xml.rules.adaptive.text.XmlTooManyTextStylesOnScreenRule
 import ru.itis.xml.rules.static.accessibility.XmlTouchTargetTooSmallRule
 import ru.itis.xml.source.importer.XmlProjectImporter
 import ru.itis.xml.source.parser.XmlLayoutParser
-import ru.itis.xml.source.resource.ResourceRepository
+import ru.itis.xml.source.resource.DefaultResourceRepository
 
 class AdaptiveRulesFixtureTest {
 
@@ -22,7 +22,7 @@ class AdaptiveRulesFixtureTest {
         val projectRoot = File("src/test/resources/demo-project")
         val importer = XmlProjectImporter()
         val parser = XmlLayoutParser()
-        val resourceRepository = ResourceRepository.load(projectRoot)
+        val resourceRepository = DefaultResourceRepository.load(projectRoot)
 
         val rules: List<Rule> = listOf(
             XmlTouchTargetTooSmallRule(resourceRepository),
@@ -41,41 +41,42 @@ class AdaptiveRulesFixtureTest {
         val issues = analyzer.analyze(components)
 
         assertTrue(
-            issues.any { issue -> issue.ruleId == AnalyzerStrings.RuleIds.ADAPTIVE_SPACING_OUTLIER },
+            issues.any { issue -> issue.ruleId == RuleIds.ADAPTIVE_SPACING_OUTLIER },
             "Expected adaptive spacing outlier issue for demo project"
         )
 
         assertTrue(
-            issues.any { issue -> issue.ruleId == AnalyzerStrings.RuleIds.ADAPTIVE_TEXT_SIZE_OUTLIER },
+            issues.any { issue -> issue.ruleId == RuleIds.ADAPTIVE_TEXT_SIZE_OUTLIER },
             "Expected adaptive text size outlier issue for demo project"
         )
 
         assertTrue(
-            issues.any { issue -> issue.ruleId == AnalyzerStrings.RuleIds.ADAPTIVE_TEXT_STYLE_OUTLIER },
+            issues.any { issue -> issue.ruleId == RuleIds.ADAPTIVE_TEXT_STYLE_OUTLIER },
             "Expected adaptive text style outlier issue for demo project"
         )
 
         assertTrue(
-            issues.any { issue -> issue.ruleId == AnalyzerStrings.RuleIds.ADAPTIVE_BUTTON_STYLE_OUTLIER },
+            issues.any { issue -> issue.ruleId == RuleIds.ADAPTIVE_BUTTON_STYLE_OUTLIER },
             "Expected adaptive button style outlier issue for demo project"
         )
 
         assertTrue(
             issues.any { issue ->
-                issue.ruleId == AnalyzerStrings.RuleIds.ADAPTIVE_TEXT_STYLE_OUTLIER &&
+                issue.ruleId == RuleIds.ADAPTIVE_TEXT_STYLE_OUTLIER &&
                     issue.componentId == "body_outlier"
             },
             "Expected adaptive text style outlier for predicted body role demo"
         )
 
         assertTrue(
-            issues.any { issue -> issue.ruleId == AnalyzerStrings.RuleIds.TOUCH_TARGET_TOO_SMALL },
+            issues.any { issue -> issue.ruleId == RuleIds.TOUCH_TARGET_TOO_SMALL },
             "Expected touch target warning for demo project"
         )
 
         assertTrue(
-            issues.any { issue -> issue.ruleId == AnalyzerStrings.RuleIds.TOO_MANY_TEXT_STYLES_ON_SCREEN },
+            issues.any { issue -> issue.ruleId == RuleIds.TOO_MANY_TEXT_STYLES_ON_SCREEN },
             "Expected too many text styles warning for demo project"
         )
     }
 }
+

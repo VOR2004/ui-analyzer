@@ -1,7 +1,8 @@
-package ru.itis.xml.rules.static.accessibility
+﻿package ru.itis.xml.rules.static.accessibility
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
 
-import ru.itis.analyzer.config.ComponentTypes
-import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.xml.source.resource.ResourceRepository
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.rules.base.onlyXmlFlatComponents
@@ -13,7 +14,7 @@ import ru.itis.model.UiComponent
 class XmlTouchTargetTooSmallRule(
     private val resourceRepository: ResourceRepository = ResourceRepository.empty()
 ) : Rule {
-    override val id: String = AnalyzerStrings.RuleIds.TOUCH_TARGET_TOO_SMALL
+    override val id: String = RuleIds.TOUCH_TARGET_TOO_SMALL
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
         return components.onlyXmlFlatComponents()
@@ -38,11 +39,11 @@ class XmlTouchTargetTooSmallRule(
             componentId = component.id,
             componentType = component.type,
             filePath = component.filePath,
-            message = AnalyzerStrings.Messages.touchTargetTooSmall(
+            message = AnalyzerMessages.touchTargetTooSmall(
                 width = component.properties.width,
                 height = component.properties.height
             ),
-            recommendation = AnalyzerStrings.Messages.TOUCH_TARGET_TOO_SMALL_RECOMMENDATION
+            recommendation = AnalyzerMessages.TOUCH_TARGET_TOO_SMALL_RECOMMENDATION
         )
     }
 
@@ -63,3 +64,5 @@ class XmlTouchTargetTooSmallRule(
         const val MIN_TOUCH_TARGET_DP = 48f
     }
 }
+
+

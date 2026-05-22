@@ -6,7 +6,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
-import ru.itis.analyzer.config.ComponentTypes
+import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.model.SourceType
 

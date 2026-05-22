@@ -9,13 +9,14 @@ import ru.itis.xml.source.parser.SecureXmlDocumentParser
 import java.io.File
 
 class UiAutomatorDumpParser private constructor(
-    private val boundsParser: UiAutomatorBoundsParser = UiAutomatorBoundsParser()
+    private val boundsParser: UiAutomatorBoundsParser = UiAutomatorBoundsParser(),
+    private val documentParser: SecureXmlDocumentParser = SecureXmlDocumentParser()
 ) : RuntimeDumpParser {
 
-    constructor() : this(UiAutomatorBoundsParser())
+    constructor() : this(UiAutomatorBoundsParser(), SecureXmlDocumentParser())
 
     override fun parse(file: File): List<UiComponent> {
-        val root = SecureXmlDocumentParser.parse(file).documentElement
+        val root = documentParser.parse(file).documentElement
         return root.childElements()
             .filter { element -> element.tagName == UiAutomatorDumpSchema.NODE_TAG }
             .mapIndexed { index, node ->

@@ -2,7 +2,7 @@ package ru.itis
 
 import java.io.File
 import ru.itis.analyzer.Analyzer
-import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.messages.cli.CliMessages
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.android.project.AndroidProjectPackageResolver
 import ru.itis.android.runtime.adb.provider.AdbUiAutomatorSnapshotProvider
@@ -11,17 +11,19 @@ import ru.itis.compose.rules.ComposeRuleSet
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.UiComponent
 import ru.itis.report.JsonReportGenerator
+import ru.itis.report.ReportGenerator
 import ru.itis.compose.source.importer.ComposeProjectImporter
 import ru.itis.compose.source.parser.ComposeFunctionParser
 import ru.itis.compose.source.psi.ComposePsiLayoutParser
 import ru.itis.xml.rules.XmlRuleSet
 import ru.itis.xml.source.importer.XmlProjectImporter
 import ru.itis.xml.source.parser.XmlLayoutParser
+import ru.itis.xml.source.resource.DefaultResourceRepository
 import ru.itis.xml.source.resource.ResourceRepository
 
 fun main(args: Array<String>) {
     if (args.isEmpty()) {
-        println(AnalyzerStrings.Cli.USAGE)
+        println(CliMessages.USAGE)
         return
     }
 
@@ -31,7 +33,7 @@ fun main(args: Array<String>) {
 
     val projectRoot = File(projectPath)
     if (!projectRoot.exists() || !projectRoot.isDirectory) {
-        println(AnalyzerStrings.Cli.projectDirectoryDoesNotExist(projectPath))
+        println(CliMessages.projectDirectoryDoesNotExist(projectPath))
         return
     }
 
@@ -43,7 +45,7 @@ fun main(args: Array<String>) {
     val runtimeSnapshotImporter = ComposeRuntimeSnapshotImporter()
     val adbSnapshotProvider = AdbUiAutomatorSnapshotProvider()
     val projectPackageResolver = AndroidProjectPackageResolver()
-    val resourceRepository = ResourceRepository.load(projectRoot)
+    val resourceRepository = DefaultResourceRepository.load(projectRoot)
     val expectedPackageName = projectPackageResolver.resolve(projectRoot)
 
     val composeFiles = if (options.ruleMode.includesCompose) {
@@ -55,7 +57,7 @@ fun main(args: Array<String>) {
         composeFiles.flatMap { file ->
             runCatching { composeFunctionParser.parse(file) }
                 .onFailure { error ->
-                    println(AnalyzerStrings.Cli.failedToParse(file.path, error.message))
+                    println(CliMessages.failedToParse(file.path, error.message))
                 }
                 .getOrDefault(emptyList())
         }
@@ -63,19 +65,19 @@ fun main(args: Array<String>) {
         emptyList()
     }
 
-    val reportGenerator = JsonReportGenerator()
+    val reportGenerator: ReportGenerator = JsonReportGenerator()
 
     val xmlFiles = if (options.ruleMode.includesXml) {
         xmlImporter.findLayoutXmlFiles(projectRoot)
     } else {
         emptyList()
     }
-    println(AnalyzerStrings.Cli.foundLayoutXmlFiles(xmlFiles.size))
+    println(CliMessages.foundLayoutXmlFiles(xmlFiles.size))
 
     val xmlComponents = xmlFiles.mapNotNull { file ->
         runCatching { xmlParser.parse(file) }
             .onFailure { error ->
-                println(AnalyzerStrings.Cli.failedToParse(file.path, error.message))
+                println(CliMessages.failedToParse(file.path, error.message))
             }
             .getOrNull()
     }
@@ -83,7 +85,7 @@ fun main(args: Array<String>) {
     val composeComponents = composeFiles.flatMap { file ->
         runCatching { composeParser.parse(file) }
             .onFailure { error ->
-                println(AnalyzerStrings.Cli.failedToParse(file.path, error.message))
+                println(CliMessages.failedToParse(file.path, error.message))
             }
             .getOrDefault(emptyList())
     }
@@ -92,7 +94,7 @@ fun main(args: Array<String>) {
         !options.ruleMode.includesRuntime -> emptyList()
         options.runtimeMode == null -> emptyList()
         options.runtimeMode == RUNTIME_ADB_ARGUMENT -> {
-            println(AnalyzerStrings.Cli.capturingRuntimeWithAdb(options.adbSerial))
+            println(CliMessages.capturingRuntimeWithAdb(options.adbSerial))
             runCatching { adbSnapshotProvider.capture(options.adbSerial) }
                 .onFailure { error -> println(error.message) }
                 .getOrDefault(emptyList())
@@ -103,7 +105,7 @@ fun main(args: Array<String>) {
                 ?.let { file ->
                     runCatching { runtimeSnapshotImporter.import(file) }
                         .onFailure { error ->
-                            println(AnalyzerStrings.Cli.failedToParse(file.path, error.message))
+                            println(CliMessages.failedToParse(file.path, error.message))
                         }
                         .getOrDefault(emptyList())
                 }
@@ -112,7 +114,7 @@ fun main(args: Array<String>) {
     }
 
     if (options.runtimeMode != null) {
-        println(AnalyzerStrings.Cli.loadedRuntimeComponents(runtimeComponents.sumOf { countComponents(it) }))
+        println(CliMessages.loadedRuntimeComponents(runtimeComponents.sumOf { countComponents(it) }))
     }
 
     val components = componentsForReport(
@@ -132,10 +134,10 @@ fun main(args: Array<String>) {
     )
     reportGenerator.writeReport(File(outputPath), components, issues)
 
-    println(AnalyzerStrings.Cli.ANALYSIS_COMPLETE)
-    println(AnalyzerStrings.Cli.componentsParsed(components.size))
-    println(AnalyzerStrings.Cli.issuesFound(issues.size))
-    println(AnalyzerStrings.Cli.reportWrittenTo(outputPath))
+    println(CliMessages.ANALYSIS_COMPLETE)
+    println(CliMessages.componentsParsed(components.size))
+    println(CliMessages.issuesFound(issues.size))
+    println(CliMessages.reportWrittenTo(outputPath))
 }
 
 private fun analyzeByRuleMode(
@@ -241,7 +243,7 @@ private data class CliOptions(
                 null
             }
             val positionalArguments = remaining.filterNot { value -> value.startsWith(ARGUMENT_PREFIX) }
-            val outputPath = positionalArguments.getOrNull(0) ?: AnalyzerStrings.Cli.DEFAULT_OUTPUT_PATH
+            val outputPath = positionalArguments.getOrNull(0) ?: CliMessages.DEFAULT_OUTPUT_PATH
             val runtimeMode = runtimeModeFromAdb ?: positionalArguments.getOrNull(1)
 
             return CliOptions(

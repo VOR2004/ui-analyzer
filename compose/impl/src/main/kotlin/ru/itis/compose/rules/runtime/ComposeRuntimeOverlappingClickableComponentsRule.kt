@@ -1,10 +1,12 @@
-package ru.itis.compose.rules.runtime
+﻿package ru.itis.compose.rules.runtime
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
 
 import kotlin.math.max
 import kotlin.math.min
-import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.utils.ComponentUtils
+import ru.itis.compose.runtime.model.ComposeRuntimeAttributes
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.Severity
 import ru.itis.model.SourceType
@@ -12,7 +14,7 @@ import ru.itis.model.UiBounds
 import ru.itis.model.UiComponent
 
 class ComposeRuntimeOverlappingClickableComponentsRule : Rule {
-    override val id: String = AnalyzerStrings.RuleIds.COMPOSE_RUNTIME_OVERLAPPING_CLICKABLE_COMPONENTS
+    override val id: String = RuleIds.COMPOSE_RUNTIME_OVERLAPPING_CLICKABLE_COMPONENTS
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
         return ComponentUtils.flattenAll(components)
@@ -58,12 +60,12 @@ class ComposeRuntimeOverlappingClickableComponentsRule : Rule {
             componentLocator = second.treePath?.let { path -> "${second.type}[path=$path]" },
             componentType = second.type,
             filePath = second.filePath,
-            message = AnalyzerStrings.Messages.composeRuntimeOverlappingClickableComponents(
+            message = AnalyzerMessages.composeRuntimeOverlappingClickableComponents(
                 firstComponent = first.describe(),
                 secondComponent = second.describe(),
                 overlapArea = overlapArea.toPixelAreaString()
             ),
-            recommendation = AnalyzerStrings.Messages
+            recommendation = AnalyzerMessages
                 .COMPOSE_RUNTIME_OVERLAPPING_CLICKABLE_COMPONENTS_RECOMMENDATION
         )
     }
@@ -71,8 +73,8 @@ class ComposeRuntimeOverlappingClickableComponentsRule : Rule {
     private fun UiComponent.runtimeGroupKey(): String {
         return listOfNotNull(
             filePath,
-            properties.rawAttributes[SCREEN_ATTRIBUTE],
-            properties.rawAttributes[STATE_ATTRIBUTE]
+            properties.rawAttributes[ComposeRuntimeAttributes.SCREEN],
+            properties.rawAttributes[ComposeRuntimeAttributes.STATE]
         ).joinToString(separator = "|")
     }
 
@@ -111,8 +113,7 @@ class ComposeRuntimeOverlappingClickableComponentsRule : Rule {
 
     private companion object {
         const val MIN_OVERLAP_AREA_PX = 16f
-        const val SCREEN_ATTRIBUTE = "runtime:screen"
-        const val STATE_ATTRIBUTE = "runtime:state"
         val runtimeSourceTypes = setOf(SourceType.COMPOSE_RUNTIME, SourceType.ANDROID_RUNTIME)
     }
 }
+

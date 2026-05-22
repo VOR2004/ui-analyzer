@@ -5,7 +5,8 @@ plugins {
 
 dependencies {
     implementation(project(":compose:compose-api"))
-    implementation(project(":common:common-api"))
+    implementation(project(":core:core-api"))
+    implementation(project(":core:core-utils"))
     implementation(project(":analyzer:analyzer-api"))
     implementation(project(":xml:xml-api"))
     implementation(project(":xml:xml-impl"))

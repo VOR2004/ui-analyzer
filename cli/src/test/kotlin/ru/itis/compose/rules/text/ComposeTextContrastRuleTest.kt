@@ -1,10 +1,10 @@
-package ru.itis.compose.rules.text
+﻿package ru.itis.compose.rules.text
+import ru.itis.analyzer.messages.rules.RuleIds
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-import ru.itis.analyzer.config.ComponentTypes
-import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.model.Severity
 import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
@@ -30,7 +30,7 @@ class ComposeTextContrastRuleTest {
         val issues = ComposeTextContrastRule().check(components)
 
         assertEquals(1, issues.size)
-        assertEquals(AnalyzerStrings.RuleIds.COMPOSE_TEXT_CONTRAST, issues.single().ruleId)
+        assertEquals(RuleIds.COMPOSE_TEXT_CONTRAST, issues.single().ruleId)
         assertEquals("mutedText", issues.single().componentId)
         assertEquals(Severity.WARNING, issues.single().severity)
         assertTrue(issues.single().message.orEmpty().contains("#FFCCCCCC"))
@@ -151,3 +151,5 @@ class ComposeTextContrastRuleTest {
         )
     }
 }
+
+

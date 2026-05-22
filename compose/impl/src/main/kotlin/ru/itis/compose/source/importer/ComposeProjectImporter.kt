@@ -1,8 +1,9 @@
 package ru.itis.compose.source.importer
 
 import java.io.File
-import ru.itis.analyzer.config.ComponentTypes
-import ru.itis.analyzer.config.ProjectStructure
+import ru.itis.analyzer.config.components.ComponentTypes
+import ru.itis.analyzer.config.components.ProjectStructure
+import ru.itis.compose.source.model.ComposeFunctionConstants
 
 class ComposeProjectImporter {
 
@@ -25,7 +26,7 @@ class ComposeProjectImporter {
 
     private fun looksLikeComposeFile(file: File): Boolean {
         val content = runCatching { file.readText() }.getOrNull() ?: return false
-        return content.contains(COMPOSABLE_ANNOTATION) ||
+        return content.contains(ComposeFunctionConstants.COMPOSABLE_ANNOTATION) ||
             composeFunctionNames.any { functionName -> content.contains("$functionName(") }
     }
 
@@ -41,8 +42,6 @@ class ComposeProjectImporter {
     }
 
     private companion object {
-        const val COMPOSABLE_ANNOTATION = "@Composable"
-
         val composeFunctionNames = setOf(
             ComponentTypes.COMPOSE_TEXT,
             ComponentTypes.COMPOSE_BUTTON,

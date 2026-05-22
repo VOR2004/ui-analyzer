@@ -1,7 +1,7 @@
 package ru.itis.compose.source.psi
 
 import java.io.File
-import ru.itis.analyzer.config.ComponentTypes
+import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.compose.source.legacy.parser.ComposeLayoutParser
 import ru.itis.model.SourceType
 import ru.itis.model.UiComponent

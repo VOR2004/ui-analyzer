@@ -1,9 +1,10 @@
-package ru.itis.xml.rules.static.color
+﻿package ru.itis.xml.rules.static.color
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
 
 import ru.itis.xml.helpers.ButtonColorAnalysisHelper
 import ru.itis.xml.helpers.ButtonColorEntry
-import ru.itis.analyzer.config.AnalyzerThresholds
-import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.config.analyzer.AnalyzerThresholds
 import ru.itis.xml.source.resource.ResourceRepository
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.rules.base.onlyXmlRoots
@@ -17,7 +18,7 @@ class XmlButtonColorProjectConsistencyRule(
     private val nearThreshold: Double = AnalyzerThresholds.NEAR_COLOR_DISTANCE
 ) : Rule {
 
-    override val id: String = AnalyzerStrings.RuleIds.BUTTON_COLOR_PROJECT_CONSISTENCY
+    override val id: String = RuleIds.BUTTON_COLOR_PROJECT_CONSISTENCY
 
     private val helper = ButtonColorAnalysisHelper(resourceRepository)
 
@@ -33,17 +34,17 @@ class XmlButtonColorProjectConsistencyRule(
 
         val nearDuplicateIssues = nearDuplicateResult.replacements.map { replacement ->
             AnalysisIssue(
-                ruleId = AnalyzerStrings.RuleIds.nearDuplicateCluster(id),
+                ruleId = RuleIds.nearDuplicateCluster(id),
                 severity = Severity.INFO,
                 componentId = replacement.entry.button.id,
                 componentType = replacement.entry.button.type,
                 filePath = replacement.entry.button.filePath,
-                message = AnalyzerStrings.Messages.buttonColorProjectNearDuplicate(
+                message = AnalyzerMessages.buttonColorProjectNearDuplicate(
                     color = replacement.entry.color,
                     canonicalColor = replacement.canonicalColor,
                     distance = helper.formatDistance(replacement.distance)
                 ),
-                recommendation = AnalyzerStrings.Messages.buttonColorProjectNearDuplicateRecommendation(
+                recommendation = AnalyzerMessages.buttonColorProjectNearDuplicateRecommendation(
                     replacement.canonicalColor
                 )
             )
@@ -74,13 +75,13 @@ class XmlButtonColorProjectConsistencyRule(
                 }
 
                 val message = if (distance != null && distance <= nearThreshold) {
-                    AnalyzerStrings.Messages.buttonColorProjectNearDominant(
+                    AnalyzerMessages.buttonColorProjectNearDominant(
                         color = entry.color,
                         dominantColor = dominantColor,
                         distance = helper.formatDistance(distance)
                     )
                 } else {
-                    AnalyzerStrings.Messages.buttonColorProjectDifferent(
+                    AnalyzerMessages.buttonColorProjectDifferent(
                         color = entry.color,
                         dominantColor = dominantColor
                     )
@@ -93,8 +94,10 @@ class XmlButtonColorProjectConsistencyRule(
                     componentType = entry.button.type,
                     filePath = entry.button.filePath,
                     message = message,
-                    recommendation = AnalyzerStrings.Messages.BUTTON_COLOR_PROJECT_RECOMMENDATION
+                    recommendation = AnalyzerMessages.BUTTON_COLOR_PROJECT_RECOMMENDATION
                 )
             }
     }
 }
+
+

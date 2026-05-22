@@ -1,16 +1,16 @@
-package ru.itis.analyzer
+﻿package ru.itis.analyzer
+import ru.itis.analyzer.messages.rules.RuleIds
 
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertTrue
-import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.xml.rules.adaptive.button.XmlAdaptiveButtonStyleOutlierRule
 import ru.itis.xml.rules.adaptive.layout.XmlAdaptiveSpacingOutlierRule
 import ru.itis.xml.rules.adaptive.text.XmlAdaptiveTextSizeOutlierRule
 import ru.itis.xml.rules.adaptive.text.XmlAdaptiveTextStyleOutlierRule
 import ru.itis.xml.source.parser.XmlLayoutParser
-import ru.itis.xml.source.resource.ResourceRepository
+import ru.itis.xml.source.resource.DefaultResourceRepository
 
 class AdaptiveResourceAwareRulesTest {
 
@@ -21,7 +21,7 @@ class AdaptiveResourceAwareRulesTest {
             projectRoot,
             "app/src/main/res/layout/adaptive_resource_resolution_demo.xml"
         )
-        val resourceRepository = ResourceRepository.load(projectRoot)
+        val resourceRepository = DefaultResourceRepository.load(projectRoot)
         val component = XmlLayoutParser().parse(layoutFile)
 
         val rules: List<Rule> = listOf(
@@ -38,7 +38,7 @@ class AdaptiveResourceAwareRulesTest {
 
         assertTrue(
             issues.any {
-                it.ruleId == AnalyzerStrings.RuleIds.ADAPTIVE_SPACING_OUTLIER &&
+                it.ruleId == RuleIds.ADAPTIVE_SPACING_OUTLIER &&
                     it.componentId == "adaptive_resource_spacing_outlier"
             },
             "Expected adaptive spacing rule to resolve @dimen and ?attr spacing values"
@@ -46,7 +46,7 @@ class AdaptiveResourceAwareRulesTest {
 
         assertTrue(
             issues.any {
-                it.ruleId == AnalyzerStrings.RuleIds.ADAPTIVE_TEXT_SIZE_OUTLIER &&
+                it.ruleId == RuleIds.ADAPTIVE_TEXT_SIZE_OUTLIER &&
                     it.componentId == "adaptive_resource_text_size_outlier"
             },
             "Expected adaptive text size rule to resolve @dimen and ?attr text sizes"
@@ -54,7 +54,7 @@ class AdaptiveResourceAwareRulesTest {
 
         assertTrue(
             issues.any {
-                it.ruleId == AnalyzerStrings.RuleIds.ADAPTIVE_TEXT_STYLE_OUTLIER &&
+                it.ruleId == RuleIds.ADAPTIVE_TEXT_STYLE_OUTLIER &&
                     it.componentId == "adaptive_resource_text_style_outlier"
             },
             "Expected adaptive text style rule to resolve text resources and dimensions"
@@ -62,10 +62,11 @@ class AdaptiveResourceAwareRulesTest {
 
         assertTrue(
             issues.any {
-                it.ruleId == AnalyzerStrings.RuleIds.ADAPTIVE_BUTTON_STYLE_OUTLIER &&
+                it.ruleId == RuleIds.ADAPTIVE_BUTTON_STYLE_OUTLIER &&
                     it.componentId == "adaptive_resource_button_outlier"
             },
             "Expected adaptive button style rule to resolve @color, ?attr and @dimen resources"
         )
     }
 }
+

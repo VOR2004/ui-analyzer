@@ -1,10 +1,10 @@
-package ru.itis.compose.rules.layout
+﻿package ru.itis.compose.rules.layout
+import ru.itis.analyzer.messages.rules.RuleIds
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-import ru.itis.analyzer.config.ComponentTypes
-import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 import ru.itis.model.UiProperties
@@ -22,7 +22,7 @@ class ComposeNearDuplicateSpacingClusterRuleTest {
         val issues = ComposeNearDuplicateSpacingClusterRule().check(components)
 
         assertEquals(1, issues.size)
-        assertEquals(AnalyzerStrings.RuleIds.COMPOSE_NEAR_DUPLICATE_SPACING_CLUSTER, issues.single().ruleId)
+        assertEquals(RuleIds.COMPOSE_NEAR_DUPLICATE_SPACING_CLUSTER, issues.single().ruleId)
         assertEquals("box3", issues.single().componentId)
         assertTrue(issues.single().recommendation.contains("16.0dp"))
     }
@@ -74,3 +74,5 @@ class ComposeNearDuplicateSpacingClusterRuleTest {
         )
     }
 }
+
+

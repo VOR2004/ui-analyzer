@@ -16,12 +16,14 @@
             <option value="$PROJECT_DIR$/android/api" />
             <option value="$PROJECT_DIR$/android/impl" />
             <option value="$PROJECT_DIR$/cli" />
-            <option value="$PROJECT_DIR$/common" />
-            <option value="$PROJECT_DIR$/common/api" />
             <option value="$PROJECT_DIR$/compose" />
             <option value="$PROJECT_DIR$/compose/api" />
             <option value="$PROJECT_DIR$/compose/impl" />
+            <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/core/api" />
+            <option value="$PROJECT_DIR$/core/utils" />
             <option value="$PROJECT_DIR$/report" />
+            <option value="$PROJECT_DIR$/report/api" />
             <option value="$PROJECT_DIR$/report/impl" />
             <option value="$PROJECT_DIR$/xml" />
             <option value="$PROJECT_DIR$/xml/api" />

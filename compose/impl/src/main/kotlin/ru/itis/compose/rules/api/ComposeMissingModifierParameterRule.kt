@@ -1,7 +1,8 @@
-package ru.itis.compose.rules.api
+﻿package ru.itis.compose.rules.api
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
 
 import ru.itis.analyzer.core.ComposeSourceAnalysisContext
-import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.analyzer.rules.base.ComposeSourceRule
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.Severity
@@ -12,7 +13,7 @@ import ru.itis.compose.source.model.ComposeFunctionRole
 class ComposeMissingModifierParameterRule(
     private val rolePredictor: ComposeFunctionRolePredictor = ComposeFunctionRolePredictor()
 ) : ComposeSourceRule {
-    override val id: String = AnalyzerStrings.RuleIds.COMPOSE_MISSING_MODIFIER_PARAMETER
+    override val id: String = RuleIds.COMPOSE_MISSING_MODIFIER_PARAMETER
 
     override fun check(context: ComposeSourceAnalysisContext): List<AnalysisIssue> {
         return context.composeFunctions
@@ -26,11 +27,11 @@ class ComposeMissingModifierParameterRule(
                     componentId = null,
                     componentType = COMPOSABLE_FUNCTION_COMPONENT_TYPE,
                     filePath = function.filePath,
-                    message = AnalyzerStrings.Messages.composeMissingModifierParameter(
+                    message = AnalyzerMessages.composeMissingModifierParameter(
                         functionName = function.name,
                         predictedRole = role.name
                     ),
-                    recommendation = AnalyzerStrings.Messages.COMPOSE_MISSING_MODIFIER_PARAMETER_RECOMMENDATION
+                    recommendation = AnalyzerMessages.COMPOSE_MISSING_MODIFIER_PARAMETER_RECOMMENDATION
                 )
             }
     }

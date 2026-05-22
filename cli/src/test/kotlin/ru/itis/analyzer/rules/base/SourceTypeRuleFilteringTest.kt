@@ -3,7 +3,7 @@ package ru.itis.analyzer.rules.base
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
-import ru.itis.analyzer.config.ComponentTypes
+import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.xml.rules.static.accessibility.XmlTouchTargetTooSmallRule
 import ru.itis.xml.rules.static.color.XmlHardcodedColorRule
 import ru.itis.xml.rules.static.common.XmlHardcodedDimensionRule

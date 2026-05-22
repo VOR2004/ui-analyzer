@@ -1,13 +1,14 @@
-package ru.itis.xml.rules.adaptive.layout
+﻿package ru.itis.xml.rules.adaptive.layout
+import ru.itis.analyzer.messages.rules.RuleIds
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import ru.itis.analyzer.core.AnalysisContext
-import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 import ru.itis.model.UiProperties
+import ru.itis.xml.source.resource.DefaultResourceRepository
 import ru.itis.xml.source.resource.ResourceRepository
 import ru.itis.xml.style.profile.ProjectStyleProfile
 import ru.itis.xml.style.profile.SpacingScale
@@ -25,7 +26,7 @@ class XmlNearDuplicateSpacingClusterRuleTest {
         val issues = XmlNearDuplicateSpacingClusterRule().check(context(components))
 
         assertEquals(1, issues.size)
-        assertEquals(AnalyzerStrings.RuleIds.XML_NEAR_DUPLICATE_SPACING_CLUSTER, issues.single().ruleId)
+        assertEquals(RuleIds.XML_NEAR_DUPLICATE_SPACING_CLUSTER, issues.single().ruleId)
         assertEquals("view3", issues.single().componentId)
         assertTrue(issues.single().recommendation.contains("16.0dp"))
     }
@@ -37,7 +38,7 @@ class XmlNearDuplicateSpacingClusterRuleTest {
             xmlComponent("view2", UiProperties(padding = "16dp")),
             xmlComponent("view3", UiProperties(padding = "@dimen/almost_spacing"))
         )
-        val repository = ResourceRepository(
+        val repository = DefaultResourceRepository(
             colors = emptyMap(),
             dimensions = mapOf("almost_spacing" to "15dp")
         )
@@ -110,3 +111,4 @@ class XmlNearDuplicateSpacingClusterRuleTest {
         )
     }
 }
+

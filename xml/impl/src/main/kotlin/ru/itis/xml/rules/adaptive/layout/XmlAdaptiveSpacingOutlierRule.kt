@@ -1,8 +1,10 @@
-package ru.itis.xml.rules.adaptive.layout
+﻿package ru.itis.xml.rules.adaptive.layout
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
+import ru.itis.analyzer.messages.ui.UiPropertyNames
 
 import kotlin.math.abs
 import ru.itis.analyzer.core.AnalysisContext
-import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.analyzer.rules.base.ContextualRule
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.analyzer.utils.DimensionUtils
@@ -11,7 +13,7 @@ import ru.itis.model.Severity
 import ru.itis.model.UiComponent
 
 class XmlAdaptiveSpacingOutlierRule : ContextualRule {
-    override val id: String = AnalyzerStrings.RuleIds.ADAPTIVE_SPACING_OUTLIER
+    override val id: String = RuleIds.ADAPTIVE_SPACING_OUTLIER
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> = emptyList()
 
@@ -34,7 +36,7 @@ class XmlAdaptiveSpacingOutlierRule : ContextualRule {
             if (padding != null && isOutlier(padding, commonSpacingValues)) {
                 issues += createIssue(
                     component = component,
-                    propertyName = AnalyzerStrings.PropertyNames.PADDING,
+                    propertyName = UiPropertyNames.PADDING,
                     actualValue = padding,
                     expectedValues = commonSpacingValues
                 )
@@ -47,7 +49,7 @@ class XmlAdaptiveSpacingOutlierRule : ContextualRule {
             if (margin != null && isOutlier(margin, commonSpacingValues)) {
                 issues += createIssue(
                     component = component,
-                    propertyName = AnalyzerStrings.PropertyNames.MARGIN,
+                    propertyName = UiPropertyNames.MARGIN,
                     actualValue = margin,
                     expectedValues = commonSpacingValues
                 )
@@ -79,11 +81,11 @@ class XmlAdaptiveSpacingOutlierRule : ContextualRule {
             componentId = component.id,
             componentType = component.type,
             filePath = component.filePath,
-            message = AnalyzerStrings.Messages.adaptiveSpacingOutlier(
+            message = AnalyzerMessages.adaptiveSpacingOutlier(
                 propertyName = propertyName,
                 actualValue = actualValue
             ),
-            recommendation = AnalyzerStrings.Messages.adaptiveSpacingOutlierRecommendation(expected)
+            recommendation = AnalyzerMessages.adaptiveSpacingOutlierRecommendation(expected)
         )
     }
 
@@ -91,3 +93,5 @@ class XmlAdaptiveSpacingOutlierRule : ContextualRule {
         const val SPACING_TOLERANCE_DP = 2f
     }
 }
+
+

@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
     implementation(project(":analyzer:analyzer-api"))
-    implementation(project(":common:common-api"))
+    implementation(project(":core:core-api"))
     implementation(project(":compose:compose-api"))
     implementation(project(":xml:xml-api"))
     implementation(project(":xml:xml-impl"))

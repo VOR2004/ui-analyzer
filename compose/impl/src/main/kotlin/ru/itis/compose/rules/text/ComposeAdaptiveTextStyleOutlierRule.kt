@@ -1,8 +1,10 @@
-package ru.itis.compose.rules.text
+﻿package ru.itis.compose.rules.text
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
+import ru.itis.analyzer.messages.ui.UiPropertyNames
 
 import kotlin.math.abs
-import ru.itis.analyzer.config.ComponentTypes
-import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.analyzer.utils.DimensionUtils
@@ -14,7 +16,7 @@ import ru.itis.compose.source.analyzer.ComposeTextRolePredictor
 import ru.itis.compose.style.signature.ComposePredictedTextRole
 
 class ComposeAdaptiveTextStyleOutlierRule : Rule {
-    override val id: String = AnalyzerStrings.RuleIds.COMPOSE_ADAPTIVE_TEXT_STYLE_OUTLIER
+    override val id: String = RuleIds.COMPOSE_ADAPTIVE_TEXT_STYLE_OUTLIER
     private val rolePredictor = ComposeTextRolePredictor()
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
@@ -74,7 +76,7 @@ class ComposeAdaptiveTextStyleOutlierRule : Rule {
             differences += "typographyStyle"
         }
         if (!sameSp(actual.textSize, dominant.textSize)) {
-            differences += AnalyzerStrings.PropertyNames.TEXT_SIZE
+            differences += UiPropertyNames.TEXT_SIZE
         }
         if (actual.textStyle != dominant.textStyle) {
             differences += "textStyle"
@@ -111,11 +113,11 @@ class ComposeAdaptiveTextStyleOutlierRule : Rule {
             componentLocator = component.treePath?.let { path -> "${component.type}[path=$path]" },
             componentType = component.type,
             filePath = component.filePath,
-            message = AnalyzerStrings.Messages.composeAdaptiveTextStyleOutlier(
+            message = AnalyzerMessages.composeAdaptiveTextStyleOutlier(
                 differences = differences.joinToString(", "),
                 predictedRole = entry.role.name
             ),
-            recommendation = AnalyzerStrings.Messages.composeAdaptiveTextStyleOutlierRecommendation(
+            recommendation = AnalyzerMessages.composeAdaptiveTextStyleOutlierRecommendation(
                 dominantStyle = "predictedRole=${entry.role.name}, ${dominantStyle.format()}"
             )
         )
@@ -172,3 +174,5 @@ class ComposeAdaptiveTextStyleOutlierRule : Rule {
         const val TEXT_SIZE_TOLERANCE_SP = 1f
     }
 }
+
+

@@ -1,8 +1,10 @@
-package ru.itis.xml.rules.adaptive.layout
+﻿package ru.itis.xml.rules.adaptive.layout
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
+import ru.itis.analyzer.messages.ui.UiPropertyNames
 
 import kotlin.math.abs
 import ru.itis.analyzer.core.AnalysisContext
-import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.analyzer.rules.base.ContextualRule
 import ru.itis.analyzer.rules.base.onlyXmlFlatComponents
 import ru.itis.analyzer.utils.DimensionUtils
@@ -11,7 +13,7 @@ import ru.itis.model.Severity
 import ru.itis.model.UiComponent
 
 class XmlNearDuplicateSpacingClusterRule : ContextualRule {
-    override val id: String = AnalyzerStrings.RuleIds.XML_NEAR_DUPLICATE_SPACING_CLUSTER
+    override val id: String = RuleIds.XML_NEAR_DUPLICATE_SPACING_CLUSTER
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> = emptyList()
 
@@ -30,8 +32,8 @@ class XmlNearDuplicateSpacingClusterRule : ContextualRule {
         component: UiComponent
     ): List<SpacingEntry> {
         return listOfNotNull(
-            parseEntry(context, component, AnalyzerStrings.PropertyNames.PADDING, component.properties.padding),
-            parseEntry(context, component, AnalyzerStrings.PropertyNames.MARGIN, component.properties.margin)
+            parseEntry(context, component, UiPropertyNames.PADDING, component.properties.padding),
+            parseEntry(context, component, UiPropertyNames.MARGIN, component.properties.margin)
         )
     }
 
@@ -97,12 +99,12 @@ class XmlNearDuplicateSpacingClusterRule : ContextualRule {
             componentId = entry.component.id,
             componentType = entry.component.type,
             filePath = entry.component.filePath,
-            message = AnalyzerStrings.Messages.xmlNearDuplicateSpacingCluster(
+            message = AnalyzerMessages.xmlNearDuplicateSpacingCluster(
                 propertyName = entry.propertyName,
                 value = entry.value,
                 canonicalValue = canonicalValue
             ),
-            recommendation = AnalyzerStrings.Messages.xmlNearDuplicateSpacingClusterRecommendation(
+            recommendation = AnalyzerMessages.xmlNearDuplicateSpacingClusterRecommendation(
                 canonicalValue = canonicalValue
             )
         )
@@ -119,3 +121,5 @@ class XmlNearDuplicateSpacingClusterRule : ContextualRule {
         const val NEAR_DUPLICATE_DISTANCE_DP = 2f
     }
 }
+
+

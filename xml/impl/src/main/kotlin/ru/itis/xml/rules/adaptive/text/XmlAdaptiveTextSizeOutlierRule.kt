@@ -1,8 +1,9 @@
-package ru.itis.xml.rules.adaptive.text
+﻿package ru.itis.xml.rules.adaptive.text
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
 
 import kotlin.math.abs
 import ru.itis.analyzer.core.AnalysisContext
-import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.analyzer.rules.base.ContextualRule
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.analyzer.utils.DimensionUtils
@@ -14,7 +15,7 @@ import ru.itis.xml.style.signature.PredictedTextRole
 import ru.itis.xml.style.signature.TextRolePredictor
 
 class XmlAdaptiveTextSizeOutlierRule : ContextualRule {
-    override val id: String = AnalyzerStrings.RuleIds.ADAPTIVE_TEXT_SIZE_OUTLIER
+    override val id: String = RuleIds.ADAPTIVE_TEXT_SIZE_OUTLIER
     private val textRolePredictor = TextRolePredictor()
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> = emptyList()
@@ -84,11 +85,11 @@ class XmlAdaptiveTextSizeOutlierRule : ContextualRule {
             componentId = component.id,
             componentType = component.type,
             filePath = component.filePath,
-            message = AnalyzerStrings.Messages.adaptiveTextSizeOutlier(
+            message = AnalyzerMessages.adaptiveTextSizeOutlier(
                 actualValue = actualValue,
                 predictedRole = predictedRole?.name
             ),
-            recommendation = AnalyzerStrings.Messages.adaptiveTextSizeOutlierRecommendation(expected)
+            recommendation = AnalyzerMessages.adaptiveTextSizeOutlierRecommendation(expected)
         )
     }
 
@@ -97,3 +98,5 @@ class XmlAdaptiveTextSizeOutlierRule : ContextualRule {
         const val MIN_COMMON_CLUSTER_FREQUENCY = 1
     }
 }
+
+

@@ -1,7 +1,9 @@
-package ru.itis.compose.rules.layout
+﻿package ru.itis.compose.rules.layout
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
+import ru.itis.analyzer.messages.ui.UiPropertyNames
 
 import kotlin.math.abs
-import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.analyzer.utils.DimensionUtils
@@ -11,7 +13,7 @@ import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 
 class ComposeAdaptiveSpacingOutlierRule : Rule {
-    override val id: String = AnalyzerStrings.RuleIds.COMPOSE_ADAPTIVE_SPACING_OUTLIER
+    override val id: String = RuleIds.COMPOSE_ADAPTIVE_SPACING_OUTLIER
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
         val composeComponents = ComponentUtils.flattenAll(components)
@@ -45,9 +47,9 @@ class ComposeAdaptiveSpacingOutlierRule : Rule {
 
     private fun collectSpacingProperties(component: UiComponent): List<SpacingProperty> {
         return listOfNotNull(
-            parseSpacing(AnalyzerStrings.PropertyNames.PADDING, component.properties.padding),
-            parseSpacing(AnalyzerStrings.PropertyNames.WIDTH, component.properties.width),
-            parseSpacing(AnalyzerStrings.PropertyNames.HEIGHT, component.properties.height)
+            parseSpacing(UiPropertyNames.PADDING, component.properties.padding),
+            parseSpacing(UiPropertyNames.WIDTH, component.properties.width),
+            parseSpacing(UiPropertyNames.HEIGHT, component.properties.height)
         )
     }
 
@@ -87,11 +89,11 @@ class ComposeAdaptiveSpacingOutlierRule : Rule {
             componentLocator = component.treePath?.let { path -> "${component.type}[path=$path]" },
             componentType = component.type,
             filePath = component.filePath,
-            message = AnalyzerStrings.Messages.composeAdaptiveSpacingOutlier(
+            message = AnalyzerMessages.composeAdaptiveSpacingOutlier(
                 propertyName = property.propertyName,
                 actualValue = property.value
             ),
-            recommendation = AnalyzerStrings.Messages.composeAdaptiveSpacingOutlierRecommendation(expected)
+            recommendation = AnalyzerMessages.composeAdaptiveSpacingOutlierRecommendation(expected)
         )
     }
 
@@ -106,3 +108,5 @@ class ComposeAdaptiveSpacingOutlierRule : Rule {
         const val SPACING_TOLERANCE_DP = 2f
     }
 }
+
+

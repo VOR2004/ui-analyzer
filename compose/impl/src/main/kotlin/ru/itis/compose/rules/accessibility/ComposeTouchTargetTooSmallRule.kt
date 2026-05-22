@@ -1,7 +1,8 @@
-package ru.itis.compose.rules.accessibility
+﻿package ru.itis.compose.rules.accessibility
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
 
-import ru.itis.analyzer.config.ComponentTypes
-import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.analyzer.utils.DimensionUtils
@@ -11,7 +12,7 @@ import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 
 class ComposeTouchTargetTooSmallRule : Rule {
-    override val id: String = AnalyzerStrings.RuleIds.COMPOSE_TOUCH_TARGET_TOO_SMALL
+    override val id: String = RuleIds.COMPOSE_TOUCH_TARGET_TOO_SMALL
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
         return ComponentUtils.flattenAll(components)
@@ -39,11 +40,11 @@ class ComposeTouchTargetTooSmallRule : Rule {
             componentLocator = component.treePath?.let { path -> "${component.type}[path=$path]" },
             componentType = component.type,
             filePath = component.filePath,
-            message = AnalyzerStrings.Messages.composeTouchTargetTooSmall(
+            message = AnalyzerMessages.composeTouchTargetTooSmall(
                 width = component.properties.width,
                 height = component.properties.height
             ),
-            recommendation = AnalyzerStrings.Messages.COMPOSE_TOUCH_TARGET_TOO_SMALL_RECOMMENDATION
+            recommendation = AnalyzerMessages.COMPOSE_TOUCH_TARGET_TOO_SMALL_RECOMMENDATION
         )
     }
 
@@ -63,3 +64,5 @@ class ComposeTouchTargetTooSmallRule : Rule {
         )
     }
 }
+
+

@@ -1,8 +1,10 @@
-package ru.itis.compose.rules.style
+﻿package ru.itis.compose.rules.style
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
+import ru.itis.analyzer.messages.ui.UiPropertyNames
 
 import kotlin.math.abs
-import ru.itis.analyzer.config.ComponentTypes
-import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.analyzer.utils.DimensionUtils
@@ -14,15 +16,17 @@ import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 
 class ComposeComponentStyleOutlierRule : Rule {
-    override val id: String = AnalyzerStrings.RuleIds.COMPOSE_COMPONENT_STYLE_OUTLIER
+    override val id: String = RuleIds.COMPOSE_COMPONENT_STYLE_OUTLIER
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
         return ComponentUtils.flattenAll(components)
+            .asSequence()
             .filter { component -> component.sourceType == SourceType.COMPOSE }
             .filter { component -> component.type in composeButtonTypes }
             .mapNotNull { component -> ComposeButtonStyleEntry.from(component) }
             .groupBy { entry -> entry.component.filePath to entry.signature.type }
             .flatMap { (_, entries) -> analyzeButtonGroup(entries) }
+            .toList()
     }
 
     private fun analyzeButtonGroup(entries: List<ComposeButtonStyleEntry>): List<AnalysisIssue> {
@@ -68,13 +72,13 @@ class ComposeComponentStyleOutlierRule : Rule {
             differences += "contentColor"
         }
         if (!sameDp(actual.width, dominant.width)) {
-            differences += AnalyzerStrings.PropertyNames.WIDTH
+            differences += UiPropertyNames.WIDTH
         }
         if (!sameDp(actual.height, dominant.height)) {
-            differences += AnalyzerStrings.PropertyNames.HEIGHT
+            differences += UiPropertyNames.HEIGHT
         }
         if (!sameDp(actual.padding, dominant.padding)) {
-            differences += AnalyzerStrings.PropertyNames.PADDING
+            differences += UiPropertyNames.PADDING
         }
 
         return differences
@@ -102,11 +106,11 @@ class ComposeComponentStyleOutlierRule : Rule {
             componentLocator = component.treePath?.let { path -> "${component.type}[path=$path]" },
             componentType = component.type,
             filePath = component.filePath,
-            message = AnalyzerStrings.Messages.composeComponentStyleOutlier(
+            message = AnalyzerMessages.composeComponentStyleOutlier(
                 componentType = component.type,
                 differences = differences.joinToString(", ")
             ),
-            recommendation = AnalyzerStrings.Messages.composeComponentStyleOutlierRecommendation(
+            recommendation = AnalyzerMessages.composeComponentStyleOutlierRecommendation(
                 dominantStyle = dominantSignature.format()
             )
         )

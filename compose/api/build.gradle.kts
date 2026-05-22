@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":common:common-api"))
+    implementation(project(":core:core-api"))
 }
 
 kotlin {

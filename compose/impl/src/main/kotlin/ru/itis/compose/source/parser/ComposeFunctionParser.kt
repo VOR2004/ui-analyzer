@@ -2,6 +2,7 @@ package ru.itis.compose.source.parser
 
 import java.io.File
 import ru.itis.compose.source.model.ComposeFunction
+import ru.itis.compose.source.model.ComposeFunctionConstants
 
 class ComposeFunctionParser {
 
@@ -11,12 +12,12 @@ class ComposeFunctionParser {
         var index = 0
 
         while (index < source.length) {
-            val annotationIndex = source.indexOf(COMPOSABLE_ANNOTATION, index)
+            val annotationIndex = source.indexOf(ComposeFunctionConstants.COMPOSABLE_ANNOTATION, index)
             if (annotationIndex < 0) break
 
             val function = parseFunctionAfterAnnotation(source, annotationIndex, file.absolutePath)
             if (function == null) {
-                index = annotationIndex + COMPOSABLE_ANNOTATION.length
+                index = annotationIndex + ComposeFunctionConstants.COMPOSABLE_ANNOTATION.length
             } else {
                 functions += function.value
                 index = function.nextIndex
@@ -31,7 +32,10 @@ class ComposeFunctionParser {
         annotationIndex: Int,
         filePath: String
     ): ParsedFunction? {
-        val funIndex = source.indexOf(FUN_KEYWORD, annotationIndex + COMPOSABLE_ANNOTATION.length)
+        val funIndex = source.indexOf(
+            FUN_KEYWORD,
+            annotationIndex + ComposeFunctionConstants.COMPOSABLE_ANNOTATION.length
+        )
         if (funIndex < 0) return null
         val modifiers = parseFunctionModifiers(source, annotationIndex, funIndex)
 
@@ -77,11 +81,11 @@ class ComposeFunctionParser {
     ): Set<String> {
         val beforeAnnotation = source.substring(findLineStart(source, annotationIndex), annotationIndex)
         val betweenAnnotationAndFun = source.substring(
-            annotationIndex + COMPOSABLE_ANNOTATION.length,
+            annotationIndex + ComposeFunctionConstants.COMPOSABLE_ANNOTATION.length,
             funIndex
         )
 
-        return (beforeAnnotation + " " + betweenAnnotationAndFun)
+        return ("$beforeAnnotation $betweenAnnotationAndFun")
             .split(Regex("""\s+"""))
             .map { token -> token.trim() }
             .filter { token -> token in knownFunctionModifiers }
@@ -179,11 +183,10 @@ class ComposeFunctionParser {
     )
 
     private companion object {
-        const val COMPOSABLE_ANNOTATION = "@Composable"
         const val FUN_KEYWORD = "fun"
 
         val knownFunctionModifiers = setOf(
-            "private",
+            ComposeFunctionConstants.PRIVATE_MODIFIER,
             "internal",
             "public"
         )

@@ -1,13 +1,14 @@
-package ru.itis.xml.rules.adaptive.text
+﻿package ru.itis.xml.rules.adaptive.text
+import ru.itis.analyzer.messages.rules.RuleIds
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import ru.itis.analyzer.core.AnalysisContext
-import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 import ru.itis.model.UiProperties
+import ru.itis.xml.source.resource.DefaultResourceRepository
 import ru.itis.xml.source.resource.ResourceRepository
 import ru.itis.xml.style.profile.ProjectStyleProfile
 import ru.itis.xml.style.profile.SpacingScale
@@ -25,7 +26,7 @@ class XmlTextSizeNearDuplicateClusterRuleTest {
         val issues = XmlTextSizeNearDuplicateClusterRule().check(context(components))
 
         assertEquals(1, issues.size)
-        assertEquals(AnalyzerStrings.RuleIds.XML_TEXT_SIZE_NEAR_DUPLICATE_CLUSTER, issues.single().ruleId)
+        assertEquals(RuleIds.XML_TEXT_SIZE_NEAR_DUPLICATE_CLUSTER, issues.single().ruleId)
         assertEquals("body3", issues.single().componentId)
         assertTrue(issues.single().recommendation.contains("predictedRole=BODY"))
     }
@@ -37,7 +38,7 @@ class XmlTextSizeNearDuplicateClusterRuleTest {
             xmlText("body2", UiProperties(textSize = "16sp")),
             xmlText("body3", UiProperties(textSize = "@dimen/almost_body_text"))
         )
-        val repository = ResourceRepository(
+        val repository = DefaultResourceRepository(
             colors = emptyMap(),
             dimensions = mapOf("almost_body_text" to "15sp")
         )
@@ -123,3 +124,4 @@ class XmlTextSizeNearDuplicateClusterRuleTest {
         )
     }
 }
+

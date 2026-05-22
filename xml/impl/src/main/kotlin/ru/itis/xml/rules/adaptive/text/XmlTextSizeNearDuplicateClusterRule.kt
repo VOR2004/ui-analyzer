@@ -1,8 +1,9 @@
-package ru.itis.xml.rules.adaptive.text
+﻿package ru.itis.xml.rules.adaptive.text
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
 
 import kotlin.math.abs
 import ru.itis.analyzer.core.AnalysisContext
-import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.analyzer.rules.base.ContextualRule
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.analyzer.utils.DimensionUtils
@@ -14,7 +15,7 @@ import ru.itis.xml.style.signature.PredictedTextRole
 import ru.itis.xml.style.signature.TextRolePredictor
 
 class XmlTextSizeNearDuplicateClusterRule : ContextualRule {
-    override val id: String = AnalyzerStrings.RuleIds.XML_TEXT_SIZE_NEAR_DUPLICATE_CLUSTER
+    override val id: String = RuleIds.XML_TEXT_SIZE_NEAR_DUPLICATE_CLUSTER
 
     private val rolePredictor = TextRolePredictor()
 
@@ -101,12 +102,12 @@ class XmlTextSizeNearDuplicateClusterRule : ContextualRule {
             componentId = entry.component.id,
             componentType = entry.component.type,
             filePath = entry.component.filePath,
-            message = AnalyzerStrings.Messages.xmlTextSizeNearDuplicateCluster(
+            message = AnalyzerMessages.xmlTextSizeNearDuplicateCluster(
                 value = entry.value,
                 canonicalValue = canonicalValue,
                 predictedRole = entry.role.name
             ),
-            recommendation = AnalyzerStrings.Messages.xmlTextSizeNearDuplicateClusterRecommendation(
+            recommendation = AnalyzerMessages.xmlTextSizeNearDuplicateClusterRecommendation(
                 canonicalValue = canonicalValue,
                 predictedRole = entry.role.name
             )
@@ -127,3 +128,5 @@ class XmlTextSizeNearDuplicateClusterRule : ContextualRule {
         const val NEAR_DUPLICATE_DISTANCE_SP = 1f
     }
 }
+
+

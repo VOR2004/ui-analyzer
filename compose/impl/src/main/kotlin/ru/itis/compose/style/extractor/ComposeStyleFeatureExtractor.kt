@@ -1,6 +1,6 @@
 package ru.itis.compose.style.extractor
 
-import ru.itis.analyzer.config.ComponentTypes
+import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.analyzer.utils.DimensionUtils
 import ru.itis.compose.source.analyzer.ComposeTextRolePredictor

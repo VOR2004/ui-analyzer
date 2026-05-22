@@ -1,20 +1,19 @@
 package ru.itis.report
 
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.UiComponent
 import java.io.File
 
-class JsonReportGenerator {
+class JsonReportGenerator : ReportGenerator {
 
     private val json = Json {
         prettyPrint = true
         encodeDefaults = true
     }
 
-    fun writeReport(
+    override fun writeReport(
         outputFile: File,
         components: List<UiComponent>,
         issues: List<AnalysisIssue>
@@ -92,15 +91,3 @@ class JsonReportGenerator {
     }
 }
 
-@Serializable
-data class AnalysisReport(
-    val summary: Summary,
-    val components: List<UiComponent>,
-    val issues: List<AnalysisIssue>
-)
-
-@Serializable
-data class Summary(
-    val totalComponents: Int,
-    val totalIssues: Int
-)

@@ -1,6 +1,8 @@
-package ru.itis.compose.rules.color
+﻿package ru.itis.compose.rules.color
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
+import ru.itis.analyzer.messages.ui.UiPropertyNames
 
-import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.model.AnalysisIssue
@@ -9,17 +11,17 @@ import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 
 class ComposeHardcodedColorRule : Rule {
-    override val id: String = AnalyzerStrings.RuleIds.COMPOSE_HARDCODED_COLOR
+    override val id: String = RuleIds.COMPOSE_HARDCODED_COLOR
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
         return ComponentUtils.flattenAll(components)
             .filter { component -> component.sourceType == SourceType.COMPOSE }
             .flatMap { component ->
                 listOfNotNull(
-                    checkColorProperty(component, AnalyzerStrings.PropertyNames.BACKGROUND, component.properties.backgroundColor),
-                    checkColorProperty(component, AnalyzerStrings.PropertyNames.BACKGROUND_TINT, component.properties.backgroundTint),
-                    checkColorProperty(component, AnalyzerStrings.PropertyNames.TINT, component.properties.tint),
-                    checkColorProperty(component, AnalyzerStrings.PropertyNames.TEXT_COLOR, component.properties.textColor)
+                    checkColorProperty(component, UiPropertyNames.BACKGROUND, component.properties.backgroundColor),
+                    checkColorProperty(component, UiPropertyNames.BACKGROUND_TINT, component.properties.backgroundTint),
+                    checkColorProperty(component, UiPropertyNames.TINT, component.properties.tint),
+                    checkColorProperty(component, UiPropertyNames.TEXT_COLOR, component.properties.textColor)
                 )
             }
     }
@@ -40,8 +42,8 @@ class ComposeHardcodedColorRule : Rule {
             componentId = component.id,
             componentType = component.type,
             filePath = component.filePath,
-            message = AnalyzerStrings.Messages.composeHardcodedColor(propertyName, normalized),
-            recommendation = AnalyzerStrings.Messages.COMPOSE_HARDCODED_COLOR_RECOMMENDATION
+            message = AnalyzerMessages.composeHardcodedColor(propertyName, normalized),
+            recommendation = AnalyzerMessages.COMPOSE_HARDCODED_COLOR_RECOMMENDATION
         )
     }
 
@@ -54,3 +56,5 @@ class ComposeHardcodedColorRule : Rule {
         val HEX_COLOR_LITERAL = Regex("""0x[0-9A-Fa-f]{8}|#[0-9A-Fa-f]{6,8}""")
     }
 }
+
+

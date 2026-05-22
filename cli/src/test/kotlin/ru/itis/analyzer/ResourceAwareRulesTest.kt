@@ -1,10 +1,10 @@
-package ru.itis.analyzer
+﻿package ru.itis.analyzer
+import ru.itis.analyzer.messages.rules.RuleIds
 
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
-import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.xml.rules.static.accessibility.XmlTouchTargetTooSmallRule
 import ru.itis.xml.rules.static.color.XmlNearDuplicateButtonColorRule
@@ -12,7 +12,7 @@ import ru.itis.xml.rules.static.text.XmlHardcodedTextRule
 import ru.itis.xml.rules.static.text.XmlSuspiciousTextSizeRule
 import ru.itis.xml.rules.static.text.XmlTextContrastRule
 import ru.itis.xml.source.parser.XmlLayoutParser
-import ru.itis.xml.source.resource.ResourceRepository
+import ru.itis.xml.source.resource.DefaultResourceRepository
 
 class ResourceAwareRulesTest {
 
@@ -23,7 +23,7 @@ class ResourceAwareRulesTest {
             projectRoot,
             "app/src/main/res/layout/rule_resource_resolution_demo.xml"
         )
-        val resourceRepository = ResourceRepository.load(projectRoot)
+        val resourceRepository = DefaultResourceRepository.load(projectRoot)
         val component = XmlLayoutParser().parse(layoutFile)
 
         val rules: List<Rule> = listOf(
@@ -41,7 +41,7 @@ class ResourceAwareRulesTest {
 
         assertTrue(
             issues.any {
-                it.ruleId == AnalyzerStrings.RuleIds.TOUCH_TARGET_TOO_SMALL &&
+                it.ruleId == RuleIds.TOUCH_TARGET_TOO_SMALL &&
                     it.componentId == "resource_tiny_button"
             },
             "Expected touch target rule to resolve width and height from theme dimen attrs"
@@ -49,7 +49,7 @@ class ResourceAwareRulesTest {
 
         assertTrue(
             issues.any {
-                it.ruleId == AnalyzerStrings.RuleIds.SUSPICIOUS_TEXT_SIZE &&
+                it.ruleId == RuleIds.SUSPICIOUS_TEXT_SIZE &&
                     it.componentId == "resource_tiny_text"
             },
             "Expected suspicious text size rule to resolve textSize from theme dimen attr"
@@ -57,7 +57,7 @@ class ResourceAwareRulesTest {
 
         assertTrue(
             issues.any {
-                it.ruleId == AnalyzerStrings.RuleIds.TEXT_CONTRAST &&
+                it.ruleId == RuleIds.TEXT_CONTRAST &&
                     it.componentId == "resource_low_contrast_text"
             },
             "Expected text contrast rule to resolve text color and background from theme attrs"
@@ -65,7 +65,7 @@ class ResourceAwareRulesTest {
 
         assertTrue(
             issues.any {
-                it.ruleId == AnalyzerStrings.RuleIds.HARDCODED_TEXT &&
+                it.ruleId == RuleIds.HARDCODED_TEXT &&
                     it.componentId == "raw_hardcoded_text"
             },
             "Expected raw literal text to be reported as hardcoded"
@@ -73,15 +73,16 @@ class ResourceAwareRulesTest {
 
         assertFalse(
             issues.any {
-                it.ruleId == AnalyzerStrings.RuleIds.HARDCODED_TEXT &&
+                it.ruleId == RuleIds.HARDCODED_TEXT &&
                     it.componentId == "resource_safe_text"
             },
             "Expected @string text not to be reported as hardcoded"
         )
 
         assertTrue(
-            issues.any { it.ruleId == AnalyzerStrings.RuleIds.NEAR_DUPLICATE_BUTTON_COLORS },
+            issues.any { it.ruleId == RuleIds.NEAR_DUPLICATE_BUTTON_COLORS },
             "Expected near duplicate button colors to resolve @color resources"
         )
     }
 }
+

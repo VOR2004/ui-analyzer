@@ -1,11 +1,11 @@
-package ru.itis.compose.rules.accessibility
+﻿package ru.itis.compose.rules.accessibility
+import ru.itis.analyzer.messages.rules.RuleIds
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
-import ru.itis.analyzer.config.ComponentTypes
-import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.model.Severity
 import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
@@ -22,7 +22,7 @@ class ComposeImageContentDescriptionRuleTest {
 
         val issues = ComposeImageContentDescriptionRule().check(listOf(image))
 
-        assertTrue(issues.any { it.ruleId == AnalyzerStrings.RuleIds.COMPOSE_IMAGE_CONTENT_DESCRIPTION })
+        assertTrue(issues.any { it.ruleId == RuleIds.COMPOSE_IMAGE_CONTENT_DESCRIPTION })
         assertEquals(Severity.INFO, issues.first().severity)
     }
 
@@ -71,3 +71,5 @@ class ComposeImageContentDescriptionRuleTest {
         )
     }
 }
+
+

@@ -1,11 +1,11 @@
-package ru.itis.compose.rules.layout
+﻿package ru.itis.compose.rules.layout
+import ru.itis.analyzer.messages.rules.RuleIds
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
-import ru.itis.analyzer.config.ComponentTypes
-import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 import ru.itis.model.UiProperties
@@ -25,7 +25,7 @@ class ComposeAdaptiveSpacingOutlierRuleTest {
         val issues = ComposeAdaptiveSpacingOutlierRule().check(components)
 
         assertEquals(1, issues.size)
-        assertEquals(AnalyzerStrings.RuleIds.COMPOSE_ADAPTIVE_SPACING_OUTLIER, issues.single().ruleId)
+        assertEquals(RuleIds.COMPOSE_ADAPTIVE_SPACING_OUTLIER, issues.single().ruleId)
         assertEquals("text5", issues.single().componentId)
     }
 
@@ -80,3 +80,5 @@ class ComposeAdaptiveSpacingOutlierRuleTest {
         )
     }
 }
+
+

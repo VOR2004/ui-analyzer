@@ -1,7 +1,9 @@
-package ru.itis.compose.rules.layout
+﻿package ru.itis.compose.rules.layout
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
+import ru.itis.analyzer.messages.ui.UiPropertyNames
 
 import kotlin.math.abs
-import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.analyzer.utils.DimensionUtils
@@ -11,7 +13,7 @@ import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 
 class ComposeNearDuplicateSpacingClusterRule : Rule {
-    override val id: String = AnalyzerStrings.RuleIds.COMPOSE_NEAR_DUPLICATE_SPACING_CLUSTER
+    override val id: String = RuleIds.COMPOSE_NEAR_DUPLICATE_SPACING_CLUSTER
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
         val entries = ComponentUtils.flattenAll(components)
@@ -39,9 +41,9 @@ class ComposeNearDuplicateSpacingClusterRule : Rule {
 
     private fun collectSpacingEntries(component: UiComponent): List<SpacingEntry> {
         return listOfNotNull(
-            parseEntry(component, AnalyzerStrings.PropertyNames.PADDING, component.properties.padding),
-            parseEntry(component, AnalyzerStrings.PropertyNames.WIDTH, component.properties.width),
-            parseEntry(component, AnalyzerStrings.PropertyNames.HEIGHT, component.properties.height)
+            parseEntry(component, UiPropertyNames.PADDING, component.properties.padding),
+            parseEntry(component, UiPropertyNames.WIDTH, component.properties.width),
+            parseEntry(component, UiPropertyNames.HEIGHT, component.properties.height)
         )
     }
 
@@ -92,12 +94,12 @@ class ComposeNearDuplicateSpacingClusterRule : Rule {
             componentLocator = entry.component.treePath?.let { path -> "${entry.component.type}[path=$path]" },
             componentType = entry.component.type,
             filePath = entry.component.filePath,
-            message = AnalyzerStrings.Messages.composeNearDuplicateSpacingCluster(
+            message = AnalyzerMessages.composeNearDuplicateSpacingCluster(
                 propertyName = entry.propertyName,
                 value = entry.value,
                 canonicalValue = canonicalValue
             ),
-            recommendation = AnalyzerStrings.Messages.composeNearDuplicateSpacingClusterRecommendation(
+            recommendation = AnalyzerMessages.composeNearDuplicateSpacingClusterRecommendation(
                 canonicalValue = canonicalValue
             )
         )
@@ -114,3 +116,5 @@ class ComposeNearDuplicateSpacingClusterRule : Rule {
         const val NEAR_DUPLICATE_DISTANCE_DP = 2f
     }
 }
+
+

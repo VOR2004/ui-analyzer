@@ -1,6 +1,6 @@
 package ru.itis.xml.style.extractor
 
-import ru.itis.analyzer.config.ComponentTypes
+import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.xml.source.resource.ResourceRepository
 import ru.itis.analyzer.utils.ColorUtils
 import ru.itis.analyzer.utils.ComponentUtils

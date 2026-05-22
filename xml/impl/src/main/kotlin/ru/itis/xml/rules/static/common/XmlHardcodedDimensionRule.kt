@@ -1,7 +1,9 @@
-package ru.itis.xml.rules.static.common
+﻿package ru.itis.xml.rules.static.common
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
+import ru.itis.analyzer.messages.ui.UiPropertyNames
 
-import ru.itis.analyzer.config.ResourcePatterns
-import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.config.components.ResourcePatterns
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.rules.base.onlyXmlFlatComponents
 import ru.itis.analyzer.utils.DimensionUtils
@@ -11,7 +13,7 @@ import ru.itis.model.UiComponent
 
 class XmlHardcodedDimensionRule : Rule {
 
-    override val id: String = AnalyzerStrings.RuleIds.HARDCODED_DIMENSION
+    override val id: String = RuleIds.HARDCODED_DIMENSION
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
         val flatComponents = components.onlyXmlFlatComponents()
@@ -20,31 +22,31 @@ class XmlHardcodedDimensionRule : Rule {
         for (component in flatComponents) {
             issues += checkDimensionProperty(
                 component = component,
-                propertyName = AnalyzerStrings.PropertyNames.WIDTH,
+                propertyName = UiPropertyNames.WIDTH,
                 propertyValue = component.properties.width
             )
 
             issues += checkDimensionProperty(
                 component = component,
-                propertyName = AnalyzerStrings.PropertyNames.HEIGHT,
+                propertyName = UiPropertyNames.HEIGHT,
                 propertyValue = component.properties.height
             )
 
             issues += checkDimensionProperty(
                 component = component,
-                propertyName = AnalyzerStrings.PropertyNames.TEXT_SIZE,
+                propertyName = UiPropertyNames.TEXT_SIZE,
                 propertyValue = component.properties.textSize
             )
 
             issues += checkDimensionProperty(
                 component = component,
-                propertyName = AnalyzerStrings.PropertyNames.PADDING,
+                propertyName = UiPropertyNames.PADDING,
                 propertyValue = component.properties.padding
             )
 
             issues += checkDimensionProperty(
                 component = component,
-                propertyName = AnalyzerStrings.PropertyNames.MARGIN,
+                propertyName = UiPropertyNames.MARGIN,
                 propertyValue = component.properties.margin
             )
         }
@@ -66,8 +68,8 @@ class XmlHardcodedDimensionRule : Rule {
                 componentId = component.id,
                 componentType = component.type,
                 filePath = component.filePath,
-                message = AnalyzerStrings.Messages.hardcodedDimension(propertyName, propertyValue),
-                recommendation = AnalyzerStrings.Messages.HARDCODED_DIMENSION_RECOMMENDATION
+                message = AnalyzerMessages.hardcodedDimension(propertyName, propertyValue),
+                recommendation = AnalyzerMessages.HARDCODED_DIMENSION_RECOMMENDATION
             )
         )
     }
@@ -87,3 +89,5 @@ class XmlHardcodedDimensionRule : Rule {
             value.startsWith(ResourcePatterns.ANDROID_ATTR_REF_PREFIX)
     }
 }
+
+

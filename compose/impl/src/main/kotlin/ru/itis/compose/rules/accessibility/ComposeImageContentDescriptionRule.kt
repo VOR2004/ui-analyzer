@@ -1,7 +1,8 @@
-package ru.itis.compose.rules.accessibility
+﻿package ru.itis.compose.rules.accessibility
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
 
-import ru.itis.analyzer.config.ComponentTypes
-import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.Severity
@@ -9,7 +10,7 @@ import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 
 class ComposeImageContentDescriptionRule : Rule {
-    override val id: String = AnalyzerStrings.RuleIds.COMPOSE_IMAGE_CONTENT_DESCRIPTION
+    override val id: String = RuleIds.COMPOSE_IMAGE_CONTENT_DESCRIPTION
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
         return components.flatMap { root -> checkComponent(root, parent = null) }
@@ -48,11 +49,11 @@ class ComposeImageContentDescriptionRule : Rule {
             componentId = component.id,
             componentType = component.type,
             filePath = component.filePath,
-            message = AnalyzerStrings.Messages.composeImageContentDescription(
+            message = AnalyzerMessages.composeImageContentDescription(
                 componentType = component.type,
                 isInteractive = insideInteractiveContainer
             ),
-            recommendation = AnalyzerStrings.Messages.COMPOSE_IMAGE_CONTENT_DESCRIPTION_RECOMMENDATION
+            recommendation = AnalyzerMessages.COMPOSE_IMAGE_CONTENT_DESCRIPTION_RECOMMENDATION
         )
     }
 
@@ -77,3 +78,5 @@ class ComposeImageContentDescriptionRule : Rule {
         )
     }
 }
+
+

@@ -1,8 +1,10 @@
-package ru.itis.xml.rules.adaptive.text
+﻿package ru.itis.xml.rules.adaptive.text
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
+import ru.itis.analyzer.messages.ui.UiPropertyNames
 
 import kotlin.math.abs
 import ru.itis.analyzer.core.AnalysisContext
-import ru.itis.analyzer.messages.AnalyzerStrings
 import ru.itis.analyzer.rules.base.ContextualRule
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.model.AnalysisIssue
@@ -12,7 +14,7 @@ import ru.itis.xml.style.extractor.TextStyleSignatureExtractor
 import ru.itis.xml.style.signature.TextStyleSignature
 
 class XmlAdaptiveTextStyleOutlierRule : ContextualRule {
-    override val id: String = AnalyzerStrings.RuleIds.ADAPTIVE_TEXT_STYLE_OUTLIER
+    override val id: String = RuleIds.ADAPTIVE_TEXT_STYLE_OUTLIER
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> = emptyList()
 
@@ -37,10 +39,10 @@ class XmlAdaptiveTextStyleOutlierRule : ContextualRule {
                     componentId = component.id,
                     componentType = component.type,
                     filePath = component.filePath,
-                    message = AnalyzerStrings.Messages.adaptiveTextStyleOutlier(
+                    message = AnalyzerMessages.adaptiveTextStyleOutlier(
                         differences = differences.joinToString(", ")
                     ),
-                    recommendation = AnalyzerStrings.Messages.adaptiveTextStyleOutlierRecommendation(
+                    recommendation = AnalyzerMessages.adaptiveTextStyleOutlierRecommendation(
                         dominantStyle = formatStyle(dominantStyle)
                     )
                 )
@@ -57,7 +59,7 @@ class XmlAdaptiveTextStyleOutlierRule : ContextualRule {
         val differences = mutableListOf<String>()
 
         if (!sameDimension(actual.textSize, dominant.textSize, TEXT_SIZE_TOLERANCE_SP)) {
-            differences += AnalyzerStrings.PropertyNames.TEXT_SIZE
+            differences += UiPropertyNames.TEXT_SIZE
         }
         if (actual.textStyle != dominant.textStyle) {
             differences += "textStyle"
@@ -89,3 +91,5 @@ class XmlAdaptiveTextStyleOutlierRule : ContextualRule {
         const val TEXT_SIZE_TOLERANCE_SP = 1f
     }
 }
+
+

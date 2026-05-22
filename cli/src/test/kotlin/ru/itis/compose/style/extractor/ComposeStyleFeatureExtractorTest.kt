@@ -3,7 +3,7 @@ package ru.itis.compose.style.extractor
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-import ru.itis.analyzer.config.ComponentTypes
+import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.compose.style.signature.ComposePredictedTextRole
 import ru.itis.model.SourceType
 import ru.itis.model.UiComponent

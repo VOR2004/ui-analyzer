@@ -12,13 +12,15 @@ fun unsafeAccessJvmArgs(): List<String> {
 }
 
 dependencies {
-    implementation(project(":common:common-api"))
+    implementation(project(":core:core-api"))
+    testImplementation(project(":core:core-utils"))
     implementation(project(":analyzer:analyzer-api"))
     implementation(project(":analyzer:analyzer-impl"))
     implementation(project(":android:android-api"))
     implementation(project(":android:android-impl"))
     implementation(project(":compose:compose-api"))
     implementation(project(":compose:compose-impl"))
+    implementation(project(":report:report-api"))
     implementation(project(":report:report-impl"))
     implementation(project(":xml:xml-api"))
     implementation(project(":xml:xml-impl"))

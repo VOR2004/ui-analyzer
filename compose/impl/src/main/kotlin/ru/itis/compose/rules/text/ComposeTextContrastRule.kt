@@ -1,10 +1,11 @@
-package ru.itis.compose.rules.text
+﻿package ru.itis.compose.rules.text
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
 
 import java.lang.String.format
 import java.util.Locale
-import ru.itis.analyzer.config.AnalyzerThresholds
-import ru.itis.analyzer.config.ComponentTypes
-import ru.itis.analyzer.messages.AnalyzerStrings
+import ru.itis.analyzer.config.analyzer.AnalyzerThresholds
+import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.utils.ContrastUtils
 import ru.itis.analyzer.utils.DimensionUtils
@@ -15,7 +16,7 @@ import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 
 class ComposeTextContrastRule : Rule {
-    override val id: String = AnalyzerStrings.RuleIds.COMPOSE_TEXT_CONTRAST
+    override val id: String = RuleIds.COMPOSE_TEXT_CONTRAST
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
         return components.flatMap { component ->
@@ -71,13 +72,13 @@ class ComposeTextContrastRule : Rule {
             componentLocator = component.treePath?.let { path -> "${component.type}[path=$path]" },
             componentType = component.type,
             filePath = component.filePath,
-            message = AnalyzerStrings.Messages.composeInsufficientTextContrast(
+            message = AnalyzerMessages.composeInsufficientTextContrast(
                 textColor = textColor,
                 backgroundColor = backgroundColor,
                 ratio = formatRatio(contrast),
                 minContrast = minContrast
             ),
-            recommendation = AnalyzerStrings.Messages.COMPOSE_INSUFFICIENT_TEXT_CONTRAST_RECOMMENDATION
+            recommendation = AnalyzerMessages.COMPOSE_INSUFFICIENT_TEXT_CONTRAST_RECOMMENDATION
         )
     }
 
@@ -101,3 +102,5 @@ class ComposeTextContrastRule : Rule {
         return format(Locale.US, "%.2f", value)
     }
 }
+
+

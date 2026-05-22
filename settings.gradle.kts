@@ -3,7 +3,8 @@ plugins {
 }
 rootProject.name = "ui-analyzer"
 
-include(":common:api")
+include(":core:api")
+include(":core:utils")
 include(":analyzer:api")
 include(":analyzer:impl")
 include(":xml:api")
@@ -12,10 +13,12 @@ include(":compose:api")
 include(":compose:impl")
 include(":android:api")
 include(":android:impl")
+include(":report:api")
 include(":report:impl")
 include(":cli")
 
-project(":common:api").name = "common-api"
+project(":core:api").name = "core-api"
+project(":core:utils").name = "core-utils"
 project(":analyzer:api").name = "analyzer-api"
 project(":analyzer:impl").name = "analyzer-impl"
 project(":xml:api").name = "xml-api"
@@ -24,4 +27,5 @@ project(":compose:api").name = "compose-api"
 project(":compose:impl").name = "compose-impl"
 project(":android:api").name = "android-api"
 project(":android:impl").name = "android-impl"
+project(":report:api").name = "report-api"
 project(":report:impl").name = "report-impl"
