@@ -1,9 +1,8 @@
 package ru.itis.android.runtime.adb.provider
 
-import ru.itis.android.runtime.RuntimeSnapshotProvider
-import ru.itis.android.runtime.adb.AdbCommandRunner
+import ru.itis.android.runtime.uiautomator.parser.RuntimeDumpParser
+import ru.itis.android.runtime.adb.provider.AdbCommandRunner
 import ru.itis.android.runtime.adb.AdbDevice
-import ru.itis.android.runtime.adb.provider.ProcessAdbCommandRunner
 import ru.itis.android.runtime.adb.values.AdbCommands
 import ru.itis.android.runtime.adb.values.AdbRuntimeMessages
 import ru.itis.android.runtime.uiautomator.parser.UiAutomatorDumpParser
@@ -13,8 +12,8 @@ import kotlin.io.path.createTempFile
 
 class AdbUiAutomatorSnapshotProvider(
     private val commandRunner: AdbCommandRunner = ProcessAdbCommandRunner(),
-    private val deviceProvider: AdbDeviceProvider = AdbDeviceProvider(commandRunner),
-    private val dumpParser: UiAutomatorDumpParser = UiAutomatorDumpParser()
+    private val deviceProvider: AndroidDeviceProvider = AdbDeviceProvider(commandRunner),
+    private val dumpParser: RuntimeDumpParser = UiAutomatorDumpParser()
 ) : RuntimeSnapshotProvider {
 
     override fun capture(requestedSerial: String?): List<UiComponent> {

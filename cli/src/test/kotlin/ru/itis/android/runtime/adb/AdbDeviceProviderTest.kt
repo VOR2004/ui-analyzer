@@ -1,5 +1,6 @@
 package ru.itis.android.runtime.adb
 
+import ru.itis.android.runtime.adb.provider.AdbCommandRunner
 import ru.itis.android.runtime.adb.provider.AdbDeviceProvider
 import kotlin.test.Test
 import kotlin.test.assertEquals

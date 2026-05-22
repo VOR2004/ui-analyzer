@@ -1,4 +1,4 @@
-package ru.itis.android.runtime
+package ru.itis.android.runtime.adb.provider
 
 import ru.itis.model.UiComponent
 

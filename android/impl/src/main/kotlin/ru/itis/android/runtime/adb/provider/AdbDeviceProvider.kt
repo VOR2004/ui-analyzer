@@ -1,6 +1,6 @@
 package ru.itis.android.runtime.adb.provider
 
-import ru.itis.android.runtime.adb.AdbCommandRunner
+import ru.itis.android.runtime.adb.provider.AdbCommandRunner
 import ru.itis.android.runtime.adb.AdbDevice
 import ru.itis.android.runtime.adb.values.AdbCommands
 import ru.itis.android.runtime.adb.values.AdbDeviceStates
@@ -8,9 +8,9 @@ import ru.itis.android.runtime.adb.values.AdbRuntimeMessages
 
 class AdbDeviceProvider(
     private val commandRunner: AdbCommandRunner
-) {
+) : AndroidDeviceProvider {
 
-    fun selectDevice(requestedSerial: String? = null): AdbDevice {
+    override fun selectDevice(requestedSerial: String?): AdbDevice {
         val devices = loadDevices()
         if (requestedSerial != null) {
             return devices.firstOrNull { device -> device.serial == requestedSerial }

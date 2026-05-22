@@ -2,6 +2,7 @@ package ru.itis.analyzer
 
 import ru.itis.analyzer.core.AnalysisContext
 import ru.itis.analyzer.core.ComposeSourceAnalysisContext
+import ru.itis.analyzer.core.UiAnalyzer
 import ru.itis.xml.source.resource.ResourceRepository
 import ru.itis.analyzer.rules.base.ComposeSourceRule
 import ru.itis.analyzer.rules.base.ContextualRule
@@ -19,8 +20,8 @@ class Analyzer(
     private val styleProfiler: StyleProfiler = StyleProfiler(
         featureExtractor = StyleFeatureExtractor(resourceRepository)
     )
-) {
-    fun analyze(components: List<UiComponent>): List<AnalysisIssue> {
+) : UiAnalyzer {
+    override fun analyze(components: List<UiComponent>): List<AnalysisIssue> {
         val screenProfiles = styleProfiler.buildScreenProfiles(components)
         val projectStyleProfile = styleProfiler.buildProjectProfile(components)
         val context = AnalysisContext(

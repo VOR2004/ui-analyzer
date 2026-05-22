@@ -6,7 +6,7 @@ internal class UiAutomatorBoundsParser {
 
     fun parse(rawBounds: String?): UiBounds? {
         val value = rawBounds?.trim().orEmpty()
-        val match = BOUNDS_PATTERN.matchEntire(value) ?: return null
+        val match = boundsPattern.matchEntire(value) ?: return null
 
         val left = match.groupValues[1].toFloat()
         val top = match.groupValues[2].toFloat()
@@ -25,5 +25,5 @@ internal class UiAutomatorBoundsParser {
         )
     }
 
-    private val BOUNDS_PATTERN = Regex("""\[(\d+),(\d+)]\[(\d+),(\d+)]""")
+    private val boundsPattern = Regex("""\[(\d+),(\d+)]\[(\d+),(\d+)]""")
 }
