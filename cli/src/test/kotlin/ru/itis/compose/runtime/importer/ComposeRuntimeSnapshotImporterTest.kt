@@ -15,6 +15,11 @@ class ComposeRuntimeSnapshotImporterTest {
             {
               "screen": "BoardScreen",
               "state": "content",
+              "density": 2.75,
+              "densityDpi": 440,
+              "orientation": "portrait",
+              "screenWidthPx": 1080,
+              "screenHeightPx": 2400,
               "components": [
                 {
                   "type": "Button",
@@ -59,6 +64,11 @@ class ComposeRuntimeSnapshotImporterTest {
         assertTrue(button.properties.isClickable)
         assertEquals("BoardScreen", button.properties.rawAttributes["runtime:screen"])
         assertEquals("content", button.properties.rawAttributes["runtime:state"])
+        assertEquals("2.75", button.properties.rawAttributes["runtime:density"])
+        assertEquals("440", button.properties.rawAttributes["runtime:densityDpi"])
+        assertEquals("portrait", button.properties.rawAttributes["runtime:orientation"])
+        assertEquals("1080", button.properties.rawAttributes["runtime:screenWidthPx"])
+        assertEquals("2400", button.properties.rawAttributes["runtime:screenHeightPx"])
         assertEquals("Button[text=Save]", button.properties.rawAttributes["runtime:locator"])
 
         assertEquals(SourceType.COMPOSE_RUNTIME, text.sourceType)

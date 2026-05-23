@@ -7,6 +7,11 @@ import ru.itis.model.UiBounds
 data class ComposeRuntimeSnapshot(
     val screen: String,
     val state: String? = null,
+    val density: Float? = null,
+    val densityDpi: Int? = null,
+    val orientation: String? = null,
+    val screenWidthPx: Int? = null,
+    val screenHeightPx: Int? = null,
     val components: List<ComposeRuntimeComponent> = emptyList()
 )
 

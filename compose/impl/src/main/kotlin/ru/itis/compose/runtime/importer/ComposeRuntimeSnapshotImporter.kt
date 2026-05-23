@@ -67,6 +67,15 @@ class ComposeRuntimeSnapshotImporter {
                 putAll(attributes)
                 put(ComposeRuntimeAttributes.SCREEN, snapshot.screen)
                 snapshot.state?.let { state -> put(ComposeRuntimeAttributes.STATE, state) }
+                snapshot.density?.let { density -> put(ComposeRuntimeAttributes.DENSITY, density.toString()) }
+                snapshot.densityDpi?.let { densityDpi ->
+                    put(ComposeRuntimeAttributes.DENSITY_DPI, densityDpi.toString())
+                }
+                snapshot.orientation?.let { orientation -> put(ComposeRuntimeAttributes.ORIENTATION, orientation) }
+                snapshot.screenWidthPx?.let { width -> put(ComposeRuntimeAttributes.SCREEN_WIDTH_PX, width.toString()) }
+                snapshot.screenHeightPx?.let { height ->
+                    put(ComposeRuntimeAttributes.SCREEN_HEIGHT_PX, height.toString())
+                }
                 locator?.let { locator -> put(ComposeRuntimeAttributes.LOCATOR, locator) }
                 bounds?.let { bounds ->
                     put(ComposeRuntimeAttributes.BOUNDS_X, bounds.x.toPixelString())

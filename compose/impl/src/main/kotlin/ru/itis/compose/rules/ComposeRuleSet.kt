@@ -11,7 +11,10 @@ import ru.itis.compose.rules.layout.ComposeNearDuplicateSpacingClusterRule
 import ru.itis.compose.rules.runtime.ComposeRuntimeOffscreenOrClippedComponentRule
 import ru.itis.compose.rules.runtime.ComposeRuntimeOverlappingClickableComponentsRule
 import ru.itis.compose.rules.runtime.RuntimeDuplicateVisibleTextActionsRule
+import ru.itis.compose.rules.runtime.RuntimeScreenDensitySnapshotInfoRule
+import ru.itis.compose.rules.runtime.RuntimeSmallTouchTargetRule
 import ru.itis.compose.rules.runtime.RuntimeSystemAppSnapshotWarningRule
+import ru.itis.compose.rules.runtime.RuntimeTextTruncationRiskRule
 import ru.itis.compose.rules.style.ComposeComponentStyleOutlierRule
 import ru.itis.compose.rules.text.ComposeAdaptiveTextStyleOutlierRule
 import ru.itis.compose.rules.text.ComposeHardcodedTextRule
@@ -45,10 +48,13 @@ object ComposeRuleSet {
 
     fun runtimeRules(expectedPackageName: String? = null): List<Rule> {
         return listOf(
+            RuntimeScreenDensitySnapshotInfoRule(),
             RuntimeSystemAppSnapshotWarningRule(expectedPackageName),
             ComposeRuntimeOverlappingClickableComponentsRule(),
             ComposeRuntimeOffscreenOrClippedComponentRule(),
-            RuntimeDuplicateVisibleTextActionsRule()
+            RuntimeDuplicateVisibleTextActionsRule(),
+            RuntimeSmallTouchTargetRule(),
+            RuntimeTextTruncationRiskRule()
         )
     }
 }

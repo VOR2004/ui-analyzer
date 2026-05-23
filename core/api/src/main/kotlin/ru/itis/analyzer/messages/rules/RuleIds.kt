@@ -42,6 +42,12 @@ object RuleIds {
         "runtime-system-app-snapshot-warning"
     const val RUNTIME_DUPLICATE_VISIBLE_TEXT_ACTIONS =
         "runtime-duplicate-visible-text-actions"
+    const val RUNTIME_SMALL_TOUCH_TARGET =
+        "runtime-small-touch-target"
+    const val RUNTIME_TEXT_TRUNCATION_RISK =
+        "runtime-text-truncation-risk"
+    const val RUNTIME_SCREEN_DENSITY_SNAPSHOT_INFO =
+        "runtime-screen-density-snapshot-info"
 
     fun nearDuplicateCluster(baseId: String): String = "$baseId-near-duplicate-cluster"
 }
