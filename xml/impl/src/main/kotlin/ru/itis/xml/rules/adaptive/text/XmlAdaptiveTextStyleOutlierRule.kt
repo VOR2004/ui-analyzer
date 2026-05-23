@@ -1,10 +1,10 @@
 package ru.itis.xml.rules.adaptive.text
-import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
-import ru.itis.analyzer.messages.rules.RuleIds
-import ru.itis.analyzer.messages.ui.UiPropertyNames
 
 import kotlin.math.abs
 import ru.itis.analyzer.core.AnalysisContext
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
+import ru.itis.analyzer.messages.ui.UiPropertyNames
 import ru.itis.analyzer.rules.base.ContextualRule
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.model.AnalysisIssue
@@ -58,7 +58,7 @@ class XmlAdaptiveTextStyleOutlierRule : ContextualRule {
     ): List<String> {
         val differences = mutableListOf<String>()
 
-        if (!sameDimension(actual.textSize, dominant.textSize, TEXT_SIZE_TOLERANCE_SP)) {
+        if (!sameTextSize(actual.textSize, dominant.textSize)) {
             differences += UiPropertyNames.TEXT_SIZE
         }
         if (actual.textStyle != dominant.textStyle) {
@@ -71,10 +71,10 @@ class XmlAdaptiveTextStyleOutlierRule : ContextualRule {
         return differences
     }
 
-    private fun sameDimension(first: Float?, second: Float?, tolerance: Float): Boolean {
+    private fun sameTextSize(first: Float?, second: Float?): Boolean {
         if (first == null && second == null) return true
         if (first == null || second == null) return false
-        return abs(first - second) <= tolerance
+        return abs(first - second) <= TEXT_SIZE_TOLERANCE_SP
     }
 
     private fun formatStyle(style: TextStyleSignature): String {
@@ -91,5 +91,4 @@ class XmlAdaptiveTextStyleOutlierRule : ContextualRule {
         const val TEXT_SIZE_TOLERANCE_SP = 1f
     }
 }
-
 
