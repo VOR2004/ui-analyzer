@@ -1,4 +1,4 @@
-package ru.itis.compose.source.model
+﻿package ru.itis.compose.source.model
 
 object ComposeFunctionConstants {
     const val MODIFIER_PARAMETER_NAME = "modifier"

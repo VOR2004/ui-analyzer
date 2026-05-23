@@ -1,4 +1,4 @@
-package ru.itis.compose.source.psi
+﻿package ru.itis.compose.source.psi
 
 import kotlin.math.max
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement

@@ -1,4 +1,4 @@
-package ru.itis.analyzer.messages.rules
+﻿package ru.itis.analyzer.messages.rules
 
 object RuleIds {
     const val ADAPTIVE_BUTTON_STYLE_OUTLIER = "adaptive-button-style-outlier"

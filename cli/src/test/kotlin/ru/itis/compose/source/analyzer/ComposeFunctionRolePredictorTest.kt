@@ -1,5 +1,6 @@
-package ru.itis.compose.source.analyzer
+﻿package ru.itis.compose.source.analyzer
 
+import ru.itis.compose.source.role.DefaultComposeFunctionRolePredictor
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import ru.itis.compose.source.model.ComposeFunction
@@ -7,7 +8,7 @@ import ru.itis.compose.source.model.ComposeFunctionRole
 
 class ComposeFunctionRolePredictorTest {
 
-    private val predictor = ComposeFunctionRolePredictor()
+    private val predictor = DefaultComposeFunctionRolePredictor()
 
     @Test
     fun `predicts reusable component by component suffix`() {

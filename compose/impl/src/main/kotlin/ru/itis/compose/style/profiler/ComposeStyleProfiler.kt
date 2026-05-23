@@ -1,4 +1,4 @@
-package ru.itis.compose.style.profiler
+﻿package ru.itis.compose.style.profiler
 
 import ru.itis.compose.style.extractor.ComposeStyleFeatureExtractor
 import ru.itis.compose.style.profile.ComposeProjectStyleProfile

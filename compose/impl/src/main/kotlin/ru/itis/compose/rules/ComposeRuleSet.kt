@@ -1,4 +1,4 @@
-package ru.itis.compose.rules
+﻿package ru.itis.compose.rules
 
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.compose.rules.accessibility.ComposeImageContentDescriptionRule

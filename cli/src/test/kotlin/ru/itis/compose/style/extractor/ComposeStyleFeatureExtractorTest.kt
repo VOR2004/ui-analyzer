@@ -1,4 +1,4 @@
-package ru.itis.compose.style.extractor
+﻿package ru.itis.compose.style.extractor
 
 import kotlin.test.Test
 import kotlin.test.assertEquals

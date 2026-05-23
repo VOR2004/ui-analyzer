@@ -1,4 +1,4 @@
-package ru.itis.compose.rules.runtime
+﻿package ru.itis.compose.rules.runtime
 
 import kotlin.test.Test
 import kotlin.test.assertEquals

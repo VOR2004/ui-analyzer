@@ -12,12 +12,13 @@ import ru.itis.model.AnalysisIssue
 import ru.itis.model.Severity
 import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
-import ru.itis.compose.source.analyzer.ComposeTextRolePredictor
+import ru.itis.compose.style.role.ComposeTextRolePredictor
+import ru.itis.compose.style.role.DefaultComposeTextRolePredictor
 import ru.itis.compose.style.signature.ComposePredictedTextRole
 
 class ComposeAdaptiveTextStyleOutlierRule : Rule {
     override val id: String = RuleIds.COMPOSE_ADAPTIVE_TEXT_STYLE_OUTLIER
-    private val rolePredictor = ComposeTextRolePredictor()
+    private val rolePredictor: ComposeTextRolePredictor = DefaultComposeTextRolePredictor()
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
         return ComponentUtils.flattenAll(components)
@@ -174,5 +175,4 @@ class ComposeAdaptiveTextStyleOutlierRule : Rule {
         const val TEXT_SIZE_TOLERANCE_SP = 1f
     }
 }
-
 

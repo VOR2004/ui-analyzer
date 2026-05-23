@@ -1,4 +1,4 @@
-package ru.itis.xml.style.extractor
+﻿package ru.itis.xml.style.extractor
 
 import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.xml.source.resource.ResourceRepository

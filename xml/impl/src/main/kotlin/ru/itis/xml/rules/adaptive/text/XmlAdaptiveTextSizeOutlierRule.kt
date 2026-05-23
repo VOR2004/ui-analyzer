@@ -11,12 +11,13 @@ import ru.itis.model.AnalysisIssue
 import ru.itis.model.Severity
 import ru.itis.model.UiComponent
 import ru.itis.style.cluster.DimensionCluster
+import ru.itis.xml.style.role.DefaultTextRolePredictor
 import ru.itis.xml.style.signature.PredictedTextRole
 import ru.itis.xml.style.signature.TextRolePredictor
 
 class XmlAdaptiveTextSizeOutlierRule : ContextualRule {
     override val id: String = RuleIds.ADAPTIVE_TEXT_SIZE_OUTLIER
-    private val textRolePredictor = TextRolePredictor()
+    private val textRolePredictor: TextRolePredictor = DefaultTextRolePredictor()
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> = emptyList()
 
@@ -98,5 +99,4 @@ class XmlAdaptiveTextSizeOutlierRule : ContextualRule {
         const val MIN_COMMON_CLUSTER_FREQUENCY = 1
     }
 }
-
 

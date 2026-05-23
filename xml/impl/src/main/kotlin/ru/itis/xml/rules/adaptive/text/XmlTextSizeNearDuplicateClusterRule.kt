@@ -11,13 +11,14 @@ import ru.itis.model.AnalysisIssue
 import ru.itis.model.Severity
 import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
+import ru.itis.xml.style.role.DefaultTextRolePredictor
 import ru.itis.xml.style.signature.PredictedTextRole
 import ru.itis.xml.style.signature.TextRolePredictor
 
 class XmlTextSizeNearDuplicateClusterRule : ContextualRule {
     override val id: String = RuleIds.XML_TEXT_SIZE_NEAR_DUPLICATE_CLUSTER
 
-    private val rolePredictor = TextRolePredictor()
+    private val rolePredictor: TextRolePredictor = DefaultTextRolePredictor()
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> = emptyList()
 
@@ -128,5 +129,4 @@ class XmlTextSizeNearDuplicateClusterRule : ContextualRule {
         const val NEAR_DUPLICATE_DISTANCE_SP = 1f
     }
 }
-
 

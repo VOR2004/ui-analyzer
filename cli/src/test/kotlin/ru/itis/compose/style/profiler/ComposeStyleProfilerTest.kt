@@ -1,4 +1,4 @@
-package ru.itis.compose.style.profiler
+﻿package ru.itis.compose.style.profiler
 
 import kotlin.test.Test
 import kotlin.test.assertEquals

@@ -1,4 +1,4 @@
-package ru.itis.compose.source.psi
+﻿package ru.itis.compose.source.psi
 
 import java.io.File
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreApplicationEnvironment

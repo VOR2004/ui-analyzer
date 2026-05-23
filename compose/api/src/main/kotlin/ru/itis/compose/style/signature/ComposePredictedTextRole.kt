@@ -1,4 +1,4 @@
-package ru.itis.compose.style.signature
+﻿package ru.itis.compose.style.signature
 
 enum class ComposePredictedTextRole {
     TITLE,

@@ -1,4 +1,4 @@
-package ru.itis.compose.helpers
+﻿package ru.itis.compose.helpers
 
 import ru.itis.analyzer.config.analyzer.AnalyzerFormat
 import ru.itis.analyzer.config.components.ComponentTypes
@@ -7,7 +7,7 @@ import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.compose.helpers.model.ComposeButtonColorEntry
 import ru.itis.compose.helpers.model.ComposeClusterReplacement
 import ru.itis.compose.helpers.model.ComposeNearDuplicateClusterResult
-import ru.itis.compose.style.ComposeColorValueNormalizer
+import ru.itis.compose.style.utils.ComposeColorValueNormalizer
 import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 

@@ -1,4 +1,4 @@
-package ru.itis.compose.source.importer
+﻿package ru.itis.compose.source.importer
 
 import java.io.File
 import ru.itis.analyzer.config.components.ComponentTypes

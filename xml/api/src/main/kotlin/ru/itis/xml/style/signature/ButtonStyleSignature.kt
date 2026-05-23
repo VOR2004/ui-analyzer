@@ -1,4 +1,4 @@
-package ru.itis.xml.style.signature
+﻿package ru.itis.xml.style.signature
 
 data class ButtonStyleSignature(
     val background: String?,

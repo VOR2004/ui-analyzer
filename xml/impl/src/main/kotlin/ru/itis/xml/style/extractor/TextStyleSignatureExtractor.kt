@@ -1,14 +1,15 @@
-package ru.itis.xml.style.extractor
+﻿package ru.itis.xml.style.extractor
 
 import ru.itis.xml.source.resource.ResourceRepository
 import ru.itis.analyzer.utils.DimensionUtils
 import ru.itis.model.UiComponent
+import ru.itis.xml.style.role.DefaultTextRolePredictor
 import ru.itis.xml.style.signature.TextRolePredictor
 import ru.itis.xml.style.signature.TextStyleSignature
 
 class TextStyleSignatureExtractor(
     private val resourceRepository: ResourceRepository = ResourceRepository.empty(),
-    private val textRolePredictor: TextRolePredictor = TextRolePredictor()
+    private val textRolePredictor: TextRolePredictor = DefaultTextRolePredictor()
 ) {
 
     fun extract(component: UiComponent): TextStyleSignature? {

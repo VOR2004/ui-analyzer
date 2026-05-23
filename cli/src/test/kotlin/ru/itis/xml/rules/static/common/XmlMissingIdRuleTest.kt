@@ -1,4 +1,4 @@
-package ru.itis.xml.rules.static.common
+﻿package ru.itis.xml.rules.static.common
 
 import kotlin.test.Test
 import kotlin.test.assertFalse

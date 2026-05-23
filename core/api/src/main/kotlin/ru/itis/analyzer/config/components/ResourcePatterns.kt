@@ -1,4 +1,4 @@
-package ru.itis.analyzer.config.components
+﻿package ru.itis.analyzer.config.components
 
 object ResourcePatterns {
     const val COLOR_REF_PREFIX = "@color/"

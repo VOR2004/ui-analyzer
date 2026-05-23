@@ -1,4 +1,4 @@
-package ru.itis.android.runtime.uiautomator.schema
+﻿package ru.itis.android.runtime.uiautomator.schema
 
 internal object UiAutomatorDumpSchema {
     const val NODE_TAG = "node"

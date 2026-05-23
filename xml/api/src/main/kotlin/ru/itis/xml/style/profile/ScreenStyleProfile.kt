@@ -1,4 +1,4 @@
-package ru.itis.xml.style.profile
+﻿package ru.itis.xml.style.profile
 
 import ru.itis.style.cluster.DimensionCluster
 import ru.itis.xml.style.signature.ButtonStyleSignature

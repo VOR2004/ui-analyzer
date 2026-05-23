@@ -1,4 +1,4 @@
-package ru.itis.compose.style
+package ru.itis.compose.style.utils
 
 import ru.itis.analyzer.utils.ColorUtils
 

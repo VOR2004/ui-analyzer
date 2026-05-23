@@ -1,8 +1,9 @@
-package ru.itis.compose.source.analyzer
+﻿package ru.itis.compose.source.analyzer
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import ru.itis.analyzer.config.components.ComponentTypes
+import ru.itis.compose.style.role.DefaultComposeTextRolePredictor
 import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 import ru.itis.model.UiProperties
@@ -10,7 +11,7 @@ import ru.itis.compose.style.signature.ComposePredictedTextRole
 
 class ComposeTextRolePredictorTest {
 
-    private val predictor = ComposeTextRolePredictor()
+    private val predictor = DefaultComposeTextRolePredictor()
 
     @Test
     fun `predicts title by material typography style`() {

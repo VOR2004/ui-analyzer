@@ -6,12 +6,13 @@ import ru.itis.analyzer.core.ComposeSourceAnalysisContext
 import ru.itis.analyzer.rules.base.ComposeSourceRule
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.Severity
-import ru.itis.compose.source.analyzer.ComposeFunctionRolePredictor
+import ru.itis.compose.source.role.ComposeFunctionRolePredictor
+import ru.itis.compose.source.role.DefaultComposeFunctionRolePredictor
 import ru.itis.compose.source.model.ComposeFunction
 import ru.itis.compose.source.model.ComposeFunctionRole
 
 class ComposeMissingModifierParameterRule(
-    private val rolePredictor: ComposeFunctionRolePredictor = ComposeFunctionRolePredictor()
+    private val rolePredictor: ComposeFunctionRolePredictor = DefaultComposeFunctionRolePredictor()
 ) : ComposeSourceRule {
     override val id: String = RuleIds.COMPOSE_MISSING_MODIFIER_PARAMETER
 

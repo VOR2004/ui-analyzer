@@ -1,4 +1,4 @@
-package ru.itis.xml.helpers
+﻿package ru.itis.xml.helpers
 
 import ru.itis.analyzer.config.analyzer.AnalyzerFormat
 import ru.itis.xml.source.resource.ResourceRepository

@@ -1,4 +1,4 @@
-package ru.itis.xml.source.resource
+﻿package ru.itis.xml.source.resource
 
 import ru.itis.analyzer.config.components.ProjectStructure
 import ru.itis.analyzer.config.components.ResourcePatterns

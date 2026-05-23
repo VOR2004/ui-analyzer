@@ -1,4 +1,4 @@
-package ru.itis.analyzer.config.components
+﻿package ru.itis.analyzer.config.components
 
 object ComponentTypes {
     const val TEXT_VIEW = "TextView"

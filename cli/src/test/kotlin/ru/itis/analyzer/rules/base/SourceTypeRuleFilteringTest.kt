@@ -1,4 +1,4 @@
-package ru.itis.analyzer.rules.base
+﻿package ru.itis.analyzer.rules.base
 
 import kotlin.test.Test
 import kotlin.test.assertFalse

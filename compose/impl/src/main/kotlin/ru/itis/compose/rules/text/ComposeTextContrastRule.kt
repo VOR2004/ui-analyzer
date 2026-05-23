@@ -9,7 +9,7 @@ import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.utils.ContrastUtils
 import ru.itis.analyzer.utils.DimensionUtils
-import ru.itis.compose.style.ComposeColorValueNormalizer
+import ru.itis.compose.style.utils.ComposeColorValueNormalizer
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.Severity
 import ru.itis.model.SourceType

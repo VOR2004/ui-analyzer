@@ -1,4 +1,4 @@
-package ru.itis.demo
+﻿package ru.itis.demo
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

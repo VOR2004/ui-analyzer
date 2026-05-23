@@ -1,4 +1,4 @@
-package ru.itis.xml.style.extractor
+﻿package ru.itis.xml.style.extractor
 
 import ru.itis.xml.style.signature.ButtonStyleSignature
 import ru.itis.xml.style.signature.TextStyleSignature

@@ -7,7 +7,8 @@ import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.analyzer.utils.DimensionUtils
-import ru.itis.compose.source.analyzer.ComposeTextRolePredictor
+import ru.itis.compose.style.role.ComposeTextRolePredictor
+import ru.itis.compose.style.role.DefaultComposeTextRolePredictor
 import ru.itis.compose.style.signature.ComposePredictedTextRole
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.Severity
@@ -17,7 +18,7 @@ import ru.itis.model.UiComponent
 class ComposeTextSizeNearDuplicateClusterRule : Rule {
     override val id: String = RuleIds.COMPOSE_TEXT_SIZE_NEAR_DUPLICATE_CLUSTER
 
-    private val rolePredictor = ComposeTextRolePredictor()
+    private val rolePredictor: ComposeTextRolePredictor = DefaultComposeTextRolePredictor()
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
         val entries = ComponentUtils.flattenAll(components)
@@ -117,5 +118,4 @@ class ComposeTextSizeNearDuplicateClusterRule : Rule {
         const val NEAR_DUPLICATE_DISTANCE_SP = 1f
     }
 }
-
 

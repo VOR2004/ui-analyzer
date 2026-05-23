@@ -1,4 +1,4 @@
-package ru.itis
+﻿package ru.itis
 
 import java.io.File
 import ru.itis.analyzer.Analyzer

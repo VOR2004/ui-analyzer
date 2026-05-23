@@ -1,4 +1,4 @@
-package ru.itis.compose.source.parser
+﻿package ru.itis.compose.source.parser
 
 import kotlin.test.Test
 import kotlin.test.assertEquals

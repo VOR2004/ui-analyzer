@@ -1,4 +1,4 @@
-package ru.itis.xml.rules
+﻿package ru.itis.xml.rules
 
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.xml.rules.adaptive.button.XmlAdaptiveButtonStyleOutlierRule

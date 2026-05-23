@@ -1,17 +1,18 @@
-package ru.itis.compose.style.extractor
+﻿package ru.itis.compose.style.extractor
 
 import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.analyzer.utils.DimensionUtils
-import ru.itis.compose.source.analyzer.ComposeTextRolePredictor
-import ru.itis.compose.style.ComposeColorValueNormalizer
+import ru.itis.compose.style.role.ComposeTextRolePredictor
+import ru.itis.compose.style.role.DefaultComposeTextRolePredictor
+import ru.itis.compose.style.utils.ComposeColorValueNormalizer
 import ru.itis.compose.style.signature.ComposeButtonStyleSignature
 import ru.itis.compose.style.signature.ComposeTextStyleSignature
 import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 
 class ComposeStyleFeatureExtractor(
-    private val textRolePredictor: ComposeTextRolePredictor = ComposeTextRolePredictor()
+    private val textRolePredictor: ComposeTextRolePredictor = DefaultComposeTextRolePredictor()
 ) {
 
     fun extractFeatures(components: List<UiComponent>): ComposeStyleFeatureSet {
