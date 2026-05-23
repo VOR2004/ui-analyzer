@@ -1,5 +1,6 @@
 package ru.itis.xml.style.profiler
 
+import ru.itis.analyzer.utils.DimensionScaleUtils
 import ru.itis.model.UiComponent
 import ru.itis.style.cluster.DimensionCluster
 import ru.itis.style.cluster.DimensionClusterer
@@ -134,33 +135,17 @@ class StyleProfiler(
             .toList()
 
         return SpacingScale(
-            baseUnitDp = guessBaseUnit(commonValues),
+            baseUnitDp = DimensionScaleUtils.guessBaseUnit(commonValues),
             commonValuesDp = commonValues,
             dominantSpacingDp = commonValues.firstOrNull()
         )
-    }
-
-    private fun guessBaseUnit(values: List<Float>): Float? {
-        if (values.isEmpty()) {
-            return null
-        }
-
-        return BASE_UNIT_CANDIDATES.firstOrNull { unit ->
-            values.count { value ->
-                val remainder = value % unit
-                remainder <= BASE_UNIT_EPSILON || remainder >= unit - BASE_UNIT_EPSILON
-            } >= values.size / MIN_MATCH_DIVISOR
-        }
     }
 
     private companion object {
         const val TEXT_SIZE_TOLERANCE_DP = 1f
         const val SPACING_TOLERANCE_DP = 2f
         const val MAX_COMMON_SPACING_VALUES = 6
-        const val BASE_UNIT_EPSILON = 0.1f
-        const val MIN_MATCH_DIVISOR = 2
         const val MIN_COMMON_CLUSTER_FREQUENCY = 1
-        val BASE_UNIT_CANDIDATES = listOf(4f, 8f, 2f)
     }
 
     private data class ProfileData(

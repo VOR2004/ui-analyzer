@@ -1,6 +1,7 @@
 package ru.itis.compose.source.parser
 
 import java.io.File
+import ru.itis.analyzer.utils.SourceTextUtils
 import ru.itis.compose.source.model.ComposeFunction
 import ru.itis.compose.source.model.ComposeFunctionConstants
 
@@ -52,11 +53,11 @@ class ComposeFunctionParser {
             index < source.length && source[index] == '('
         } ?: return null
 
-        val closeParen = findMatchingParen(source, openParen) ?: return null
+        val closeParen = SourceTextUtils.findMatchingDelimiter(source, openParen, '(', ')') ?: return null
         val parameters = source.substring(openParen + 1, closeParen)
         val bodyStart = skipWhitespace(source, closeParen + 1)
         val body = if (bodyStart < source.length && source[bodyStart] == '{') {
-            val bodyEnd = findMatchingBrace(source, bodyStart)
+            val bodyEnd = SourceTextUtils.findMatchingDelimiter(source, bodyStart, '{', '}')
             if (bodyEnd != null) source.substring(bodyStart + 1, bodyEnd) else ""
         } else {
             ""
@@ -121,44 +122,6 @@ class ComposeFunctionParser {
 
         result += rawParameters.substring(start).trim()
         return result.filter { it.isNotBlank() }
-    }
-
-    private fun findMatchingParen(source: String, openParen: Int): Int? {
-        var depth = 0
-        var inString = false
-
-        for (index in openParen until source.length) {
-            val char = source[index]
-            when {
-                char == '"' -> inString = !inString
-                !inString && char == '(' -> depth++
-                !inString && char == ')' -> {
-                    depth--
-                    if (depth == 0) return index
-                }
-            }
-        }
-
-        return null
-    }
-
-    private fun findMatchingBrace(source: String, openBrace: Int): Int? {
-        var depth = 0
-        var inString = false
-
-        for (index in openBrace until source.length) {
-            val char = source[index]
-            when {
-                char == '"' -> inString = !inString
-                !inString && char == '{' -> depth++
-                !inString && char == '}' -> {
-                    depth--
-                    if (depth == 0) return index
-                }
-            }
-        }
-
-        return null
     }
 
     private fun skipWhitespace(source: String, startIndex: Int): Int {
