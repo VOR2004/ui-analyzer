@@ -1,4 +1,4 @@
-﻿package ru.itis.xml.source.parser
+package ru.itis.xml.source.parser
 
 import org.w3c.dom.Element
 import ru.itis.analyzer.config.components.ResourcePatterns

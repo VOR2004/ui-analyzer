@@ -1,4 +1,4 @@
-﻿package ru.itis.compose.source.analyzer
+package ru.itis.compose.source.analyzer
 
 import ru.itis.compose.source.role.DefaultComposeFunctionRolePredictor
 import kotlin.test.Test

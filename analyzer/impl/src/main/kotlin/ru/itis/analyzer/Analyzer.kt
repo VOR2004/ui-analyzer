@@ -1,4 +1,4 @@
-﻿package ru.itis.analyzer
+package ru.itis.analyzer
 
 import ru.itis.analyzer.core.AnalysisContext
 import ru.itis.analyzer.core.ComposeSourceAnalysisContext

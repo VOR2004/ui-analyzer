@@ -1,4 +1,4 @@
-﻿package ru.itis.android.project
+package ru.itis.android.project
 
 import ru.itis.android.project.schema.AndroidGradleProjectSchema
 import java.io.File

@@ -1,4 +1,4 @@
-﻿package ru.itis.analyzer.core
+package ru.itis.analyzer.core
 
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.UiComponent

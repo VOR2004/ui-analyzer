@@ -1,4 +1,4 @@
-﻿package ru.itis.compose.rules.text
+package ru.itis.compose.rules.text
 import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
 import ru.itis.analyzer.messages.rules.RuleIds
 

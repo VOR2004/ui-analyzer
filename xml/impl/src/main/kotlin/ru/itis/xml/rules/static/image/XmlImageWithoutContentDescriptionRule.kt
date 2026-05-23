@@ -1,4 +1,4 @@
-﻿package ru.itis.xml.rules.static.image
+package ru.itis.xml.rules.static.image
 import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
 import ru.itis.analyzer.messages.rules.RuleIds
 

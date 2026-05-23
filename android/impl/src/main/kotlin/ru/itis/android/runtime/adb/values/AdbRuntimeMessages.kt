@@ -1,4 +1,4 @@
-﻿package ru.itis.android.runtime.adb.values
+package ru.itis.android.runtime.adb.values
 
 internal object AdbRuntimeMessages {
     fun deviceNotFound(serial: String): String =

@@ -1,4 +1,4 @@
-﻿package ru.itis.xml.rules.adaptive.layout
+package ru.itis.xml.rules.adaptive.layout
 import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
 import ru.itis.analyzer.messages.rules.RuleIds
 import ru.itis.analyzer.messages.ui.UiPropertyNames

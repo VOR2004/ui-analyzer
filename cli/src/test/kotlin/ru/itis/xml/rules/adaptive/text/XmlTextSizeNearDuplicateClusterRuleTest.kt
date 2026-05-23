@@ -1,4 +1,4 @@
-﻿package ru.itis.xml.rules.adaptive.text
+package ru.itis.xml.rules.adaptive.text
 import ru.itis.analyzer.messages.rules.RuleIds
 
 import kotlin.test.Test

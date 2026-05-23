@@ -1,4 +1,4 @@
-﻿package ru.itis.compose.runtime.model
+package ru.itis.compose.runtime.model
 
 import kotlinx.serialization.Serializable
 import ru.itis.model.UiBounds

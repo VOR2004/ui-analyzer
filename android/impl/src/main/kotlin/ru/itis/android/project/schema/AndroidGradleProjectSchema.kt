@@ -1,4 +1,4 @@
-﻿package ru.itis.android.project.schema
+package ru.itis.android.project.schema
 
 internal object AndroidGradleProjectSchema {
     const val APPLICATION_ID_PROPERTY = "applicationId"

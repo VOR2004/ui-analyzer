@@ -1,4 +1,4 @@
-﻿package ru.itis.xml.source.resource
+package ru.itis.xml.source.resource
 
 import java.io.File
 import kotlin.test.Test

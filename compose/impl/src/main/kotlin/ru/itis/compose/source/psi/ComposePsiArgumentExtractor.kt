@@ -1,4 +1,4 @@
-﻿package ru.itis.compose.source.psi
+package ru.itis.compose.source.psi
 
 import org.jetbrains.kotlin.psi.KtCallExpression
 

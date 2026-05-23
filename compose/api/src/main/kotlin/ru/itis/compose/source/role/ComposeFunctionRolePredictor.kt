@@ -1,4 +1,4 @@
-﻿package ru.itis.compose.source.role
+package ru.itis.compose.source.role
 
 import ru.itis.compose.source.model.ComposeFunction
 import ru.itis.compose.source.model.ComposeFunctionRole

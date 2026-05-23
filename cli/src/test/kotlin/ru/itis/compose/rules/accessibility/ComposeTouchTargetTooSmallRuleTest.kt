@@ -1,4 +1,4 @@
-﻿package ru.itis.compose.rules.accessibility
+package ru.itis.compose.rules.accessibility
 import ru.itis.analyzer.messages.rules.RuleIds
 
 import kotlin.test.Test

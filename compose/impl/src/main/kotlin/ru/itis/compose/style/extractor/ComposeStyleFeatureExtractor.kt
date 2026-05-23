@@ -1,4 +1,4 @@
-﻿package ru.itis.compose.style.extractor
+package ru.itis.compose.style.extractor
 
 import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.analyzer.utils.ComponentUtils

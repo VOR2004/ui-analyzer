@@ -1,4 +1,4 @@
-﻿package ru.itis.compose.rules.api
+package ru.itis.compose.rules.api
 import ru.itis.analyzer.messages.rules.RuleIds
 
 import kotlin.test.Test

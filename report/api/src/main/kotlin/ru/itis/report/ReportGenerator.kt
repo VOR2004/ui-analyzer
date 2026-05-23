@@ -1,4 +1,4 @@
-﻿package ru.itis.report
+package ru.itis.report
 
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.UiComponent

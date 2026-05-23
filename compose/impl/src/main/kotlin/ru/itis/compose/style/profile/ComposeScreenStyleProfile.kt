@@ -1,4 +1,4 @@
-﻿package ru.itis.compose.style.profile
+package ru.itis.compose.style.profile
 
 import ru.itis.compose.style.signature.ComposeButtonStyleSignature
 import ru.itis.compose.style.signature.ComposePredictedTextRole

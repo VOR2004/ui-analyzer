@@ -1,4 +1,4 @@
-﻿package ru.itis.analyzer.messages.cli
+package ru.itis.analyzer.messages.cli
 
 object CliMessages {
     const val USAGE =

@@ -1,4 +1,4 @@
-﻿package ru.itis.xml.rules.adaptive.button
+package ru.itis.xml.rules.adaptive.button
 import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
 import ru.itis.analyzer.messages.rules.RuleIds
 import ru.itis.analyzer.messages.ui.UiPropertyNames

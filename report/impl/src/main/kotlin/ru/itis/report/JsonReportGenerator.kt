@@ -1,4 +1,4 @@
-﻿package ru.itis.report
+package ru.itis.report
 
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json

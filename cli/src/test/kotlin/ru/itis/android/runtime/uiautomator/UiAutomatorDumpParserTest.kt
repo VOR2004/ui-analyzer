@@ -1,4 +1,4 @@
-﻿package ru.itis.android.runtime.uiautomator
+package ru.itis.android.runtime.uiautomator
 
 import ru.itis.android.runtime.uiautomator.parser.UiAutomatorDumpParser
 import java.io.File

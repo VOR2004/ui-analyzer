@@ -1,4 +1,4 @@
-﻿package ru.itis.xml.source.importer
+package ru.itis.xml.source.importer
 
 import ru.itis.analyzer.config.components.ProjectStructure
 import java.io.File

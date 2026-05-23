@@ -1,4 +1,4 @@
-﻿package ru.itis.compose.source.role.values
+package ru.itis.compose.source.role.values
 
 internal object ComposeFunctionRolePredictionValues {
     val themeOrProviderSuffixes = setOf(

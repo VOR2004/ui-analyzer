@@ -1,4 +1,4 @@
-﻿package ru.itis.model
+package ru.itis.model
 
 import kotlinx.serialization.Serializable
 

@@ -1,4 +1,4 @@
-﻿package ru.itis.analyzer.rules.base
+package ru.itis.analyzer.rules.base
 
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.model.SourceType

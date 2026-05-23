@@ -1,4 +1,4 @@
-﻿package ru.itis.compose.runtime.model
+package ru.itis.compose.runtime.model
 
 object ComposeRuntimeAttributes {
     const val SCREEN = "runtime:screen"

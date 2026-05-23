@@ -1,4 +1,4 @@
-﻿package ru.itis.compose.helpers.model
+package ru.itis.compose.helpers.model
 
 import ru.itis.model.UiComponent
 

@@ -1,4 +1,4 @@
-﻿package ru.itis.xml.source.parser
+package ru.itis.xml.source.parser
 
 import ru.itis.xml.source.resource.ValuesResourceSet
 import java.io.File

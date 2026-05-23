@@ -1,4 +1,4 @@
-﻿package ru.itis.analyzer.config.analyzer
+package ru.itis.analyzer.config.analyzer
 
 object AnalyzerThresholds {
     const val NEAR_COLOR_DISTANCE = 12.0

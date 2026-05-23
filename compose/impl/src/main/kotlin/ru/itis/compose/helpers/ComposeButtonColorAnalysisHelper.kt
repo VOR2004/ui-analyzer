@@ -1,4 +1,4 @@
-﻿package ru.itis.compose.helpers
+package ru.itis.compose.helpers
 
 import ru.itis.analyzer.config.analyzer.AnalyzerFormat
 import ru.itis.analyzer.config.components.ComponentTypes

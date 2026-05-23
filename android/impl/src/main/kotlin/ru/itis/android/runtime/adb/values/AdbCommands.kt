@@ -1,4 +1,4 @@
-﻿package ru.itis.android.runtime.adb.values
+package ru.itis.android.runtime.adb.values
 
 internal object AdbCommands {
     const val DEFAULT_ADB_PATH = "adb"

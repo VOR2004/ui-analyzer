@@ -1,4 +1,4 @@
-﻿package ru.itis.android.runtime.uiautomator.parser
+package ru.itis.android.runtime.uiautomator.parser
 
 import org.w3c.dom.Element
 import ru.itis.android.runtime.uiautomator.schema.UiAutomatorDumpSchema

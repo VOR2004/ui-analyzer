@@ -1,4 +1,4 @@
-﻿package ru.itis.xml.source.resource
+package ru.itis.xml.source.resource
 
 data class ValuesResourceSet(
     val colors: Map<String, String> = emptyMap(),

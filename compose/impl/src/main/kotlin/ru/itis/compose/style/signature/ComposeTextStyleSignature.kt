@@ -1,4 +1,4 @@
-﻿package ru.itis.compose.style.signature
+package ru.itis.compose.style.signature
 
 data class ComposeTextStyleSignature(
     val role: ComposePredictedTextRole,

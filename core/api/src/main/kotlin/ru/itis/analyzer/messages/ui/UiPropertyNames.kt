@@ -1,4 +1,4 @@
-﻿package ru.itis.analyzer.messages.ui
+package ru.itis.analyzer.messages.ui
 
 object UiPropertyNames {
     const val WIDTH = "width"

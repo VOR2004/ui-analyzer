@@ -1,4 +1,4 @@
-﻿package ru.itis.analyzer.config.analyzer
+package ru.itis.analyzer.config.analyzer
 
 import java.util.Locale
 

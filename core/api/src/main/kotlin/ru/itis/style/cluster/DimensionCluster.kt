@@ -1,4 +1,4 @@
-﻿package ru.itis.style.cluster
+package ru.itis.style.cluster
 
 data class DimensionCluster(
     val centroid: Float,

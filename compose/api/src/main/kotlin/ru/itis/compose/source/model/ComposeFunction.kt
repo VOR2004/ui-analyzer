@@ -1,4 +1,4 @@
-﻿package ru.itis.compose.source.model
+package ru.itis.compose.source.model
 
 data class ComposeFunction(
     val name: String,

@@ -1,4 +1,4 @@
-﻿package ru.itis.xml.source.parser
+package ru.itis.xml.source.parser
 
 import kotlin.io.path.createTempFile
 import kotlin.test.Test

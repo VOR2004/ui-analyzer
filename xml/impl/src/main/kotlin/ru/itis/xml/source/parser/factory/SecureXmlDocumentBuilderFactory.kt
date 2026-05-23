@@ -1,4 +1,4 @@
-﻿package ru.itis.xml.source.parser.factory
+package ru.itis.xml.source.parser.factory
 
 import javax.xml.XMLConstants
 import javax.xml.parsers.DocumentBuilderFactory

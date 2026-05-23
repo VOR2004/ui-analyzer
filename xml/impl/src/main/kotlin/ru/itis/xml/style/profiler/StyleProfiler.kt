@@ -1,4 +1,4 @@
-﻿package ru.itis.xml.style.profiler
+package ru.itis.xml.style.profiler
 
 import ru.itis.model.UiComponent
 import ru.itis.style.cluster.DimensionCluster

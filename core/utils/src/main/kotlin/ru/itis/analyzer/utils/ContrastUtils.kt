@@ -1,4 +1,4 @@
-﻿package ru.itis.analyzer.utils
+package ru.itis.analyzer.utils
 
 import ru.itis.analyzer.config.analyzer.AnalyzerThresholds
 import kotlin.math.pow

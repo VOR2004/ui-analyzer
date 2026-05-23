@@ -1,4 +1,4 @@
-﻿package ru.itis.analyzer.config.components
+package ru.itis.analyzer.config.components
 
 object ProjectStructure {
     const val ANDROID_MANIFEST_FILE = "AndroidManifest.xml"

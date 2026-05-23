@@ -1,4 +1,4 @@
-﻿package ru.itis.analyzer.config.components
+package ru.itis.analyzer.config.components
 
 object XmlAttributes {
     const val ANDROID_ID = "android:id"

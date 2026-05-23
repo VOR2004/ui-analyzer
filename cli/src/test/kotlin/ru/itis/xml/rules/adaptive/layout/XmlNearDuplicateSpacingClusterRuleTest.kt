@@ -1,4 +1,4 @@
-﻿package ru.itis.xml.rules.adaptive.layout
+package ru.itis.xml.rules.adaptive.layout
 import ru.itis.analyzer.messages.rules.RuleIds
 
 import kotlin.test.Test

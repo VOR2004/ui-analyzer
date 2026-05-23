@@ -1,4 +1,4 @@
-﻿package ru.itis.analyzer.messages.analyzer
+package ru.itis.analyzer.messages.analyzer
 
 object AnalyzerMessages {
     fun tooManyTextStylesOnScreen(

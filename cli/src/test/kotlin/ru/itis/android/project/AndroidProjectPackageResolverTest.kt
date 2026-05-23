@@ -1,4 +1,4 @@
-﻿package ru.itis.android.project
+package ru.itis.android.project
 
 import java.nio.file.Files
 import kotlin.test.Test

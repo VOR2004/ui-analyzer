@@ -1,4 +1,4 @@
-﻿package ru.itis.compose.source.parser
+package ru.itis.compose.source.parser
 
 import java.io.File
 import ru.itis.compose.source.model.ComposeFunction

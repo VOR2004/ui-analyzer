@@ -1,4 +1,4 @@
-﻿package ru.itis.xml.source.parser
+package ru.itis.xml.source.parser
 
 import ru.itis.analyzer.config.components.XmlAttributes
 import ru.itis.model.SourceType

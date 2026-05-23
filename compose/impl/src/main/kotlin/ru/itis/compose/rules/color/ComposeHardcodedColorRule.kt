@@ -1,4 +1,4 @@
-﻿package ru.itis.compose.rules.color
+package ru.itis.compose.rules.color
 import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
 import ru.itis.analyzer.messages.rules.RuleIds
 import ru.itis.analyzer.messages.ui.UiPropertyNames
