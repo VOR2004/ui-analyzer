@@ -2,6 +2,7 @@ package ru.itis.compose.source.psi
 
 import java.io.File
 import ru.itis.analyzer.config.components.ComponentTypes
+import ru.itis.analyzer.utils.SourceTextUtils
 import ru.itis.compose.source.legacy.parser.ComposeLayoutParser
 import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
@@ -101,7 +102,11 @@ class ComposePsiLayoutParser(
 
     private fun extractNamedArgumentValue(arguments: String, name: String): String? {
         val openParen = arguments.indexOf('(')
-        val closeParen = if (openParen >= 0) findMatching(arguments, openParen, '(', ')') else null
+        val closeParen = if (openParen >= 0) {
+            SourceTextUtils.findMatchingDelimiter(arguments, openParen, '(', ')')
+        } else {
+            null
+        }
         val normalizedArguments = if (openParen >= 0 && closeParen != null) {
             arguments.substring(openParen + 1, closeParen)
         } else {
@@ -139,14 +144,14 @@ class ComposePsiLayoutParser(
         if (start < 0) return null
 
         val openParen = modifier.indexOf('(', start)
-        val closeParen = findMatching(modifier, openParen, '(', ')') ?: return null
+        val closeParen = SourceTextUtils.findMatchingDelimiter(modifier, openParen, '(', ')') ?: return null
         return modifier.substring(openParen + 1, closeParen).trim()
     }
 
     private fun parseNamedArguments(arguments: String): Map<String, String> {
-        return splitTopLevel(arguments, ',')
+        return splitTopLevelArguments(arguments)
             .mapNotNull { argument ->
-                val equalsIndex = indexOfTopLevel(argument, '=')
+                val equalsIndex = indexOfTopLevelEquals(argument)
                 if (equalsIndex == null) {
                     null
                 } else {
@@ -158,7 +163,7 @@ class ComposePsiLayoutParser(
             .toMap()
     }
 
-    private fun splitTopLevel(value: String, separator: Char): List<String> {
+    private fun splitTopLevelArguments(value: String): List<String> {
         val result = mutableListOf<String>()
         var start = 0
         var parenDepth = 0
@@ -173,7 +178,7 @@ class ComposePsiLayoutParser(
                 !inString && char == ')' -> parenDepth--
                 !inString && char == '{' -> braceDepth++
                 !inString && char == '}' -> braceDepth--
-                !inString && char == separator && parenDepth == 0 && braceDepth == 0 -> {
+                !inString && char == ARGUMENT_SEPARATOR && parenDepth == 0 && braceDepth == 0 -> {
                     result += value.substring(start, index).trim()
                     start = index + 1
                 }
@@ -184,7 +189,7 @@ class ComposePsiLayoutParser(
         return result.filter { item -> item.isNotBlank() }
     }
 
-    private fun indexOfTopLevel(value: String, target: Char): Int? {
+    private fun indexOfTopLevelEquals(value: String): Int? {
         var parenDepth = 0
         var braceDepth = 0
         var inString = false
@@ -197,26 +202,7 @@ class ComposePsiLayoutParser(
                 !inString && char == ')' -> parenDepth--
                 !inString && char == '{' -> braceDepth++
                 !inString && char == '}' -> braceDepth--
-                !inString && char == target && parenDepth == 0 && braceDepth == 0 -> return index
-            }
-        }
-
-        return null
-    }
-
-    private fun findMatching(value: String, openIndex: Int, openChar: Char, closeChar: Char): Int? {
-        var depth = 0
-        var inString = false
-
-        for (index in openIndex until value.length) {
-            val char = value[index]
-            when {
-                char == '"' -> inString = !inString
-                !inString && char == openChar -> depth++
-                !inString && char == closeChar -> {
-                    depth--
-                    if (depth == 0) return index
-                }
+                !inString && char == NAMED_ARGUMENT_SEPARATOR && parenDepth == 0 && braceDepth == 0 -> return index
             }
         }
 
@@ -262,6 +248,8 @@ class ComposePsiLayoutParser(
         const val PADDING_MODIFIER = "padding"
         const val BACKGROUND_MODIFIER = "background"
         const val CLICKABLE_MODIFIER = "clickable"
+        const val ARGUMENT_SEPARATOR = ','
+        const val NAMED_ARGUMENT_SEPARATOR = '='
 
         val DIMENSION_PATTERN = Regex("""\d+(?:\.\d+)?\.(?:dp|sp)""")
     }

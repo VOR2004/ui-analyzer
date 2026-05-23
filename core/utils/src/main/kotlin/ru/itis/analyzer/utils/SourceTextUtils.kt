@@ -6,17 +6,32 @@ object SourceTextUtils {
         source: String,
         openIndex: Int,
         openDelimiter: Char,
-        closeDelimiter: Char
+        closeDelimiter: Char,
+        endIndex: Int = source.length
     ): Int? {
         var depth = 0
         var inString = false
+        var escaped = false
 
-        for (index in openIndex until source.length) {
+        for (index in openIndex until endIndex.coerceAtMost(source.length)) {
             val char = source[index]
-            when {
-                char == '"' -> inString = !inString
-                !inString && char == openDelimiter -> depth++
-                !inString && char == closeDelimiter -> {
+            if (inString) {
+                if (escaped) {
+                    escaped = false
+                    continue
+                }
+
+                when (char) {
+                    '\\' -> escaped = true
+                    '"' -> inString = false
+                }
+                continue
+            }
+
+            when (char) {
+                '"' -> inString = true
+                openDelimiter -> depth++
+                closeDelimiter -> {
                     depth--
                     if (depth == 0) return index
                 }

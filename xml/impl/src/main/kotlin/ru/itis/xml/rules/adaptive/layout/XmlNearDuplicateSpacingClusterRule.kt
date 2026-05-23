@@ -1,13 +1,13 @@
 package ru.itis.xml.rules.adaptive.layout
+
+import ru.itis.analyzer.core.AnalysisContext
 import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
 import ru.itis.analyzer.messages.rules.RuleIds
 import ru.itis.analyzer.messages.ui.UiPropertyNames
-
-import kotlin.math.abs
-import ru.itis.analyzer.core.AnalysisContext
 import ru.itis.analyzer.rules.base.ContextualRule
 import ru.itis.analyzer.rules.base.onlyXmlFlatComponents
 import ru.itis.analyzer.utils.DimensionUtils
+import ru.itis.analyzer.utils.NearDuplicateDimensionAnalyzer
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.Severity
 import ru.itis.model.UiComponent
@@ -49,46 +49,12 @@ class XmlNearDuplicateSpacingClusterRule : ContextualRule {
     }
 
     private fun analyzeFile(entries: List<SpacingEntry>): List<AnalysisIssue> {
-        val values = entries.map { entry -> entry.value }.distinct().sorted()
-        if (values.size < MIN_DISTINCT_VALUES) {
-            return emptyList()
-        }
-
-        return buildNearDuplicateClusters(values).flatMap { cluster ->
-            val canonicalValue = findCanonicalValue(cluster, entries)
-            entries
-                .filter { entry -> entry.value in cluster && entry.value != canonicalValue }
-                .map { entry -> createIssue(entry, canonicalValue) }
-        }
-    }
-
-    private fun buildNearDuplicateClusters(values: List<Float>): List<Set<Float>> {
-        val clusters = mutableListOf<MutableSet<Float>>()
-
-        for (value in values) {
-            val cluster = clusters.firstOrNull { existingCluster ->
-                existingCluster.any { existingValue -> isNearDuplicate(value, existingValue) }
-            }
-
-            if (cluster == null) {
-                clusters += mutableSetOf(value)
-            } else {
-                cluster += value
-            }
-        }
-
-        return clusters.filter { cluster -> cluster.size > 1 }
-    }
-
-    private fun isNearDuplicate(first: Float, second: Float): Boolean {
-        val distance = abs(first - second)
-        return distance > 0f && distance <= NEAR_DUPLICATE_DISTANCE_DP
-    }
-
-    private fun findCanonicalValue(cluster: Set<Float>, entries: List<SpacingEntry>): Float {
-        return cluster.maxWith(
-            compareBy<Float> { value -> entries.count { entry -> entry.value == value } }
-                .thenBy { value -> value }
+        return NearDuplicateDimensionAnalyzer.analyze(
+            entries = entries,
+            minDistinctValues = MIN_DISTINCT_VALUES,
+            nearDuplicateDistance = NEAR_DUPLICATE_DISTANCE_DP,
+            valueSelector = SpacingEntry::value,
+            resultFactory = ::createIssue
         )
     }
 
@@ -121,5 +87,4 @@ class XmlNearDuplicateSpacingClusterRule : ContextualRule {
         const val NEAR_DUPLICATE_DISTANCE_DP = 2f
     }
 }
-
 

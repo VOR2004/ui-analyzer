@@ -2,6 +2,7 @@ package ru.itis.xml.helpers
 
 import ru.itis.analyzer.config.analyzer.AnalyzerFormat
 import ru.itis.xml.source.resource.ResourceRepository
+import ru.itis.analyzer.utils.ClusterUtils
 import ru.itis.analyzer.utils.ColorUtils
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.model.UiComponent
@@ -54,7 +55,9 @@ class ButtonColorAnalysisHelper(
             return NearDuplicateClusterResult()
         }
 
-        val clusters = buildColorClusters(uniqueColors, nearThreshold)
+        val clusters = ClusterUtils.connectedClusters(uniqueColors) { first, second ->
+            ColorUtils.areColorsClose(first, second, nearThreshold)
+        }
         val flaggedKeys = mutableSetOf<String>()
         val pairs = mutableListOf<ClusterReplacement>()
 
@@ -91,52 +94,6 @@ class ButtonColorAnalysisHelper(
             replacements = pairs,
             flaggedKeys = flaggedKeys
         )
-    }
-
-    fun buildColorClusters(colors: List<String>, nearThreshold: Double): List<Set<String>> {
-        val adjacency = mutableMapOf<String, MutableSet<String>>()
-
-        colors.forEach { color ->
-            adjacency.putIfAbsent(color, mutableSetOf())
-        }
-
-        for (i in colors.indices) {
-            for (j in i + 1 until colors.size) {
-                val first = colors[i]
-                val second = colors[j]
-
-                if (ColorUtils.areColorsClose(first, second, nearThreshold)) {
-                    adjacency.getValue(first).add(second)
-                    adjacency.getValue(second).add(first)
-                }
-            }
-        }
-
-        val visited = mutableSetOf<String>()
-        val clusters = mutableListOf<Set<String>>()
-
-        for (color in colors) {
-            if (!visited.add(color)) continue
-
-            val cluster = mutableSetOf<String>()
-            val queue = ArrayDeque<String>()
-            queue.add(color)
-
-            while (queue.isNotEmpty()) {
-                val current = queue.removeFirst()
-                cluster.add(current)
-
-                for (neighbor in adjacency[current].orEmpty()) {
-                    if (visited.add(neighbor)) {
-                        queue.add(neighbor)
-                    }
-                }
-            }
-
-            clusters += cluster
-        }
-
-        return clusters
     }
 
     fun entryKey(button: UiComponent): String {

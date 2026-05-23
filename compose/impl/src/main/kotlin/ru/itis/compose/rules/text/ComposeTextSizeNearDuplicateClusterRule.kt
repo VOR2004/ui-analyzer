@@ -4,9 +4,9 @@ import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
 import ru.itis.analyzer.messages.rules.RuleIds
 import ru.itis.analyzer.rules.base.Rule
-import ru.itis.analyzer.utils.ClusterUtils
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.analyzer.utils.DimensionUtils
+import ru.itis.analyzer.utils.NearDuplicateDimensionAnalyzer
 import ru.itis.compose.style.role.ComposeTextRolePredictor
 import ru.itis.compose.style.role.DefaultComposeTextRolePredictor
 import ru.itis.compose.style.signature.ComposePredictedTextRole
@@ -41,30 +41,12 @@ class ComposeTextSizeNearDuplicateClusterRule : Rule {
     }
 
     private fun analyzeRole(entries: List<TextSizeEntry>): List<AnalysisIssue> {
-        val values = entries.map { entry -> entry.value }.distinct().sorted()
-        if (values.size < MIN_DISTINCT_VALUES) {
-            return emptyList()
-        }
-
-        return ClusterUtils.connectedClusters(values, ::isNearDuplicate)
-            .filter { cluster -> cluster.size > 1 }
-            .flatMap { cluster ->
-                val canonicalValue = findCanonicalValue(cluster, entries)
-                entries
-                    .filter { entry -> entry.value in cluster && entry.value != canonicalValue }
-                    .map { entry -> createIssue(entry, canonicalValue) }
-            }
-    }
-
-    private fun isNearDuplicate(first: Float, second: Float): Boolean {
-        val distance = kotlin.math.abs(first - second)
-        return distance > 0f && distance <= NEAR_DUPLICATE_DISTANCE_SP
-    }
-
-    private fun findCanonicalValue(cluster: Set<Float>, entries: List<TextSizeEntry>): Float {
-        return cluster.maxWith(
-            compareBy<Float> { value -> entries.count { entry -> entry.value == value } }
-                .thenBy { value -> value }
+        return NearDuplicateDimensionAnalyzer.analyze(
+            entries = entries,
+            minDistinctValues = MIN_DISTINCT_VALUES,
+            nearDuplicateDistance = NEAR_DUPLICATE_DISTANCE_SP,
+            valueSelector = TextSizeEntry::value,
+            resultFactory = ::createIssue
         )
     }
 

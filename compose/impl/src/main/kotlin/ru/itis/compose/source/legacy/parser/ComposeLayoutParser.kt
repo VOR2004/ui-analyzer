@@ -2,6 +2,7 @@ package ru.itis.compose.source.legacy.parser
 
 import java.io.File
 import ru.itis.analyzer.config.components.ComponentTypes
+import ru.itis.analyzer.utils.SourceTextUtils
 import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 import ru.itis.model.UiProperties
@@ -57,13 +58,16 @@ class ComposeLayoutParser {
         siblingIndex: Int
     ): ParsedCall? {
         val openParen = source.indexOfSkippingWhitespace(match.nameEnd, endIndex, '(') ?: return null
-        val closeParen = findMatching(source, openParen, '(', ')', endIndex) ?: return null
+        val closeParen = SourceTextUtils.findMatchingDelimiter(source, openParen, '(', ')', endIndex)
+            ?: return null
         val arguments = source.substring(openParen + 1, closeParen)
         val rawAttributes = parseNamedArguments(arguments)
         val treePath = "$parentPath/${match.name}[$siblingIndex]"
 
         val openBrace = source.indexOfSkippingWhitespace(closeParen + 1, endIndex, '{')
-        val closeBrace = openBrace?.let { findMatching(source, it, '{', '}', endIndex) }
+        val closeBrace = openBrace?.let { braceIndex ->
+            SourceTextUtils.findMatchingDelimiter(source, braceIndex, '{', '}', endIndex)
+        }
         val children = if (openBrace != null && closeBrace != null) {
             parseComponents(
                 source = source,
@@ -132,7 +136,7 @@ class ComposeLayoutParser {
         val openParen = value.indexOf('(')
         if (openParen < 0) return null
 
-        val closeParen = findMatching(value, openParen, '(', ')', value.length) ?: return null
+        val closeParen = SourceTextUtils.findMatchingDelimiter(value, openParen, '(', ')') ?: return null
         return value.substring(openParen + 1, closeParen)
     }
 
@@ -149,16 +153,16 @@ class ComposeLayoutParser {
             ?.takeIf { value -> value.isStringLiteral() }
             ?.let { value -> return value.trimStringLiteral() }
 
-        val firstArgument = splitTopLevel(arguments, ',').firstOrNull() ?: return null
+        val firstArgument = splitTopLevelArguments(arguments).firstOrNull() ?: return null
         return firstArgument
             .takeIf { value -> value.isStringLiteral() }
             ?.trimStringLiteral()
     }
 
     private fun parseNamedArguments(arguments: String): Map<String, String> {
-        return splitTopLevel(arguments, ',')
+        return splitTopLevelArguments(arguments)
             .mapNotNull { argument ->
-                val equalsIndex = indexOfTopLevel(argument, '=')
+                val equalsIndex = indexOfTopLevelEquals(argument)
                 if (equalsIndex == null) {
                     null
                 } else {
@@ -195,46 +199,7 @@ class ComposeLayoutParser {
         return null
     }
 
-    private fun findMatching(
-        source: String,
-        openIndex: Int,
-        openChar: Char,
-        closeChar: Char,
-        endIndex: Int
-    ): Int? {
-        var depth = 0
-        var index = openIndex
-        var inString = false
-        var escaped = false
-
-        while (index < endIndex) {
-            val char = source[index]
-            if (inString) {
-                escaped = char == '\\' && !escaped
-                if (char == '"') {
-                    inString = false
-                } else if (char != '\\') {
-                    escaped = false
-                }
-                index++
-                continue
-            }
-
-            when (char) {
-                '"' -> inString = true
-                openChar -> depth++
-                closeChar -> {
-                    depth--
-                    if (depth == 0) return index
-                }
-            }
-            index++
-        }
-
-        return null
-    }
-
-    private fun splitTopLevel(value: String, separator: Char): List<String> {
+    private fun splitTopLevelArguments(value: String): List<String> {
         val result = mutableListOf<String>()
         var start = 0
         var parenDepth = 0
@@ -250,7 +215,7 @@ class ComposeLayoutParser {
                 !stringDepth && char == ')' -> parenDepth--
                 !stringDepth && char == '{' -> braceDepth++
                 !stringDepth && char == '}' -> braceDepth--
-                !stringDepth && char == separator && parenDepth == 0 && braceDepth == 0 -> {
+                !stringDepth && char == ARGUMENT_SEPARATOR && parenDepth == 0 && braceDepth == 0 -> {
                     result += value.substring(start, index).trim()
                     start = index + 1
                 }
@@ -262,7 +227,7 @@ class ComposeLayoutParser {
         return result.filter { it.isNotBlank() }
     }
 
-    private fun indexOfTopLevel(value: String, target: Char): Int? {
+    private fun indexOfTopLevelEquals(value: String): Int? {
         var parenDepth = 0
         var braceDepth = 0
         var inString = false
@@ -274,7 +239,7 @@ class ComposeLayoutParser {
                 !inString && char == ')' -> parenDepth--
                 !inString && char == '{' -> braceDepth++
                 !inString && char == '}' -> braceDepth--
-                !inString && char == target && parenDepth == 0 && braceDepth == 0 -> return index
+                !inString && char == NAMED_ARGUMENT_SEPARATOR && parenDepth == 0 && braceDepth == 0 -> return index
             }
         }
         return null
@@ -290,7 +255,7 @@ class ComposeLayoutParser {
         if (start < 0) return null
 
         val openParen = modifier.indexOf('(', start)
-        val closeParen = findMatching(modifier, openParen, '(', ')', modifier.length) ?: return null
+        val closeParen = SourceTextUtils.findMatchingDelimiter(modifier, openParen, '(', ')') ?: return null
         return modifier.substring(openParen + 1, closeParen).trim()
     }
 
@@ -375,6 +340,8 @@ class ComposeLayoutParser {
         const val PADDING_MODIFIER = "padding"
         const val BACKGROUND_MODIFIER = "background"
         const val CLICKABLE_MODIFIER = "clickable"
+        const val ARGUMENT_SEPARATOR = ','
+        const val NAMED_ARGUMENT_SEPARATOR = '='
 
         val composeFunctionNames = setOf(
             ComponentTypes.COMPOSE_TEXT,
