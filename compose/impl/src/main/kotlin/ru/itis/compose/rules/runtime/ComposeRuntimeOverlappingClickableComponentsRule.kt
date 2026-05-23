@@ -1,11 +1,12 @@
 package ru.itis.compose.rules.runtime
-import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
-import ru.itis.analyzer.messages.rules.RuleIds
 
 import kotlin.math.max
 import kotlin.math.min
+import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
+import ru.itis.analyzer.messages.rules.RuleIds
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.utils.ComponentUtils
+import ru.itis.compose.runtime.formatter.ComposeRuntimeComponentFormatter
 import ru.itis.compose.runtime.model.ComposeRuntimeAttributes
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.Severity
@@ -61,8 +62,8 @@ class ComposeRuntimeOverlappingClickableComponentsRule : Rule {
             componentType = second.type,
             filePath = second.filePath,
             message = AnalyzerMessages.composeRuntimeOverlappingClickableComponents(
-                firstComponent = first.describe(),
-                secondComponent = second.describe(),
+                firstComponent = ComposeRuntimeComponentFormatter.describe(first),
+                secondComponent = ComposeRuntimeComponentFormatter.describe(second),
                 overlapArea = overlapArea.toPixelAreaString()
             ),
             recommendation = AnalyzerMessages
@@ -76,15 +77,6 @@ class ComposeRuntimeOverlappingClickableComponentsRule : Rule {
             properties.rawAttributes[ComposeRuntimeAttributes.SCREEN],
             properties.rawAttributes[ComposeRuntimeAttributes.STATE]
         ).joinToString(separator = "|")
-    }
-
-    private fun UiComponent.describe(): String {
-        return listOfNotNull(
-            type,
-            id?.let { id -> "id=$id" },
-            treePath?.let { path -> "path=$path" },
-            properties.text?.let { text -> "text=$text" }
-        ).joinToString(prefix = "[", postfix = "]")
     }
 
     private fun UiComponent.isAncestorOf(other: UiComponent): Boolean {
@@ -116,4 +108,3 @@ class ComposeRuntimeOverlappingClickableComponentsRule : Rule {
         val runtimeSourceTypes = setOf(SourceType.COMPOSE_RUNTIME, SourceType.ANDROID_RUNTIME)
     }
 }
-

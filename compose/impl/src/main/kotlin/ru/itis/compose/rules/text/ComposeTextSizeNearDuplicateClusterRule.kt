@@ -1,10 +1,10 @@
 package ru.itis.compose.rules.text
+
+import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
 import ru.itis.analyzer.messages.rules.RuleIds
-
-import kotlin.math.abs
-import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.analyzer.rules.base.Rule
+import ru.itis.analyzer.utils.ClusterUtils
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.analyzer.utils.DimensionUtils
 import ru.itis.compose.style.role.ComposeTextRolePredictor
@@ -46,34 +46,18 @@ class ComposeTextSizeNearDuplicateClusterRule : Rule {
             return emptyList()
         }
 
-        return buildNearDuplicateClusters(values).flatMap { cluster ->
-            val canonicalValue = findCanonicalValue(cluster, entries)
-            entries
-                .filter { entry -> entry.value in cluster && entry.value != canonicalValue }
-                .map { entry -> createIssue(entry, canonicalValue) }
-        }
-    }
-
-    private fun buildNearDuplicateClusters(values: List<Float>): List<Set<Float>> {
-        val clusters = mutableListOf<MutableSet<Float>>()
-
-        for (value in values) {
-            val cluster = clusters.firstOrNull { existingCluster ->
-                existingCluster.any { existingValue -> isNearDuplicate(value, existingValue) }
+        return ClusterUtils.connectedClusters(values, ::isNearDuplicate)
+            .filter { cluster -> cluster.size > 1 }
+            .flatMap { cluster ->
+                val canonicalValue = findCanonicalValue(cluster, entries)
+                entries
+                    .filter { entry -> entry.value in cluster && entry.value != canonicalValue }
+                    .map { entry -> createIssue(entry, canonicalValue) }
             }
-
-            if (cluster == null) {
-                clusters += mutableSetOf(value)
-            } else {
-                cluster += value
-            }
-        }
-
-        return clusters.filter { cluster -> cluster.size > 1 }
     }
 
     private fun isNearDuplicate(first: Float, second: Float): Boolean {
-        val distance = abs(first - second)
+        val distance = kotlin.math.abs(first - second)
         return distance > 0f && distance <= NEAR_DUPLICATE_DISTANCE_SP
     }
 
@@ -118,4 +102,3 @@ class ComposeTextSizeNearDuplicateClusterRule : Rule {
         const val NEAR_DUPLICATE_DISTANCE_SP = 1f
     }
 }
-

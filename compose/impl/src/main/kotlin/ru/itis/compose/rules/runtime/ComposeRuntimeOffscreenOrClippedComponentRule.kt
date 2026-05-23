@@ -1,8 +1,9 @@
 package ru.itis.compose.rules.runtime
+
 import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
 import ru.itis.analyzer.messages.rules.RuleIds
-
 import ru.itis.analyzer.rules.base.Rule
+import ru.itis.compose.runtime.formatter.ComposeRuntimeComponentFormatter
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.Severity
 import ru.itis.model.SourceType
@@ -68,7 +69,7 @@ class ComposeRuntimeOffscreenOrClippedComponentRule : Rule {
             componentType = component.type,
             filePath = component.filePath,
             message = AnalyzerMessages.composeRuntimeOffscreenOrClippedComponent(
-                component = component.describe(),
+                component = ComposeRuntimeComponentFormatter.describe(component),
                 bounds = component.properties.bounds.toBoundsString(),
                 screenBounds = screenBounds.toBoundsString(),
                 reason = problem.reason
@@ -82,15 +83,6 @@ class ComposeRuntimeOffscreenOrClippedComponentRule : Rule {
             other.y >= y - BOUNDS_TOLERANCE_PX &&
             other.x + other.width <= x + width + BOUNDS_TOLERANCE_PX &&
             other.y + other.height <= y + height + BOUNDS_TOLERANCE_PX
-    }
-
-    private fun UiComponent.describe(): String {
-        return listOfNotNull(
-            type,
-            id?.let { id -> "id=$id" },
-            treePath?.let { path -> "path=$path" },
-            properties.text?.let { text -> "text=$text" }
-        ).joinToString(prefix = "[", postfix = "]")
     }
 
     private fun UiBounds?.toBoundsString(): String {
@@ -117,5 +109,3 @@ class ComposeRuntimeOffscreenOrClippedComponentRule : Rule {
         val runtimeSourceTypes = setOf(SourceType.COMPOSE_RUNTIME, SourceType.ANDROID_RUNTIME)
     }
 }
-
-
