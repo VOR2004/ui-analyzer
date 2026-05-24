@@ -5,6 +5,7 @@ import ru.itis.analyzer.messages.rules.RuleIds
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.compose.runtime.formatter.ComposeRuntimeComponentFormatter
+import ru.itis.compose.runtime.utils.RuntimeScreenMetrics
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.Severity
 import ru.itis.model.SourceType
@@ -14,15 +15,20 @@ class RuntimeSmallTouchTargetRule : Rule {
     override val id: String = RuleIds.RUNTIME_SMALL_TOUCH_TARGET
 
     override fun check(components: List<UiComponent>): List<AnalysisIssue> {
-        return ComponentUtils.flattenAll(components)
-            .filter { component -> component.sourceType in runtimeSourceTypes }
-            .filter { component -> component.properties.isClickable }
-            .mapNotNull { component -> checkComponent(component) }
+        return components
+            .filter { root -> root.sourceType in runtimeSourceTypes }
+            .flatMap { root ->
+                val minTouchTargetPx = MIN_TOUCH_TARGET_DP * RuntimeScreenMetrics.estimateDensity(root)
+                ComponentUtils.flatten(root)
+                    .filter { component -> component.sourceType in runtimeSourceTypes }
+                    .filter { component -> component.isRuntimeInteractive() }
+                    .mapNotNull { component -> checkComponent(component, minTouchTargetPx) }
+            }
     }
 
-    private fun checkComponent(component: UiComponent): AnalysisIssue? {
+    private fun checkComponent(component: UiComponent, minTouchTargetPx: Float): AnalysisIssue? {
         val bounds = component.properties.bounds ?: return null
-        if (bounds.width >= MIN_TOUCH_TARGET_PX && bounds.height >= MIN_TOUCH_TARGET_PX) {
+        if (bounds.width >= minTouchTargetPx && bounds.height >= minTouchTargetPx) {
             return null
         }
 
@@ -42,6 +48,13 @@ class RuntimeSmallTouchTargetRule : Rule {
         )
     }
 
+    private fun UiComponent.isRuntimeInteractive(): Boolean {
+        return properties.isClickable ||
+            INTERACTIVE_RAW_ATTRIBUTES.any { attribute ->
+                properties.rawAttributes[attribute].equals(TRUE_VALUE, ignoreCase = true)
+            }
+    }
+
     private fun Float.toPixelString(): String {
         return if (this % 1f == 0f) {
             "${toInt()}px"
@@ -51,7 +64,15 @@ class RuntimeSmallTouchTargetRule : Rule {
     }
 
     private companion object {
-        const val MIN_TOUCH_TARGET_PX = 48f
+        const val MIN_TOUCH_TARGET_DP = 48f
+        const val TRUE_VALUE = "true"
+        val INTERACTIVE_RAW_ATTRIBUTES = setOf(
+            "clickable",
+            "long-clickable",
+            "focusable",
+            "checkable",
+            "scrollable"
+        )
         val runtimeSourceTypes = setOf(SourceType.COMPOSE_RUNTIME, SourceType.ANDROID_RUNTIME)
     }
 }

@@ -3,9 +3,9 @@ package ru.itis.compose.rules.runtime
 import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
 import ru.itis.analyzer.messages.rules.RuleIds
 import ru.itis.analyzer.rules.base.Rule
-import ru.itis.analyzer.utils.ComponentUtils
-import ru.itis.compose.runtime.model.ComposeRuntimeAttributes
+import ru.itis.compose.runtime.utils.RuntimeScreenMetrics
 import ru.itis.model.AnalysisIssue
+import ru.itis.model.RuntimeAttributes
 import ru.itis.model.Severity
 import ru.itis.model.SourceType
 import ru.itis.model.UiBounds
@@ -25,7 +25,7 @@ class RuntimeScreenDensitySnapshotInfoRule : Rule {
     private fun buildIssue(root: UiComponent): AnalysisIssue? {
         val bounds = root.screenBounds()
         val size = root.metadataScreenSize() ?: bounds?.toSizeString() ?: UNKNOWN_VALUE
-        val orientation = root.runtimeAttribute(ComposeRuntimeAttributes.ORIENTATION)
+        val orientation = root.runtimeAttribute(RuntimeAttributes.ORIENTATION)
             ?: bounds?.orientation()
             ?: UNKNOWN_VALUE
         val density = root.runtimeDensity()
@@ -39,8 +39,8 @@ class RuntimeScreenDensitySnapshotInfoRule : Rule {
             filePath = root.filePath,
             message = AnalyzerMessages.runtimeScreenDensitySnapshotInfo(
                 source = root.sourceType.name,
-                screen = root.runtimeAttribute(ComposeRuntimeAttributes.SCREEN) ?: UNKNOWN_VALUE,
-                state = root.runtimeAttribute(ComposeRuntimeAttributes.STATE) ?: UNKNOWN_VALUE,
+                screen = root.runtimeAttribute(RuntimeAttributes.SCREEN) ?: UNKNOWN_VALUE,
+                state = root.runtimeAttribute(RuntimeAttributes.STATE) ?: UNKNOWN_VALUE,
                 size = size,
                 orientation = orientation,
                 density = density
@@ -53,40 +53,24 @@ class RuntimeScreenDensitySnapshotInfoRule : Rule {
         return listOf(
             filePath,
             sourceType.name,
-            runtimeAttribute(ComposeRuntimeAttributes.SCREEN).orEmpty(),
-            runtimeAttribute(ComposeRuntimeAttributes.STATE).orEmpty()
+            runtimeAttribute(RuntimeAttributes.SCREEN).orEmpty(),
+            runtimeAttribute(RuntimeAttributes.STATE).orEmpty()
         ).joinToString(separator = "|")
     }
 
     private fun UiComponent.screenBounds(): UiBounds? {
-        return properties.bounds ?: ComponentUtils.flatten(this)
-            .mapNotNull { component -> component.properties.bounds }
-            .takeIf { bounds -> bounds.isNotEmpty() }
-            ?.let { bounds -> bounds.union() }
-    }
-
-    private fun List<UiBounds>.union(): UiBounds {
-        val left = minOf { bounds -> bounds.x }
-        val top = minOf { bounds -> bounds.y }
-        val right = maxOf { bounds -> bounds.x + bounds.width }
-        val bottom = maxOf { bounds -> bounds.y + bounds.height }
-        return UiBounds(
-            x = left,
-            y = top,
-            width = right - left,
-            height = bottom - top
-        )
+        return properties.bounds ?: RuntimeScreenMetrics.inferBounds(this)
     }
 
     private fun UiComponent.metadataScreenSize(): String? {
-        val width = runtimeAttribute(ComposeRuntimeAttributes.SCREEN_WIDTH_PX) ?: return null
-        val height = runtimeAttribute(ComposeRuntimeAttributes.SCREEN_HEIGHT_PX) ?: return null
+        val width = runtimeAttribute(RuntimeAttributes.SCREEN_WIDTH_PX) ?: return null
+        val height = runtimeAttribute(RuntimeAttributes.SCREEN_HEIGHT_PX) ?: return null
         return "${width}px x ${height}px"
     }
 
     private fun UiComponent.runtimeDensity(): String {
-        val density = runtimeAttribute(ComposeRuntimeAttributes.DENSITY)
-        val densityDpi = runtimeAttribute(ComposeRuntimeAttributes.DENSITY_DPI)
+        val density = runtimeAttribute(RuntimeAttributes.DENSITY)
+        val densityDpi = runtimeAttribute(RuntimeAttributes.DENSITY_DPI)
         return listOfNotNull(
             density?.let { value -> "density=$value" },
             densityDpi?.let { value -> "densityDpi=$value" }

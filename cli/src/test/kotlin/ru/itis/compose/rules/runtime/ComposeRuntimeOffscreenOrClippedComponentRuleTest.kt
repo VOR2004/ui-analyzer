@@ -36,7 +36,7 @@ class ComposeRuntimeOffscreenOrClippedComponentRuleTest {
         val root = runtimeRoot(
             child = runtimeComponent(
                 id = "thin",
-                bounds = UiBounds(x = 20f, y = 20f, width = 1f, height = 48f)
+                bounds = UiBounds(x = 20f, y = 20f, width = 3f, height = 48f)
             )
         )
 

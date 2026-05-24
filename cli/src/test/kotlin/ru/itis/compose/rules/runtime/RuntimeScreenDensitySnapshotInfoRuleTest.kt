@@ -4,7 +4,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import ru.itis.analyzer.messages.rules.RuleIds
-import ru.itis.compose.runtime.model.ComposeRuntimeAttributes
+import ru.itis.model.RuntimeAttributes
 import ru.itis.model.Severity
 import ru.itis.model.SourceType
 import ru.itis.model.UiBounds
@@ -20,11 +20,11 @@ class RuntimeScreenDensitySnapshotInfoRuleTest {
             sourceType = SourceType.COMPOSE_RUNTIME,
             bounds = UiBounds(x = 0f, y = 0f, width = 1080f, height = 2400f),
             attributes = mapOf(
-                ComposeRuntimeAttributes.SCREEN to "BoardScreen",
-                ComposeRuntimeAttributes.STATE to "content",
-                ComposeRuntimeAttributes.DENSITY to "2.75",
-                ComposeRuntimeAttributes.DENSITY_DPI to "440",
-                ComposeRuntimeAttributes.ORIENTATION to "portrait"
+                RuntimeAttributes.SCREEN to "BoardScreen",
+                RuntimeAttributes.STATE to "content",
+                RuntimeAttributes.DENSITY to "2.75",
+                RuntimeAttributes.DENSITY_DPI to "440",
+                RuntimeAttributes.ORIENTATION to "portrait"
             )
         )
 

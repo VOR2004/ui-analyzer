@@ -4,6 +4,7 @@ import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
 import ru.itis.analyzer.messages.rules.RuleIds
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.compose.runtime.formatter.ComposeRuntimeComponentFormatter
+import ru.itis.compose.runtime.utils.RuntimeScreenMetrics
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.Severity
 import ru.itis.model.SourceType
@@ -17,21 +18,27 @@ class ComposeRuntimeOffscreenOrClippedComponentRule : Rule {
         return components
             .filter { root -> root.sourceType in runtimeSourceTypes }
             .flatMap { root ->
-                val screenBounds = root.properties.bounds ?: return@flatMap emptyList()
-                root.children.flatMap { child -> analyzeNode(child, screenBounds) }
+                val screenBounds = root.properties.bounds ?: RuntimeScreenMetrics.inferBounds(root)
+                    ?: return@flatMap emptyList()
+                val minVisibleSizePx = MIN_VISIBLE_SIZE_DP * RuntimeScreenMetrics.estimateDensity(root)
+                root.children.flatMap { child -> analyzeNode(child, screenBounds, minVisibleSizePx) }
             }
     }
 
-    private fun analyzeNode(component: UiComponent, screenBounds: UiBounds): List<AnalysisIssue> {
+    private fun analyzeNode(
+        component: UiComponent,
+        screenBounds: UiBounds,
+        minVisibleSizePx: Float
+    ): List<AnalysisIssue> {
         val ownIssue = component.properties.bounds
-            ?.let { bounds -> classify(bounds, screenBounds) }
+            ?.let { bounds -> classify(bounds, screenBounds, minVisibleSizePx) }
             ?.let { problem -> buildIssue(component, problem, screenBounds) }
 
         return listOfNotNull(ownIssue) +
-            component.children.flatMap { child -> analyzeNode(child, screenBounds) }
+            component.children.flatMap { child -> analyzeNode(child, screenBounds, minVisibleSizePx) }
     }
 
-    private fun classify(bounds: UiBounds, screenBounds: UiBounds): BoundsProblem? {
+    private fun classify(bounds: UiBounds, screenBounds: UiBounds, minVisibleSizePx: Float): BoundsProblem? {
         if (bounds.width <= 0f || bounds.height <= 0f) {
             return BoundsProblem(
                 severity = Severity.WARNING,
@@ -39,7 +46,7 @@ class ComposeRuntimeOffscreenOrClippedComponentRule : Rule {
             )
         }
 
-        if (bounds.width < MIN_VISIBLE_SIZE_PX || bounds.height < MIN_VISIBLE_SIZE_PX) {
+        if (bounds.width < minVisibleSizePx || bounds.height < minVisibleSizePx) {
             return BoundsProblem(
                 severity = Severity.INFO,
                 reason = "almost zero visible size"
@@ -104,7 +111,7 @@ class ComposeRuntimeOffscreenOrClippedComponentRule : Rule {
     )
 
     private companion object {
-        const val MIN_VISIBLE_SIZE_PX = 2f
+        const val MIN_VISIBLE_SIZE_DP = 2f
         const val BOUNDS_TOLERANCE_PX = 1f
         val runtimeSourceTypes = setOf(SourceType.COMPOSE_RUNTIME, SourceType.ANDROID_RUNTIME)
     }

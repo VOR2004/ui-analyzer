@@ -7,8 +7,8 @@ import ru.itis.analyzer.messages.rules.RuleIds
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.compose.runtime.formatter.ComposeRuntimeComponentFormatter
-import ru.itis.compose.runtime.model.ComposeRuntimeAttributes
 import ru.itis.model.AnalysisIssue
+import ru.itis.model.RuntimeAttributes
 import ru.itis.model.Severity
 import ru.itis.model.SourceType
 import ru.itis.model.UiBounds
@@ -74,8 +74,8 @@ class ComposeRuntimeOverlappingClickableComponentsRule : Rule {
     private fun UiComponent.runtimeGroupKey(): String {
         return listOfNotNull(
             filePath,
-            properties.rawAttributes[ComposeRuntimeAttributes.SCREEN],
-            properties.rawAttributes[ComposeRuntimeAttributes.STATE]
+            properties.rawAttributes[RuntimeAttributes.SCREEN],
+            properties.rawAttributes[RuntimeAttributes.STATE]
         ).joinToString(separator = "|")
     }
 

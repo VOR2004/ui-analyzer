@@ -2,9 +2,9 @@ package ru.itis.compose.runtime.importer
 
 import java.io.File
 import kotlinx.serialization.json.Json
-import ru.itis.compose.runtime.model.ComposeRuntimeAttributes
 import ru.itis.compose.runtime.model.ComposeRuntimeComponent
 import ru.itis.compose.runtime.model.ComposeRuntimeSnapshot
+import ru.itis.model.RuntimeAttributes
 import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 import ru.itis.model.UiProperties
@@ -65,21 +65,21 @@ class ComposeRuntimeSnapshotImporter {
             bounds = bounds,
             rawAttributes = buildMap {
                 putAll(attributes)
-                put(ComposeRuntimeAttributes.SCREEN, snapshot.screen)
-                snapshot.state?.let { state -> put(ComposeRuntimeAttributes.STATE, state) }
-                snapshot.density?.let { density -> put(ComposeRuntimeAttributes.DENSITY, density.toString()) }
+                put(RuntimeAttributes.SCREEN, snapshot.screen)
+                snapshot.state?.let { state -> put(RuntimeAttributes.STATE, state) }
+                snapshot.density?.let { density -> put(RuntimeAttributes.DENSITY, density.toString()) }
                 snapshot.densityDpi?.let { densityDpi ->
-                    put(ComposeRuntimeAttributes.DENSITY_DPI, densityDpi.toString())
+                    put(RuntimeAttributes.DENSITY_DPI, densityDpi.toString())
                 }
-                snapshot.orientation?.let { orientation -> put(ComposeRuntimeAttributes.ORIENTATION, orientation) }
-                snapshot.screenWidthPx?.let { width -> put(ComposeRuntimeAttributes.SCREEN_WIDTH_PX, width.toString()) }
+                snapshot.orientation?.let { orientation -> put(RuntimeAttributes.ORIENTATION, orientation) }
+                snapshot.screenWidthPx?.let { width -> put(RuntimeAttributes.SCREEN_WIDTH_PX, width.toString()) }
                 snapshot.screenHeightPx?.let { height ->
-                    put(ComposeRuntimeAttributes.SCREEN_HEIGHT_PX, height.toString())
+                    put(RuntimeAttributes.SCREEN_HEIGHT_PX, height.toString())
                 }
-                locator?.let { locator -> put(ComposeRuntimeAttributes.LOCATOR, locator) }
+                locator?.let { locator -> put(RuntimeAttributes.LOCATOR, locator) }
                 bounds?.let { bounds ->
-                    put(ComposeRuntimeAttributes.BOUNDS_X, bounds.x.toPixelString())
-                    put(ComposeRuntimeAttributes.BOUNDS_Y, bounds.y.toPixelString())
+                    put(RuntimeAttributes.BOUNDS_X, bounds.x.toPixelString())
+                    put(RuntimeAttributes.BOUNDS_Y, bounds.y.toPixelString())
                 }
             }
         )
