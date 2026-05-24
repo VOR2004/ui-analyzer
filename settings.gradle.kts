@@ -16,6 +16,7 @@ include(":android:impl")
 include(":report:api")
 include(":report:impl")
 include(":cli")
+include(":desktop")
 
 project(":core:api").name = "core-api"
 project(":core:utils").name = "core-utils"
