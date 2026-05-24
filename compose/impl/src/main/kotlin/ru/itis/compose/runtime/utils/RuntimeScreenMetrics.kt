@@ -25,9 +25,8 @@ object RuntimeScreenMetrics {
 
     fun inferBounds(root: UiComponent): UiBounds? {
         return ComponentUtils.flatten(root)
-            .mapNotNull { component -> component.properties.bounds }
-            .takeIf { bounds -> bounds.isNotEmpty() }
-            ?.let { bounds -> bounds.union() }
+                .mapNotNull { component -> component.properties.bounds }
+                .takeIf { bounds -> bounds.isNotEmpty() }?.union()
     }
 
     private fun List<UiBounds>.union(): UiBounds {

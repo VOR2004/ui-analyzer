@@ -19,10 +19,10 @@ class RuntimeScreenDensitySnapshotInfoRule : Rule {
             .filter { root -> root.sourceType in runtimeSourceTypes }
             .groupBy { root -> root.snapshotKey() }
             .values
-            .mapNotNull { roots -> buildIssue(roots.first()) }
+            .map { roots -> buildIssue(roots.first()) }
     }
 
-    private fun buildIssue(root: UiComponent): AnalysisIssue? {
+    private fun buildIssue(root: UiComponent): AnalysisIssue {
         val bounds = root.screenBounds()
         val size = root.metadataScreenSize() ?: bounds?.toSizeString() ?: UNKNOWN_VALUE
         val orientation = root.runtimeAttribute(RuntimeAttributes.ORIENTATION)
