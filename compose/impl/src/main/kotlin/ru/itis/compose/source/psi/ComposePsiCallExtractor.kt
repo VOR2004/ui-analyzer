@@ -31,6 +31,10 @@ internal class ComposePsiCallExtractor {
         }
     }
 
+    fun nearestComposableFunctionName(call: KtCallExpression): String? {
+        return call.nearestComposableFunction()?.name
+    }
+
     fun KtCallExpression.composeNameOrNull(): String? {
         val name = when (val callee = calleeExpression) {
             is KtNameReferenceExpression -> callee.getReferencedName()
@@ -41,14 +45,18 @@ internal class ComposePsiCallExtractor {
     }
 
     private fun PsiElement.isInsideComposableFunction(): Boolean {
+        return nearestComposableFunction() != null
+    }
+
+    private fun PsiElement.nearestComposableFunction(): KtNamedFunction? {
         var current = parent
         while (current != null) {
-            if (current is KtNamedFunction) {
-                return current.isComposableFunction()
+            if (current is KtNamedFunction && current.isComposableFunction()) {
+                return current
             }
             current = current.parent
         }
-        return false
+        return null
     }
 
     private fun KtNamedFunction.isComposableFunction(): Boolean {

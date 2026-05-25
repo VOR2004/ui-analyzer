@@ -23,10 +23,11 @@ class ComposePsiLayoutParser(
             )
 
             callExtractor.extract(ktFile).mapIndexed { index, call ->
+                val functionName = callExtractor.nearestComposableFunctionName(call)
                 buildComponent(
                     call = call,
                     filePath = file.absolutePath,
-                    parentPath = "",
+                    parentPath = functionName?.let { name -> "/$name" }.orEmpty(),
                     siblingIndex = index
                 )
             }
@@ -63,14 +64,15 @@ class ComposePsiLayoutParser(
             sourceType = SourceType.COMPOSE,
             filePath = filePath,
             treePath = treePath,
-            properties = buildProperties(type, resolvedArguments),
+            properties = buildProperties(type, resolvedArguments, callExtractor.nearestComposableFunctionName(call)),
             children = children
         )
     }
 
     private fun buildProperties(
         type: String,
-        rawArguments: Map<String, String>
+        rawArguments: Map<String, String>,
+        composeFunctionName: String?
     ): UiProperties {
         val modifier = rawArguments[MODIFIER_ARGUMENT].orEmpty()
         val colors = rawArguments[COLORS_ARGUMENT].orEmpty()
@@ -96,8 +98,34 @@ class ComposePsiLayoutParser(
             text = extractComposeText(type, rawArguments),
             contentDescription = rawArguments[CONTENT_DESCRIPTION_ARGUMENT]?.trimStringLiteralIfNeeded(),
             isClickable = modifier.containsModifier(CLICKABLE_MODIFIER),
-            rawAttributes = rawArguments.filterKeys { key -> !key.startsWith(POSITIONAL_ARGUMENT_PREFIX) }
+            rawAttributes = buildRawAttributes(type, rawArguments, composeFunctionName)
         )
+    }
+
+    private fun buildRawAttributes(
+        type: String,
+        rawArguments: Map<String, String>,
+        composeFunctionName: String?
+    ): Map<String, String> {
+        val attributes = rawArguments
+            .filterKeys { key -> !key.startsWith(POSITIONAL_ARGUMENT_PREFIX) }
+            .toMutableMap()
+
+        if (composeFunctionName != null) {
+            attributes[COMPOSE_FUNCTION_ATTRIBUTE] = composeFunctionName
+        }
+
+        if (type == ComponentTypes.COMPOSE_ICON || type == ComponentTypes.COMPOSE_IMAGE) {
+            val firstArgument = argumentExtractor.firstPositionalArgument(rawArguments)
+            if (firstArgument != null &&
+                IMAGE_VECTOR_ARGUMENT !in attributes &&
+                PAINTER_ARGUMENT !in attributes
+            ) {
+                attributes[VISUAL_SOURCE_ARGUMENT] = firstArgument
+            }
+        }
+
+        return attributes
     }
 
     private fun extractNamedArgumentValue(arguments: String, name: String): String? {
@@ -240,6 +268,10 @@ class ComposePsiLayoutParser(
         const val FONT_STYLE_ARGUMENT = "fontStyle"
         const val FONT_FAMILY_ARGUMENT = "fontFamily"
         const val CONTENT_DESCRIPTION_ARGUMENT = "contentDescription"
+        const val IMAGE_VECTOR_ARGUMENT = "imageVector"
+        const val PAINTER_ARGUMENT = "painter"
+        const val VISUAL_SOURCE_ARGUMENT = "visualSource"
+        const val COMPOSE_FUNCTION_ATTRIBUTE = "compose:function"
         const val POSITIONAL_ARGUMENT_PREFIX = "__positional"
 
         const val SIZE_MODIFIER = "size"

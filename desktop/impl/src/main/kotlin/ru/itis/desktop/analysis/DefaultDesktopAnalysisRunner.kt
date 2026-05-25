@@ -11,7 +11,7 @@ import ru.itis.compose.source.parser.ComposeFunctionParser
 import ru.itis.compose.source.psi.ComposePsiLayoutParser
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.UiComponent
-import ru.itis.report.JsonReportGenerator
+import ru.itis.report.AutoReportGenerator
 import ru.itis.report.ReportGenerator
 import ru.itis.desktop.text.DesktopAnalysisText
 import ru.itis.xml.source.importer.XmlProjectImporter
@@ -28,7 +28,7 @@ class DefaultDesktopAnalysisRunner(
     private val runtimeSnapshotImporter: ComposeRuntimeSnapshotImporter = ComposeRuntimeSnapshotImporter(),
     private val adbSnapshotProvider: AdbUiAutomatorSnapshotProvider = AdbUiAutomatorSnapshotProvider(),
     private val projectPackageResolver: AndroidProjectPackageResolver = AndroidProjectPackageResolver(),
-    private val reportGenerator: ReportGenerator = JsonReportGenerator(),
+    private val reportGenerator: ReportGenerator = AutoReportGenerator(),
     private val ruleRegistry: DefaultDesktopRuleRegistry = DefaultDesktopRuleRegistry()
 ) : DesktopAnalysisRunner {
 

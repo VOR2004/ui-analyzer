@@ -10,7 +10,7 @@ import ru.itis.compose.runtime.importer.ComposeRuntimeSnapshotImporter
 import ru.itis.compose.rules.ComposeRuleSet
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.UiComponent
-import ru.itis.report.JsonReportGenerator
+import ru.itis.report.AutoReportGenerator
 import ru.itis.report.ReportGenerator
 import ru.itis.compose.source.importer.ComposeProjectImporter
 import ru.itis.compose.source.parser.ComposeFunctionParser
@@ -65,7 +65,7 @@ fun main(args: Array<String>) {
         emptyList()
     }
 
-    val reportGenerator: ReportGenerator = JsonReportGenerator()
+    val reportGenerator: ReportGenerator = AutoReportGenerator()
 
     val xmlFiles = if (options.ruleMode.includesXml) {
         xmlImporter.findLayoutXmlFiles(projectRoot)

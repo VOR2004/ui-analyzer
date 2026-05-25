@@ -12,82 +12,16 @@ class JsonReportGenerator : ReportGenerator {
         prettyPrint = true
         encodeDefaults = true
     }
+    private val reportBuilder = AnalysisReportBuilder()
 
     override fun writeReport(
         outputFile: File,
         components: List<UiComponent>,
         issues: List<AnalysisIssue>
     ) {
-        val enrichedIssues = enrichIssuesWithLocators(components, issues)
-
-        val report = AnalysisReport(
-            summary = Summary(
-                totalComponents = components.sumOf { countComponents(it) },
-                totalIssues = enrichedIssues.size
-            ),
-            components = components,
-            issues = enrichedIssues
-        )
+        val report = reportBuilder.build(components, issues)
 
         outputFile.writeText(json.encodeToString(report))
-    }
-
-    private fun enrichIssuesWithLocators(
-        components: List<UiComponent>,
-        issues: List<AnalysisIssue>
-    ): List<AnalysisIssue> {
-        return issues.map { issue ->
-            if (issue.componentLocator != null) {
-                issue
-            } else {
-                val component = findComponentForIssue(components, issue)
-                issue.copy(componentLocator = component?.let { buildComponentLocator(it) })
-            }
-        }
-    }
-
-    private fun findComponentForIssue(
-        components: List<UiComponent>,
-        issue: AnalysisIssue
-    ): UiComponent? {
-        return components
-            .flatMap { flatten(it) }
-            .firstOrNull { component ->
-                component.filePath == issue.filePath &&
-                    component.type == issue.componentType &&
-                    component.id == issue.componentId
-            }
-    }
-
-    private fun buildComponentLocator(component: UiComponent): String {
-        val details = listOfNotNull(
-            component.id?.let { "id=$it" },
-            component.treePath?.let { "path=$it" },
-            component.properties.text?.let { "text=${it.take(MAX_LOCATOR_VALUE_LENGTH)}" },
-            component.properties.textSize?.let { "textSize=$it" },
-            component.properties.textStyle?.let { "textStyle=$it" },
-            component.properties.contentDescription?.let {
-                "contentDescription=${it.take(MAX_LOCATOR_VALUE_LENGTH)}"
-            }
-        )
-
-        return if (details.isEmpty()) {
-            component.type
-        } else {
-            "${component.type}[${details.joinToString(", ")}]"
-        }
-    }
-
-    private fun flatten(component: UiComponent): List<UiComponent> {
-        return listOf(component) + component.children.flatMap { flatten(it) }
-    }
-
-    private fun countComponents(component: UiComponent): Int {
-        return 1 + component.children.sumOf { countComponents(it) }
-    }
-
-    private companion object {
-        const val MAX_LOCATOR_VALUE_LENGTH = 40
     }
 }
 

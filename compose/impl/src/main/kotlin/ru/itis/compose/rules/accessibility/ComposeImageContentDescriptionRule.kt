@@ -47,6 +47,7 @@ class ComposeImageContentDescriptionRule : Rule {
             ruleId = id,
             severity = severity,
             componentId = component.id,
+            componentLocator = buildComponentLocator(component),
             componentType = component.type,
             filePath = component.filePath,
             message = AnalyzerMessages.composeImageContentDescription(
@@ -66,8 +67,39 @@ class ComposeImageContentDescriptionRule : Rule {
         return component.type in interactiveComposeTypes
     }
 
+    private fun buildComponentLocator(component: UiComponent): String {
+        val details = listOfNotNull(
+            component.id?.let { value -> "id=$value" },
+            component.properties.rawAttributes[COMPOSE_FUNCTION_ATTRIBUTE]?.let { value -> "composable=$value" },
+            component.properties.rawAttributes[VISUAL_SOURCE_ATTRIBUTE]?.let { value ->
+                "visualSource=${value.take(MAX_LOCATOR_VALUE_LENGTH)}"
+            },
+            component.properties.rawAttributes[IMAGE_VECTOR_ATTRIBUTE]?.let { value ->
+                "imageVector=${value.take(MAX_LOCATOR_VALUE_LENGTH)}"
+            },
+            component.properties.rawAttributes[PAINTER_ATTRIBUTE]?.let { value ->
+                "painter=${value.take(MAX_LOCATOR_VALUE_LENGTH)}"
+            },
+            component.treePath?.let { value -> "path=$value" },
+            component.properties.contentDescription?.let { value ->
+                "contentDescription=${value.take(MAX_LOCATOR_VALUE_LENGTH)}"
+            }
+        )
+
+        return if (details.isEmpty()) {
+            component.type
+        } else {
+            "${component.type}[${details.joinToString(", ")}]"
+        }
+    }
+
     private companion object {
         const val NULL_LITERAL = "null"
+        const val MAX_LOCATOR_VALUE_LENGTH = 40
+        const val COMPOSE_FUNCTION_ATTRIBUTE = "compose:function"
+        const val VISUAL_SOURCE_ATTRIBUTE = "visualSource"
+        const val IMAGE_VECTOR_ATTRIBUTE = "imageVector"
+        const val PAINTER_ATTRIBUTE = "painter"
 
         val interactiveComposeTypes = setOf(
             ComponentTypes.COMPOSE_BUTTON,
@@ -78,5 +110,4 @@ class ComposeImageContentDescriptionRule : Rule {
         )
     }
 }
-
 
