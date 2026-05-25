@@ -13,6 +13,7 @@ import ru.itis.model.AnalysisIssue
 import ru.itis.model.UiComponent
 import ru.itis.report.JsonReportGenerator
 import ru.itis.report.ReportGenerator
+import ru.itis.desktop.text.DesktopAnalysisText
 import ru.itis.xml.source.importer.XmlProjectImporter
 import ru.itis.xml.source.parser.XmlLayoutParser
 import ru.itis.xml.source.resource.DefaultResourceRepository
@@ -32,11 +33,11 @@ class DefaultDesktopAnalysisRunner(
 ) : DesktopAnalysisRunner {
 
     override fun run(request: DesktopAnalysisRequest): DesktopAnalysisResult {
-        require(request.selectedRuleIds.isNotEmpty()) { "Select at least one rule before analysis." }
+        require(request.selectedRuleIds.isNotEmpty()) { DesktopAnalysisText.SELECT_RULE_ERROR }
 
         val projectRoot = File(request.projectPath)
         require(projectRoot.exists() && projectRoot.isDirectory) {
-            "Android project directory does not exist: ${request.projectPath}"
+            DesktopAnalysisText.missingProjectDirectory(request.projectPath)
         }
 
         val outputFile = File(request.outputPath)
@@ -97,7 +98,7 @@ class DefaultDesktopAnalysisRunner(
             RuntimeSnapshotSource.SNAPSHOT_FILE -> {
                 val snapshotFile = File(request.runtimeSnapshotPath)
                 require(snapshotFile.exists() && snapshotFile.isFile) {
-                    "Runtime snapshot file does not exist: ${request.runtimeSnapshotPath}"
+                    DesktopAnalysisText.missingRuntimeSnapshot(request.runtimeSnapshotPath)
                 }
                 runtimeSnapshotImporter.import(snapshotFile)
             }

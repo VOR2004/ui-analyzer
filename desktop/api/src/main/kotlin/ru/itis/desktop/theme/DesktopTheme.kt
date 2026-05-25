@@ -1,4 +1,4 @@
-package ru.itis.desktop.analysis
+package ru.itis.desktop.theme
 
 enum class DesktopTheme {
     LIGHT,

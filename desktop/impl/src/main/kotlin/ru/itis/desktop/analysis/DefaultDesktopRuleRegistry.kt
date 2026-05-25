@@ -2,6 +2,7 @@ package ru.itis.desktop.analysis
 
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.compose.rules.ComposeRuleSet
+import ru.itis.desktop.text.DesktopRuleText
 import ru.itis.xml.rules.XmlRuleSet
 import ru.itis.xml.source.resource.ResourceRepository
 
@@ -41,7 +42,7 @@ class DefaultDesktopRuleRegistry : DesktopRuleRegistry {
                     RuleDescriptor(
                         id = rule.id,
                         source = group.source,
-                        kind = "Static rule"
+                        kind = DesktopRuleText.STATIC_KIND
                     )
                 }
             }
@@ -52,8 +53,8 @@ class DefaultDesktopRuleRegistry : DesktopRuleRegistry {
             .map { rule ->
                 RuleDescriptor(
                     id = rule.id,
-                    source = "Device snapshot",
-                    kind = "Runtime rule"
+                    source = DesktopRuleText.DEVICE_SNAPSHOT_SOURCE,
+                    kind = DesktopRuleText.RUNTIME_KIND
                 )
             }
     }
@@ -76,10 +77,10 @@ class DefaultDesktopRuleRegistry : DesktopRuleRegistry {
     ): List<RuleGroup> {
         return buildList {
             if (staticTarget == StaticSourceTarget.XML || staticTarget == StaticSourceTarget.BOTH) {
-                add(RuleGroup(source = "XML", rules = XmlRuleSet.default(resourceRepository)))
+                add(RuleGroup(source = DesktopRuleText.XML_SOURCE, rules = XmlRuleSet.default(resourceRepository)))
             }
             if (staticTarget == StaticSourceTarget.COMPOSE || staticTarget == StaticSourceTarget.BOTH) {
-                add(RuleGroup(source = "Compose", rules = ComposeRuleSet.staticRules()))
+                add(RuleGroup(source = DesktopRuleText.COMPOSE_SOURCE, rules = ComposeRuleSet.staticRules()))
             }
         }
     }

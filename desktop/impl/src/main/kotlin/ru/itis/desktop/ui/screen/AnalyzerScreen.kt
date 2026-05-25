@@ -29,6 +29,8 @@ import ru.itis.desktop.analysis.DefaultDesktopRuleRegistry
 import ru.itis.desktop.analysis.RuntimeSnapshotSource
 import ru.itis.desktop.analysis.StaticSourceTarget
 import ru.itis.desktop.dialog.FileKitDesktopFileDialog
+import ru.itis.desktop.text.DesktopAnalysisText
+import ru.itis.desktop.text.DesktopAppText
 import ru.itis.desktop.ui.app.DesktopTitleBarActions
 import ru.itis.desktop.ui.component.ResizeHandle
 import ru.itis.desktop.ui.panel.RuleSelectionPanel
@@ -44,15 +46,15 @@ fun AnalyzerScreen(
     val fileDialog = remember { FileKitDesktopFileDialog() }
     val coroutineScope = rememberCoroutineScope()
 
-    var projectPath by remember { mutableStateOf("") }
-    var outputPath by remember { mutableStateOf("analysis-report.json") }
+    var projectPath by remember { mutableStateOf(DesktopAppText.EMPTY_VALUE) }
+    var outputPath by remember { mutableStateOf(DesktopAppText.DEFAULT_REPORT_FILE) }
     var mode by remember { mutableStateOf(DesktopAnalysisMode.STATIC) }
     var staticTarget by remember { mutableStateOf(StaticSourceTarget.BOTH) }
     var runtimeSource by remember { mutableStateOf(RuntimeSnapshotSource.ADB) }
-    var runtimeSnapshotPath by remember { mutableStateOf("") }
-    var adbSerial by remember { mutableStateOf("") }
+    var runtimeSnapshotPath by remember { mutableStateOf(DesktopAppText.EMPTY_VALUE) }
+    var adbSerial by remember { mutableStateOf(DesktopAppText.EMPTY_VALUE) }
     var selectedRuleIds by remember { mutableStateOf(emptySet<String>()) }
-    var status by remember { mutableStateOf("Ready for analysis.") }
+    var status by remember { mutableStateOf(DesktopAnalysisText.READY_STATUS) }
     var isRunning by remember { mutableStateOf(false) }
     var rulesPanelVisible by remember { mutableStateOf(true) }
     var rulesPanelWidth by remember { mutableStateOf(460.dp) }
@@ -85,10 +87,10 @@ fun AnalyzerScreen(
         if (isRunning) return
 
         isRunning = true
-        status = "Analysis started..."
+        status = DesktopAnalysisText.STARTED_STATUS
         val request = DesktopAnalysisRequest(
             projectPath = projectPath,
-            outputPath = outputPath.ifBlank { "analysis-report.json" },
+            outputPath = outputPath.ifBlank { DesktopAppText.DEFAULT_REPORT_FILE },
             mode = mode,
             staticTarget = staticTarget,
             runtimeSource = runtimeSource,
@@ -101,10 +103,8 @@ fun AnalyzerScreen(
                 runCatching { runner.run(request) }
             }
             status = result.fold(
-                onSuccess = { value ->
-                    "Done: components=${value.componentCount}, issues=${value.issueCount}, report=${value.outputPath}"
-                },
-                onFailure = { error -> "Error: ${error.message}" }
+                onSuccess = { value -> DesktopAnalysisText.success(value) },
+                onFailure = { error -> DesktopAnalysisText.failure(error) }
             )
             isRunning = false
         }

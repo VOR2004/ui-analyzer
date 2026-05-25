@@ -11,6 +11,7 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import io.github.vinceglb.filekit.FileKit
+import ru.itis.desktop.text.DesktopAppText
 import ru.itis.desktop.ui.app.DesktopAnalyzerApp
 import ru.itis.desktop.ui.window.installWindowResizeSupport
 import java.awt.Dimension
@@ -20,7 +21,7 @@ import java.awt.Point
 import java.awt.Rectangle
 
 fun main() = application {
-    FileKit.init(appId = "ui-analyzer")
+    FileKit.init(appId = DesktopAppText.APP_ID)
     val windowState = rememberWindowState(width = 1280.dp, height = 820.dp)
     var dragStartPointer: Point? = null
     var dragStartWindowLocation: Point? = null
@@ -29,7 +30,7 @@ fun main() = application {
 
     Window(
         onCloseRequest = ::exitApplication,
-        title = "UI Analyzer",
+        title = DesktopAppText.WINDOW_TITLE,
         state = windowState,
         undecorated = true
     ) {

@@ -11,8 +11,8 @@ include(":xml:api")
 include(":xml:impl")
 include(":compose:api")
 include(":compose:impl")
-include(":android:api")
-include(":android:impl")
+include(":android-runtime:api")
+include(":android-runtime:impl")
 include(":report:api")
 include(":report:impl")
 include(":cli")
@@ -27,8 +27,8 @@ project(":xml:api").name = "xml-api"
 project(":xml:impl").name = "xml-impl"
 project(":compose:api").name = "compose-api"
 project(":compose:impl").name = "compose-impl"
-project(":android:api").name = "android-api"
-project(":android:impl").name = "android-impl"
+project(":android-runtime:api").name = "android-runtime-api"
+project(":android-runtime:impl").name = "android-runtime-impl"
 project(":report:api").name = "report-api"
 project(":report:impl").name = "report-impl"
 project(":desktop:api").name = "desktop-api"

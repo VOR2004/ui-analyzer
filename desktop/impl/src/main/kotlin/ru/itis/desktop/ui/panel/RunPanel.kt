@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import ru.itis.desktop.text.DesktopPanelText
 import ru.itis.desktop.ui.component.IconOnlyButton
 import ru.itis.desktop.ui.component.Panel
 import ru.itis.desktop.ui.component.RulesIcon
@@ -38,14 +39,14 @@ fun RunPanel(
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = "Analysis workspace",
+                        text = DesktopPanelText.ANALYSIS_WORKSPACE,
                         fontWeight = FontWeight.SemiBold,
                         maxLines = 1,
                         softWrap = false,
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        text = "Selected rules: $selectedRuleCount of $totalRuleCount",
+                        text = DesktopPanelText.selectedRules(selectedRuleCount, totalRuleCount),
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1,
                         softWrap = false,
@@ -65,7 +66,7 @@ fun RunPanel(
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = "Status",
+                        text = DesktopPanelText.STATUS,
                         fontWeight = FontWeight.SemiBold,
                         maxLines = 1,
                         softWrap = false,
@@ -87,7 +88,7 @@ fun RunPanel(
                     onClick = onRun
                 ) {
                     Text(
-                        text = "Run analysis",
+                        text = DesktopPanelText.RUN_ANALYSIS,
                         maxLines = 1,
                         softWrap = false
                     )

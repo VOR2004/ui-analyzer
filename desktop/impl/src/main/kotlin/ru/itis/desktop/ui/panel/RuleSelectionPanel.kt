@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.itis.desktop.analysis.RuleDescriptor
+import ru.itis.desktop.text.DesktopPanelText
 import ru.itis.desktop.ui.component.ClearSelectionIcon
 import ru.itis.desktop.ui.component.CollapseIcon
 import ru.itis.desktop.ui.component.IconOnlyButton
@@ -51,7 +52,7 @@ fun RuleSelectionPanel(
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "Rule drawer",
+                    text = DesktopPanelText.RULE_DRAWER,
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
@@ -59,7 +60,7 @@ fun RuleSelectionPanel(
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = "Selected ${selectedRuleIds.size} of ${rules.size}.",
+                    text = DesktopPanelText.selectedRulesShort(selectedRuleIds.size, rules.size),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
                     softWrap = false,
@@ -154,7 +155,7 @@ private fun RuleSourceBlock(
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = "$selectedCount/${rules.size}",
+                    text = DesktopPanelText.selectedSourceRules(selectedCount, rules.size),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontSize = 12.sp,
                     maxLines = 1,

@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import ru.itis.desktop.text.DesktopPanelText
 
 @Composable
 fun PathField(
@@ -31,7 +32,7 @@ fun PathField(
             singleLine = true
         )
         OutlinedButton(onClick = onBrowse) {
-            Text("...")
+            Text(DesktopPanelText.BROWSE)
         }
     }
 }

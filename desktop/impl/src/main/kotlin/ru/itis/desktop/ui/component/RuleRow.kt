@@ -20,6 +20,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.itis.desktop.analysis.RuleDescriptor
+import ru.itis.desktop.text.DesktopPanelText
 
 @Composable
 fun RuleRow(
@@ -64,7 +65,7 @@ fun RuleRow(
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = if (showSource) "${rule.source} - ${rule.kind}" else rule.kind,
+                    text = if (showSource) DesktopPanelText.ruleSubtitle(rule.source, rule.kind) else rule.kind,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontSize = 12.sp,
                     maxLines = 1,

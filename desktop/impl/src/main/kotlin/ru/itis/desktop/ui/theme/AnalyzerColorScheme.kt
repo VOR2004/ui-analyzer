@@ -4,7 +4,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import ru.itis.desktop.analysis.DesktopTheme
+import ru.itis.desktop.theme.DesktopTheme
 
 @Composable
 fun analyzerColorScheme(theme: DesktopTheme) = when (theme) {

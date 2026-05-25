@@ -10,7 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import ru.itis.desktop.analysis.DesktopTheme
+import ru.itis.desktop.theme.DesktopTheme
 import ru.itis.desktop.ui.component.CustomTitleBar
 import ru.itis.desktop.ui.screen.AnalyzerScreen
 import ru.itis.desktop.ui.theme.analyzerColorScheme

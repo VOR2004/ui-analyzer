@@ -36,7 +36,9 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ru.itis.desktop.analysis.DesktopTheme
+import ru.itis.desktop.text.DesktopAppText
+import ru.itis.desktop.text.DesktopTitleBarText
+import ru.itis.desktop.theme.DesktopTheme
 import ru.itis.desktop.ui.app.DesktopTitleBarActions
 
 @Composable
@@ -71,7 +73,7 @@ fun CustomTitleBar(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "UI Analyzer",
+            text = DesktopAppText.WINDOW_TITLE,
             color = MaterialTheme.colorScheme.onSurface,
             fontSize = 13.sp,
             fontWeight = FontWeight.SemiBold
@@ -153,7 +155,7 @@ private fun FileTitleBarMenu(
 
     Box {
         TitleBarMenuButton(
-            text = "File",
+            text = DesktopTitleBarText.FILE,
             onClick = { expanded = true }
         )
         DropdownMenu(
@@ -161,21 +163,21 @@ private fun FileTitleBarMenu(
             onDismissRequest = { expanded = false }
         ) {
             TitleBarDropdownItem(
-                text = "Open project...",
+                text = DesktopTitleBarText.OPEN_PROJECT,
                 onClick = {
                     expanded = false
                     onOpenProject()
                 }
             )
             TitleBarDropdownItem(
-                text = "Choose report output...",
+                text = DesktopTitleBarText.CHOOSE_REPORT_OUTPUT,
                 onClick = {
                     expanded = false
                     onSelectReportOutput()
                 }
             )
             TitleBarDropdownItem(
-                text = "Exit",
+                text = DesktopTitleBarText.EXIT,
                 onClick = {
                     expanded = false
                     onExit()
@@ -194,7 +196,7 @@ private fun RulesTitleBarMenu(
 
     Box {
         TitleBarMenuButton(
-            text = "Rules",
+            text = DesktopTitleBarText.RULES,
             onClick = { expanded = true }
         )
         DropdownMenu(
@@ -202,7 +204,7 @@ private fun RulesTitleBarMenu(
             onDismissRequest = { expanded = false }
         ) {
             TitleBarDropdownItem(
-                text = if (rulesPanelVisible) "Hide rules" else "Show rules",
+                text = if (rulesPanelVisible) DesktopTitleBarText.HIDE_RULES else DesktopTitleBarText.SHOW_RULES,
                 onClick = {
                     expanded = false
                     onToggleRules()
@@ -221,7 +223,7 @@ private fun RunTitleBarMenu(
 
     Box {
         TitleBarMenuButton(
-            text = "Run",
+            text = DesktopTitleBarText.RUN,
             enabled = !isRunning,
             onClick = { expanded = true }
         )
@@ -230,7 +232,7 @@ private fun RunTitleBarMenu(
             onDismissRequest = { expanded = false }
         ) {
             TitleBarDropdownItem(
-                text = if (isRunning) "Running..." else "Run analysis",
+                text = if (isRunning) DesktopTitleBarText.RUNNING else DesktopTitleBarText.RUN_ANALYSIS,
                 enabled = !isRunning,
                 onClick = {
                     expanded = false

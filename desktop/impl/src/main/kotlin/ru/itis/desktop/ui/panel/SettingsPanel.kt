@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import ru.itis.desktop.analysis.DesktopAnalysisMode
 import ru.itis.desktop.analysis.RuntimeSnapshotSource
 import ru.itis.desktop.analysis.StaticSourceTarget
+import ru.itis.desktop.text.DesktopSettingsText
 import ru.itis.desktop.ui.component.Panel
 import ru.itis.desktop.ui.component.PathField
 import ru.itis.desktop.ui.component.SectionTitle
@@ -57,7 +58,7 @@ fun SettingsPanel(
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Text(
-                text = "UI Analyzer",
+                text = DesktopSettingsText.TITLE,
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface,
@@ -66,7 +67,7 @@ fun SettingsPanel(
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                text = "Desktop control panel",
+                text = DesktopSettingsText.SUBTITLE,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 1,
                 softWrap = false,
@@ -75,38 +76,38 @@ fun SettingsPanel(
 
             Spacer(modifier = Modifier.height(10.dp))
             PathField(
-                label = "Android project",
+                label = DesktopSettingsText.ANDROID_PROJECT,
                 value = projectPath,
                 onValueChange = onProjectPathChange,
                 onBrowse = onSelectProjectDirectory
             )
             PathField(
-                label = "Report output",
+                label = DesktopSettingsText.REPORT_OUTPUT,
                 value = outputPath,
                 onValueChange = onOutputPathChange,
                 onBrowse = onSelectReportOutputFile
             )
 
-            SectionTitle("Mode")
+            SectionTitle(DesktopSettingsText.MODE)
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 SelectableOptionCard(
-                    title = "Static",
-                    description = "Analyze XML and Compose sources.",
+                    title = DesktopSettingsText.STATIC_TITLE,
+                    description = DesktopSettingsText.STATIC_DESCRIPTION,
                     selected = mode == DesktopAnalysisMode.STATIC,
                     onClick = { onModeChange(DesktopAnalysisMode.STATIC) },
-                    iconText = "ST",
+                    iconText = DesktopSettingsText.STATIC_ICON,
                     modifier = Modifier.weight(1f),
                     minHeight = 132.dp
                 )
                 SelectableOptionCard(
-                    title = "Runtime",
-                    description = "Capture actual UI bounds from device.",
+                    title = DesktopSettingsText.RUNTIME_TITLE,
+                    description = DesktopSettingsText.RUNTIME_DESCRIPTION,
                     selected = mode == DesktopAnalysisMode.RUNTIME,
                     onClick = { onModeChange(DesktopAnalysisMode.RUNTIME) },
-                    iconText = "RT",
+                    iconText = DesktopSettingsText.RUNTIME_ICON,
                     modifier = Modifier.weight(1f),
                     minHeight = 132.dp
                 )
@@ -137,30 +138,30 @@ private fun StaticTargetOptions(
     staticTarget: StaticSourceTarget,
     onStaticTargetChange: (StaticSourceTarget) -> Unit
 ) {
-    SectionTitle("Source")
+    SectionTitle(DesktopSettingsText.SOURCE)
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         SelectableOptionCard(
-            title = "XML + Compose",
-            description = "Run both static rule sets.",
+            title = DesktopSettingsText.XML_COMPOSE_TITLE,
+            description = DesktopSettingsText.XML_COMPOSE_DESCRIPTION,
             selected = staticTarget == StaticSourceTarget.BOTH,
             onClick = { onStaticTargetChange(StaticSourceTarget.BOTH) },
-            iconText = "A"
+            iconText = DesktopSettingsText.XML_COMPOSE_ICON
         )
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             SelectableOptionCard(
-                title = "XML",
-                description = "Layout resources only.",
+                title = DesktopSettingsText.XML_TITLE,
+                description = DesktopSettingsText.XML_DESCRIPTION,
                 selected = staticTarget == StaticSourceTarget.XML,
                 onClick = { onStaticTargetChange(StaticSourceTarget.XML) },
-                iconText = "X",
+                iconText = DesktopSettingsText.XML_ICON,
                 modifier = Modifier.weight(1f)
             )
             SelectableOptionCard(
-                title = "Compose",
-                description = "Kotlin UI sources only.",
+                title = DesktopSettingsText.COMPOSE_TITLE,
+                description = DesktopSettingsText.COMPOSE_DESCRIPTION,
                 selected = staticTarget == StaticSourceTarget.COMPOSE,
                 onClick = { onStaticTargetChange(StaticSourceTarget.COMPOSE) },
-                iconText = "C",
+                iconText = DesktopSettingsText.COMPOSE_ICON,
                 modifier = Modifier.weight(1f)
             )
         }
@@ -177,23 +178,23 @@ private fun RuntimeSourceOptions(
     onAdbSerialChange: (String) -> Unit,
     onSelectRuntimeSnapshotFile: () -> Unit
 ) {
-    SectionTitle("Runtime snapshot")
+    SectionTitle(DesktopSettingsText.RUNTIME_SNAPSHOT)
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         SelectableOptionCard(
-            title = "ADB",
-            description = "Capture from emulator or device.",
+            title = DesktopSettingsText.ADB_TITLE,
+            description = DesktopSettingsText.ADB_DESCRIPTION,
             selected = runtimeSource == RuntimeSnapshotSource.ADB,
             onClick = { onRuntimeSourceChange(RuntimeSnapshotSource.ADB) },
-            iconText = "ADB",
+            iconText = DesktopSettingsText.ADB_ICON,
             modifier = Modifier.weight(1f),
             minHeight = 120.dp
         )
         SelectableOptionCard(
-            title = "File",
-            description = "Use saved runtime snapshot.",
+            title = DesktopSettingsText.FILE_TITLE,
+            description = DesktopSettingsText.FILE_DESCRIPTION,
             selected = runtimeSource == RuntimeSnapshotSource.SNAPSHOT_FILE,
             onClick = { onRuntimeSourceChange(RuntimeSnapshotSource.SNAPSHOT_FILE) },
-            iconText = "JS",
+            iconText = DesktopSettingsText.FILE_ICON,
             modifier = Modifier.weight(1f),
             minHeight = 120.dp
         )
@@ -202,13 +203,13 @@ private fun RuntimeSourceOptions(
         OutlinedTextField(
             value = adbSerial,
             onValueChange = onAdbSerialChange,
-            label = { Text("ADB serial, optional") },
+            label = { Text(DesktopSettingsText.ADB_SERIAL) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
     } else {
         PathField(
-            label = "Runtime snapshot file",
+            label = DesktopSettingsText.RUNTIME_SNAPSHOT_FILE,
             value = runtimeSnapshotPath,
             onValueChange = onRuntimeSnapshotPathChange,
             onBrowse = onSelectRuntimeSnapshotFile
