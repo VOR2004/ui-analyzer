@@ -11,7 +11,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,7 +20,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.itis.desktop.analysis.DesktopAnalysisMode
-import ru.itis.desktop.analysis.DesktopTheme
 import ru.itis.desktop.analysis.RuntimeSnapshotSource
 import ru.itis.desktop.analysis.StaticSourceTarget
 import ru.itis.desktop.ui.component.Panel
@@ -45,8 +43,6 @@ fun SettingsPanel(
     onRuntimeSnapshotPathChange: (String) -> Unit,
     adbSerial: String,
     onAdbSerialChange: (String) -> Unit,
-    theme: DesktopTheme,
-    onThemeChange: (DesktopTheme) -> Unit,
     onSelectProjectDirectory: () -> Unit,
     onSelectReportOutputFile: () -> Unit,
     onSelectRuntimeSnapshotFile: () -> Unit,
@@ -132,26 +128,6 @@ fun SettingsPanel(
                     onSelectRuntimeSnapshotFile = onSelectRuntimeSnapshotFile
                 )
             }
-        }
-
-        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = "Dark theme",
-                maxLines = 1,
-                softWrap = false,
-                overflow = TextOverflow.Ellipsis
-            )
-            Switch(
-                checked = theme == DesktopTheme.DARK,
-                onCheckedChange = { checked ->
-                    onThemeChange(if (checked) DesktopTheme.DARK else DesktopTheme.LIGHT)
-                }
-            )
         }
     }
 }

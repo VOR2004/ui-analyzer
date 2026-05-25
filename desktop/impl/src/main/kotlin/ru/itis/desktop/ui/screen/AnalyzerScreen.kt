@@ -26,10 +26,10 @@ import ru.itis.desktop.analysis.DesktopAnalysisMode
 import ru.itis.desktop.analysis.DesktopAnalysisRequest
 import ru.itis.desktop.analysis.DefaultDesktopAnalysisRunner
 import ru.itis.desktop.analysis.DefaultDesktopRuleRegistry
-import ru.itis.desktop.analysis.DesktopTheme
 import ru.itis.desktop.analysis.RuntimeSnapshotSource
 import ru.itis.desktop.analysis.StaticSourceTarget
 import ru.itis.desktop.dialog.FileKitDesktopFileDialog
+import ru.itis.desktop.ui.app.DesktopTitleBarActions
 import ru.itis.desktop.ui.component.ResizeHandle
 import ru.itis.desktop.ui.panel.RuleSelectionPanel
 import ru.itis.desktop.ui.panel.RunPanel
@@ -37,8 +37,7 @@ import ru.itis.desktop.ui.panel.SettingsPanel
 
 @Composable
 fun AnalyzerScreen(
-    theme: DesktopTheme,
-    onThemeChange: (DesktopTheme) -> Unit
+    onTitleBarActionsChange: (DesktopTitleBarActions) -> Unit
 ) {
     val ruleRegistry = remember { DefaultDesktopRuleRegistry() }
     val runner = remember { DefaultDesktopAnalysisRunner(ruleRegistry = ruleRegistry) }
@@ -64,6 +63,66 @@ fun AnalyzerScreen(
         selectedRuleIds = rules.map { rule -> rule.id }.toSet()
     }
 
+    fun selectProjectDirectory() {
+        coroutineScope.launch {
+            fileDialog.selectProjectDirectory()?.let { value -> projectPath = value }
+        }
+    }
+
+    fun selectReportOutputFile() {
+        coroutineScope.launch {
+            fileDialog.selectReportOutputFile()?.let { value -> outputPath = value }
+        }
+    }
+
+    fun selectRuntimeSnapshotFile() {
+        coroutineScope.launch {
+            fileDialog.selectRuntimeSnapshotFile()?.let { value -> runtimeSnapshotPath = value }
+        }
+    }
+
+    fun runAnalysis() {
+        if (isRunning) return
+
+        isRunning = true
+        status = "Analysis started..."
+        val request = DesktopAnalysisRequest(
+            projectPath = projectPath,
+            outputPath = outputPath.ifBlank { "analysis-report.json" },
+            mode = mode,
+            staticTarget = staticTarget,
+            runtimeSource = runtimeSource,
+            runtimeSnapshotPath = runtimeSnapshotPath,
+            adbSerial = adbSerial.takeIf { value -> value.isNotBlank() },
+            selectedRuleIds = selectedRuleIds
+        )
+        coroutineScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                runCatching { runner.run(request) }
+            }
+            status = result.fold(
+                onSuccess = { value ->
+                    "Done: components=${value.componentCount}, issues=${value.issueCount}, report=${value.outputPath}"
+                },
+                onFailure = { error -> "Error: ${error.message}" }
+            )
+            isRunning = false
+        }
+    }
+
+    LaunchedEffect(isRunning, rulesPanelVisible, projectPath, outputPath, mode, staticTarget, runtimeSource, runtimeSnapshotPath, adbSerial, selectedRuleIds) {
+        onTitleBarActionsChange(
+            DesktopTitleBarActions(
+                onOpenProject = ::selectProjectDirectory,
+                onSelectReportOutput = ::selectReportOutputFile,
+                onToggleRules = { rulesPanelVisible = !rulesPanelVisible },
+                onRunAnalysis = ::runAnalysis,
+                isRunning = isRunning,
+                rulesPanelVisible = rulesPanelVisible
+            )
+        )
+    }
+
     Row(
         modifier = Modifier
             .fillMaxSize()
@@ -86,23 +145,9 @@ fun AnalyzerScreen(
             onRuntimeSnapshotPathChange = { value -> runtimeSnapshotPath = value },
             adbSerial = adbSerial,
             onAdbSerialChange = { value -> adbSerial = value },
-            theme = theme,
-            onThemeChange = onThemeChange,
-            onSelectProjectDirectory = {
-                coroutineScope.launch {
-                    fileDialog.selectProjectDirectory()?.let { value -> projectPath = value }
-                }
-            },
-            onSelectReportOutputFile = {
-                coroutineScope.launch {
-                    fileDialog.selectReportOutputFile()?.let { value -> outputPath = value }
-                }
-            },
-            onSelectRuntimeSnapshotFile = {
-                coroutineScope.launch {
-                    fileDialog.selectRuntimeSnapshotFile()?.let { value -> runtimeSnapshotPath = value }
-                }
-            },
+            onSelectProjectDirectory = ::selectProjectDirectory,
+            onSelectReportOutputFile = ::selectReportOutputFile,
+            onSelectRuntimeSnapshotFile = ::selectRuntimeSnapshotFile,
             modifier = Modifier
                 .widthIn(min = 360.dp, max = 420.dp)
                 .width(390.dp)
@@ -123,32 +168,7 @@ fun AnalyzerScreen(
                 selectedRuleCount = selectedRuleIds.size,
                 totalRuleCount = rules.size,
                 onToggleRulesPanel = { rulesPanelVisible = !rulesPanelVisible },
-                onRun = {
-                    isRunning = true
-                    status = "Analysis started..."
-                    val request = DesktopAnalysisRequest(
-                        projectPath = projectPath,
-                        outputPath = outputPath.ifBlank { "analysis-report.json" },
-                        mode = mode,
-                        staticTarget = staticTarget,
-                        runtimeSource = runtimeSource,
-                        runtimeSnapshotPath = runtimeSnapshotPath,
-                        adbSerial = adbSerial.takeIf { value -> value.isNotBlank() },
-                        selectedRuleIds = selectedRuleIds
-                    )
-                    coroutineScope.launch {
-                        val result = withContext(Dispatchers.IO) {
-                            runCatching { runner.run(request) }
-                        }
-                        status = result.fold(
-                            onSuccess = { value ->
-                                "Done: components=${value.componentCount}, issues=${value.issueCount}, report=${value.outputPath}"
-                            },
-                            onFailure = { error -> "Error: ${error.message}" }
-                        )
-                        isRunning = false
-                    }
-                }
+                onRun = ::runAnalysis
             )
         }
 

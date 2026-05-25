@@ -25,7 +25,8 @@ import ru.itis.desktop.analysis.RuleDescriptor
 fun RuleRow(
     rule: RuleDescriptor,
     checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit
+    onCheckedChange: (Boolean) -> Unit,
+    showSource: Boolean = true
 ) {
     val containerColor = if (checked) {
         MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
@@ -63,7 +64,7 @@ fun RuleRow(
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = "${rule.source} - ${rule.kind}",
+                    text = if (showSource) "${rule.source} - ${rule.kind}" else rule.kind,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontSize = 12.sp,
                     maxLines = 1,
