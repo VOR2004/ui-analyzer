@@ -5,9 +5,9 @@ import ru.itis.compose.rules.ComposeRuleSet
 import ru.itis.xml.rules.XmlRuleSet
 import ru.itis.xml.source.resource.ResourceRepository
 
-object RuleCatalog {
+class DefaultDesktopRuleRegistry : DesktopRuleRegistry {
 
-    fun descriptors(
+    override fun descriptors(
         mode: DesktopAnalysisMode,
         staticTarget: StaticSourceTarget
     ): List<RuleDescriptor> {
@@ -35,13 +35,15 @@ object RuleCatalog {
     }
 
     private fun staticRuleDescriptors(staticTarget: StaticSourceTarget): List<RuleDescriptor> {
-        return buildStaticRules(ResourceRepository.empty(), staticTarget)
-            .map { rule ->
-                RuleDescriptor(
-                    id = rule.id,
-                    source = sourceLabel(rule),
-                    kind = "Static"
-                )
+        return buildStaticRuleGroups(ResourceRepository.empty(), staticTarget)
+            .flatMap { group ->
+                group.rules.map { rule ->
+                    RuleDescriptor(
+                        id = rule.id,
+                        source = group.source,
+                        kind = "Static rule"
+                    )
+                }
             }
     }
 
@@ -50,8 +52,8 @@ object RuleCatalog {
             .map { rule ->
                 RuleDescriptor(
                     id = rule.id,
-                    source = "Runtime",
-                    kind = "Runtime"
+                    source = "Device snapshot",
+                    kind = "Runtime rule"
                 )
             }
     }
@@ -60,22 +62,30 @@ object RuleCatalog {
         resourceRepository: ResourceRepository,
         staticTarget: StaticSourceTarget
     ): List<Rule> {
-        return when (staticTarget) {
-            StaticSourceTarget.XML -> XmlRuleSet.default(resourceRepository)
-            StaticSourceTarget.COMPOSE -> ComposeRuleSet.staticRules()
-            StaticSourceTarget.BOTH -> XmlRuleSet.default(resourceRepository) + ComposeRuleSet.staticRules()
-        }
+        return buildStaticRuleGroups(resourceRepository, staticTarget)
+            .flatMap { group -> group.rules }
     }
 
     private fun List<Rule>.filterSelected(selectedRuleIds: Set<String>): List<Rule> {
         return filter { rule -> rule.id in selectedRuleIds }
     }
 
-    private fun sourceLabel(rule: Rule): String {
-        return when {
-            rule.id.startsWith("xml-") -> "XML"
-            rule.id.startsWith("compose-") -> "Compose"
-            else -> "Static"
+    private fun buildStaticRuleGroups(
+        resourceRepository: ResourceRepository,
+        staticTarget: StaticSourceTarget
+    ): List<RuleGroup> {
+        return buildList {
+            if (staticTarget == StaticSourceTarget.XML || staticTarget == StaticSourceTarget.BOTH) {
+                add(RuleGroup(source = "XML", rules = XmlRuleSet.default(resourceRepository)))
+            }
+            if (staticTarget == StaticSourceTarget.COMPOSE || staticTarget == StaticSourceTarget.BOTH) {
+                add(RuleGroup(source = "Compose", rules = ComposeRuleSet.staticRules()))
+            }
         }
     }
+
+    private data class RuleGroup(
+        val source: String,
+        val rules: List<Rule>
+    )
 }

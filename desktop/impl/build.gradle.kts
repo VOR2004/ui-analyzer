@@ -14,6 +14,7 @@ fun unsafeAccessJvmArgs(): List<String> {
 }
 
 dependencies {
+    implementation(project(":desktop:desktop-api"))
     implementation(compose.desktop.currentOs)
     implementation("org.jetbrains.compose.material3:material3:1.9.0-beta03")
     implementation("io.github.vinceglb:filekit-dialogs-compose:0.14.1")

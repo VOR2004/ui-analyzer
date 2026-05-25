@@ -18,7 +18,7 @@ import ru.itis.xml.source.parser.XmlLayoutParser
 import ru.itis.xml.source.resource.DefaultResourceRepository
 import ru.itis.xml.source.resource.ResourceRepository
 
-class DesktopAnalysisRunner(
+class DefaultDesktopAnalysisRunner(
     private val xmlImporter: XmlProjectImporter = XmlProjectImporter(),
     private val xmlParser: XmlLayoutParser = XmlLayoutParser(),
     private val composeImporter: ComposeProjectImporter = ComposeProjectImporter(),
@@ -27,10 +27,11 @@ class DesktopAnalysisRunner(
     private val runtimeSnapshotImporter: ComposeRuntimeSnapshotImporter = ComposeRuntimeSnapshotImporter(),
     private val adbSnapshotProvider: AdbUiAutomatorSnapshotProvider = AdbUiAutomatorSnapshotProvider(),
     private val projectPackageResolver: AndroidProjectPackageResolver = AndroidProjectPackageResolver(),
-    private val reportGenerator: ReportGenerator = JsonReportGenerator()
-) {
+    private val reportGenerator: ReportGenerator = JsonReportGenerator(),
+    private val ruleRegistry: DefaultDesktopRuleRegistry = DefaultDesktopRuleRegistry()
+) : DesktopAnalysisRunner {
 
-    fun run(request: DesktopAnalysisRequest): DesktopAnalysisResult {
+    override fun run(request: DesktopAnalysisRequest): DesktopAnalysisResult {
         require(request.selectedRuleIds.isNotEmpty()) { "Select at least one rule before analysis." }
 
         val projectRoot = File(request.projectPath)
@@ -102,7 +103,7 @@ class DesktopAnalysisRunner(
             }
         }
         val expectedPackageName = projectPackageResolver.resolve(projectRoot)
-        val rules = RuleCatalog.runtimeRules(expectedPackageName, request.selectedRuleIds)
+        val rules = ruleRegistry.runtimeRules(expectedPackageName, request.selectedRuleIds)
         val issues = Analyzer(rules = rules).analyze(runtimeComponents)
 
         reportGenerator.writeReport(outputFile, runtimeComponents, issues)
@@ -119,7 +120,7 @@ class DesktopAnalysisRunner(
         composeFunctions: List<ComposeFunction>,
         request: DesktopAnalysisRequest
     ): List<AnalysisIssue> {
-        val rules = RuleCatalog.staticRules(
+        val rules = ruleRegistry.staticRules(
             resourceRepository = resourceRepository,
             staticTarget = request.staticTarget,
             selectedRuleIds = request.selectedRuleIds

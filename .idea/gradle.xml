@@ -23,6 +23,8 @@
             <option value="$PROJECT_DIR$/core/api" />
             <option value="$PROJECT_DIR$/core/utils" />
             <option value="$PROJECT_DIR$/desktop" />
+            <option value="$PROJECT_DIR$/desktop/api" />
+            <option value="$PROJECT_DIR$/desktop/impl" />
             <option value="$PROJECT_DIR$/report" />
             <option value="$PROJECT_DIR$/report/api" />
             <option value="$PROJECT_DIR$/report/impl" />

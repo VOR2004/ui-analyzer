@@ -16,7 +16,8 @@ include(":android:impl")
 include(":report:api")
 include(":report:impl")
 include(":cli")
-include(":desktop")
+include(":desktop:api")
+include(":desktop:impl")
 
 project(":core:api").name = "core-api"
 project(":core:utils").name = "core-utils"
@@ -30,3 +31,5 @@ project(":android:api").name = "android-api"
 project(":android:impl").name = "android-impl"
 project(":report:api").name = "report-api"
 project(":report:impl").name = "report-impl"
+project(":desktop:api").name = "desktop-api"
+project(":desktop:impl").name = "desktop-impl"

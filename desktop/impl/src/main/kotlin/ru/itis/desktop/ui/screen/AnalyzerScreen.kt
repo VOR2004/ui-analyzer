@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -23,12 +24,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.itis.desktop.analysis.DesktopAnalysisMode
 import ru.itis.desktop.analysis.DesktopAnalysisRequest
-import ru.itis.desktop.analysis.DesktopAnalysisRunner
+import ru.itis.desktop.analysis.DefaultDesktopAnalysisRunner
+import ru.itis.desktop.analysis.DefaultDesktopRuleRegistry
 import ru.itis.desktop.analysis.DesktopTheme
-import ru.itis.desktop.analysis.RuleCatalog
 import ru.itis.desktop.analysis.RuntimeSnapshotSource
 import ru.itis.desktop.analysis.StaticSourceTarget
 import ru.itis.desktop.dialog.FileKitDesktopFileDialog
+import ru.itis.desktop.ui.component.ResizeHandle
 import ru.itis.desktop.ui.panel.RuleSelectionPanel
 import ru.itis.desktop.ui.panel.RunPanel
 import ru.itis.desktop.ui.panel.SettingsPanel
@@ -38,7 +40,8 @@ fun AnalyzerScreen(
     theme: DesktopTheme,
     onThemeChange: (DesktopTheme) -> Unit
 ) {
-    val runner = remember { DesktopAnalysisRunner() }
+    val ruleRegistry = remember { DefaultDesktopRuleRegistry() }
+    val runner = remember { DefaultDesktopAnalysisRunner(ruleRegistry = ruleRegistry) }
     val fileDialog = remember { FileKitDesktopFileDialog() }
     val coroutineScope = rememberCoroutineScope()
 
@@ -52,8 +55,10 @@ fun AnalyzerScreen(
     var selectedRuleIds by remember { mutableStateOf(emptySet<String>()) }
     var status by remember { mutableStateOf("Ready for analysis.") }
     var isRunning by remember { mutableStateOf(false) }
+    var rulesPanelVisible by remember { mutableStateOf(true) }
+    var rulesPanelWidth by remember { mutableStateOf(460.dp) }
 
-    val rules = RuleCatalog.descriptors(mode, staticTarget)
+    val rules = ruleRegistry.descriptors(mode, staticTarget)
 
     LaunchedEffect(mode, staticTarget) {
         selectedRuleIds = rules.map { rule -> rule.id }.toSet()
@@ -99,6 +104,7 @@ fun AnalyzerScreen(
                 }
             },
             modifier = Modifier
+                .widthIn(min = 360.dp, max = 420.dp)
                 .width(390.dp)
                 .fillMaxHeight()
         )
@@ -106,18 +112,17 @@ fun AnalyzerScreen(
         Column(
             modifier = Modifier
                 .weight(1f)
+                .widthIn(min = 360.dp)
                 .fillMaxHeight(),
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            RuleSelectionPanel(
-                rules = rules,
-                selectedRuleIds = selectedRuleIds,
-                onSelectedRuleIdsChange = { value -> selectedRuleIds = value },
-                modifier = Modifier.weight(1f)
-            )
             RunPanel(
                 status = status,
                 isRunning = isRunning,
+                rulesPanelVisible = rulesPanelVisible,
+                selectedRuleCount = selectedRuleIds.size,
+                totalRuleCount = rules.size,
+                onToggleRulesPanel = { rulesPanelVisible = !rulesPanelVisible },
                 onRun = {
                     isRunning = true
                     status = "Analysis started..."
@@ -144,6 +149,24 @@ fun AnalyzerScreen(
                         isRunning = false
                     }
                 }
+            )
+        }
+
+        if (rulesPanelVisible) {
+            ResizeHandle(
+                onDrag = { amount ->
+                    rulesPanelWidth = (rulesPanelWidth - amount.dp).coerceIn(380.dp, 680.dp)
+                }
+            )
+            RuleSelectionPanel(
+                rules = rules,
+                selectedRuleIds = selectedRuleIds,
+                onSelectedRuleIdsChange = { value -> selectedRuleIds = value },
+                onHide = { rulesPanelVisible = false },
+                modifier = Modifier
+                    .widthIn(min = 380.dp)
+                    .width(rulesPanelWidth)
+                    .fillMaxHeight()
             )
         }
     }
