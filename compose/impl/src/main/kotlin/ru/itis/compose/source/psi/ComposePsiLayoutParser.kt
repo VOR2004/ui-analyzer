@@ -7,6 +7,8 @@ import ru.itis.compose.source.legacy.parser.ComposeLayoutParser
 import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 import ru.itis.model.UiProperties
+import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtNamedFunction
 
 class ComposePsiLayoutParser(
     private val fallbackParser: ComposeLayoutParser = ComposeLayoutParser()
@@ -17,19 +19,29 @@ class ComposePsiLayoutParser(
 
     fun parse(file: File): List<UiComponent> {
         return runCatching {
+            val source = file.readText()
             val ktFile = ComposePsiEnvironment.createKtFile(
                 fileName = file.name,
-                source = file.readText()
+                source = source
             )
+            val namedFunctionContainers = callExtractor.namedFunctionContainers(ktFile)
+            val sourceFunctionContainers = findSourceFunctionContainers(source)
 
-            callExtractor.extract(ktFile).mapIndexed { index, call ->
-                val functionName = callExtractor.nearestComposableFunctionName(call)
-                buildComponent(
-                    call = call,
-                    filePath = file.absolutePath,
-                    parentPath = functionName?.let { name -> "/$name" }.orEmpty(),
-                    siblingIndex = index
-                )
+            callExtractor.extractComposableFunctions(ktFile).flatMap { function ->
+                val functionName = function.name.orEmpty()
+                val calls = callExtractor.extractComposeCalls(function)
+                callExtractor.rootCalls(calls).mapIndexed { index, call ->
+                    buildComponent(
+                        call = call,
+                        filePath = file.absolutePath,
+                        parentPath = functionName.takeIf { name -> name.isNotBlank() }?.let { name -> "/$name" }.orEmpty(),
+                        siblingIndex = index,
+                        composeFunctionName = functionName.takeIf { name -> name.isNotBlank() },
+                        composeCalls = calls,
+                        namedFunctionContainers = namedFunctionContainers,
+                        sourceFunctionContainers = sourceFunctionContainers
+                    )
+                }
             }
         }.getOrElse {
             fallbackParser.parse(file)
@@ -37,24 +49,41 @@ class ComposePsiLayoutParser(
     }
 
     private fun buildComponent(
-        call: org.jetbrains.kotlin.psi.KtCallExpression,
+        call: KtCallExpression,
         filePath: String,
         parentPath: String,
-        siblingIndex: Int
+        siblingIndex: Int,
+        composeFunctionName: String?,
+        composeCalls: List<KtCallExpression>,
+        namedFunctionContainers: List<KtNamedFunction>,
+        sourceFunctionContainers: List<SourceFunctionContainer>
     ): UiComponent {
         val type = requireNotNull(callExtractor.run { call.composeNameOrNull() })
+        val effectiveComposeFunctionName = composeFunctionName
+            ?: nearestSourceFunctionContainer(call, sourceFunctionContainers)?.name
+            ?: callExtractor.nearestNamedFunctionName(call)
+            ?: nearestNamedFunctionContainer(call, namedFunctionContainers)?.name
+        val effectiveParentPath = if (parentPath.isBlank() && effectiveComposeFunctionName != null) {
+            "/$effectiveComposeFunctionName"
+        } else {
+            parentPath
+        }
         val rawArguments = argumentExtractor.extract(call)
         val resolvedArguments = rawArguments.mapValues { (_, value) ->
             localValueResolver.resolveSimpleValue(call, value) ?: value
         }
-        val treePath = "$parentPath/$type[$siblingIndex]"
+        val treePath = "$effectiveParentPath/$type[$siblingIndex]"
 
-        val children = callExtractor.extractDirectChildren(call).mapIndexed { index, child ->
+        val children = callExtractor.directChildren(call, composeCalls).mapIndexed { index, child ->
             buildComponent(
                 call = child,
                 filePath = filePath,
                 parentPath = treePath,
-                siblingIndex = index
+                siblingIndex = index,
+                composeFunctionName = effectiveComposeFunctionName,
+                composeCalls = composeCalls,
+                namedFunctionContainers = namedFunctionContainers,
+                sourceFunctionContainers = sourceFunctionContainers
             )
         }
 
@@ -64,9 +93,53 @@ class ComposePsiLayoutParser(
             sourceType = SourceType.COMPOSE,
             filePath = filePath,
             treePath = treePath,
-            properties = buildProperties(type, resolvedArguments, callExtractor.nearestComposableFunctionName(call)),
+            properties = buildProperties(type, resolvedArguments, effectiveComposeFunctionName),
             children = children
         )
+    }
+
+    private fun nearestNamedFunctionContainer(
+        call: KtCallExpression,
+        namedFunctionContainers: List<KtNamedFunction>
+    ): KtNamedFunction? {
+        return namedFunctionContainers
+            .asSequence()
+            .filter { function ->
+                function.textRange.startOffset <= call.textRange.startOffset &&
+                    function.textRange.endOffset >= call.textRange.endOffset
+            }
+            .minByOrNull { function -> function.textRange.length }
+    }
+
+    private fun nearestSourceFunctionContainer(
+        call: KtCallExpression,
+        sourceFunctionContainers: List<SourceFunctionContainer>
+    ): SourceFunctionContainer? {
+        return sourceFunctionContainers
+            .asSequence()
+            .filter { function ->
+                function.startOffset <= call.textRange.startOffset &&
+                    function.endOffset >= call.textRange.endOffset
+            }
+            .minByOrNull { function -> function.endOffset - function.startOffset }
+    }
+
+    private fun findSourceFunctionContainers(source: String): List<SourceFunctionContainer> {
+        return FUNCTION_DECLARATION_PATTERN.findAll(source)
+            .mapNotNull { match ->
+                val openBrace = source.indexOf('{', startIndex = match.range.last + 1)
+                    .takeIf { index -> index >= 0 }
+                    ?: return@mapNotNull null
+                val closeBrace = SourceTextUtils.findMatchingDelimiter(source, openBrace, '{', '}')
+                    ?: return@mapNotNull null
+
+                SourceFunctionContainer(
+                    name = match.groupValues[1],
+                    startOffset = match.range.first,
+                    endOffset = closeBrace
+                )
+            }
+            .toList()
     }
 
     private fun buildProperties(
@@ -284,5 +357,12 @@ class ComposePsiLayoutParser(
         const val NAMED_ARGUMENT_SEPARATOR = '='
 
         val DIMENSION_PATTERN = Regex("""\d+(?:\.\d+)?\.(?:dp|sp)""")
+        val FUNCTION_DECLARATION_PATTERN = Regex("""\bfun\s+(?:[A-Za-z_][\w]*\.)*([A-Za-z_][\w]*)\s*\(""")
     }
+
+    private data class SourceFunctionContainer(
+        val name: String,
+        val startOffset: Int,
+        val endOffset: Int
+    )
 }

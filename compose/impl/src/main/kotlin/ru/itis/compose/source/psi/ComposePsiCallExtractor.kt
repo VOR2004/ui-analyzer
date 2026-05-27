@@ -12,27 +12,44 @@ import ru.itis.analyzer.config.components.ComponentTypes
 internal class ComposePsiCallExtractor {
 
     fun extract(file: KtFile): List<KtCallExpression> {
-        return file.collectDescendantsOfType<KtCallExpression>()
-            .filter { call -> call.composeNameOrNull() != null }
-            .filter { call -> call.isInsideComposableFunction() }
-            .filter { call -> call.nearestComposeCallAncestor() == null }
+        return extractComposableFunctions(file)
+            .flatMap { function -> rootCalls(extractComposeCalls(function)) }
     }
 
-    fun extractDirectChildren(call: KtCallExpression): List<KtCallExpression> {
-        val lambdaBodies = call.lambdaArguments.mapNotNull { argument ->
-            argument.getLambdaExpression()?.bodyExpression
-        }
+    fun extractComposableFunctions(file: KtFile): List<KtNamedFunction> {
+        return file.collectDescendantsOfType<KtNamedFunction>()
+            .filter { function -> function.isComposableFunction() }
+    }
 
-        return lambdaBodies.flatMap { body ->
-            body.collectDescendantsOfType<KtCallExpression>()
-                .filter { child -> child.composeNameOrNull() != null }
-                .filter { child -> child.isInsideComposableFunction() }
-                .filter { child -> child.nearestComposeCallAncestor() == call }
+    fun namedFunctionContainers(file: KtFile): List<KtNamedFunction> {
+        return file.collectDescendantsOfType<KtNamedFunction>()
+            .filter { function -> !function.name.isNullOrBlank() }
+    }
+
+    fun extractComposeCalls(function: KtNamedFunction): List<KtCallExpression> {
+        return function.collectDescendantsOfType<KtCallExpression>()
+            .filter { call -> call.composeNameOrNull() != null }
+    }
+
+    fun rootCalls(calls: List<KtCallExpression>): List<KtCallExpression> {
+        return calls.filter { call -> nearestComposeCallContainer(call, calls) == null }
+    }
+
+    fun directChildren(
+        call: KtCallExpression,
+        calls: List<KtCallExpression>
+    ): List<KtCallExpression> {
+        return calls.filter { child ->
+            child != call && nearestComposeCallContainer(child, calls) == call
         }
     }
 
     fun nearestComposableFunctionName(call: KtCallExpression): String? {
         return call.nearestComposableFunction()?.name
+    }
+
+    fun nearestNamedFunctionName(call: KtCallExpression): String? {
+        return call.nearestNamedFunction()?.name?.takeIf { name -> name.isNotBlank() }
     }
 
     fun KtCallExpression.composeNameOrNull(): String? {
@@ -52,6 +69,17 @@ internal class ComposePsiCallExtractor {
         var current = parent
         while (current != null) {
             if (current is KtNamedFunction && current.isComposableFunction()) {
+                return current
+            }
+            current = current.parent
+        }
+        return null
+    }
+
+    private fun PsiElement.nearestNamedFunction(): KtNamedFunction? {
+        var current = parent
+        while (current != null) {
+            if (current is KtNamedFunction && !current.name.isNullOrBlank()) {
                 return current
             }
             current = current.parent
@@ -85,6 +113,25 @@ internal class ComposePsiCallExtractor {
             current = current.parent
         }
         return null
+    }
+
+    private fun nearestComposeCallContainer(
+        call: KtCallExpression,
+        calls: List<KtCallExpression>
+    ): KtCallExpression? {
+        return calls
+            .asSequence()
+            .filter { candidate -> candidate != call }
+            .filter { candidate -> candidate.textRange.containsRange(call.textRange) }
+            .minByOrNull { candidate -> candidate.textRange.length }
+            ?: call.nearestComposeCallAncestor()
+                ?.takeIf { ancestor -> ancestor in calls }
+    }
+
+    private fun org.jetbrains.kotlin.com.intellij.openapi.util.TextRange.containsRange(
+        other: org.jetbrains.kotlin.com.intellij.openapi.util.TextRange
+    ): Boolean {
+        return startOffset <= other.startOffset && endOffset >= other.endOffset
     }
 
     private companion object {

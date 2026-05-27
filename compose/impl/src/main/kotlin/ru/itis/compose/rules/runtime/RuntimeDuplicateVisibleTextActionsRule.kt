@@ -4,6 +4,7 @@ import ru.itis.analyzer.messages.rules.RuleIds
 
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.utils.ComponentUtils
+import ru.itis.compose.runtime.formatter.ComposeRuntimeComponentFormatter
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.Severity
 import ru.itis.model.SourceType
@@ -57,15 +58,24 @@ class RuntimeDuplicateVisibleTextActionsRule : Rule {
     }
 
     private fun UiComponent.accessibleLabel(): String? {
-        return properties.contentDescription
-            ?: properties.text
-            ?: descendantsText().takeIf { text -> text.isNotBlank() }
+        return properties.contentDescription?.cleanRuntimeText()
+            ?: properties.text?.cleanRuntimeText()
+            ?: descendantsText().cleanRuntimeText()
     }
 
     private fun UiComponent.descendantsText(): String {
         return children
-            .flatMap { child -> listOfNotNull(child.properties.text) + child.descendantsText().takeIf { it.isNotBlank() } }
+            .flatMap { child ->
+                listOfNotNull(child.properties.text?.cleanRuntimeText()) +
+                    listOfNotNull(child.descendantsText().cleanRuntimeText())
+            }
             .joinToString(separator = " ")
+    }
+
+    private fun String.cleanRuntimeText(): String? {
+        return trim()
+            .takeIf { value -> value.isNotBlank() }
+            ?.takeUnless { value -> value.equals(NULL_TEXT, ignoreCase = true) }
     }
 
     private fun String.normalizeLabel(): String {
@@ -73,11 +83,7 @@ class RuntimeDuplicateVisibleTextActionsRule : Rule {
     }
 
     private fun UiComponent.describe(): String {
-        return listOfNotNull(
-            type,
-            id?.let { id -> "id=$id" },
-            treePath?.let { path -> "path=$path" }
-        ).joinToString(prefix = "[", postfix = "]")
+        return ComposeRuntimeComponentFormatter.describe(this)
     }
 
     private data class RuntimeActionLabel(
@@ -89,9 +95,9 @@ class RuntimeDuplicateVisibleTextActionsRule : Rule {
         const val MIN_DUPLICATE_COUNT = 2
         const val MIN_LABEL_LENGTH = 2
         const val MAX_EXAMPLES = 3
+        const val NULL_TEXT = "null"
         val WHITESPACE_REGEX = Regex("\\s+")
         val runtimeSourceTypes = setOf(SourceType.COMPOSE_RUNTIME, SourceType.ANDROID_RUNTIME)
     }
 }
-
 
