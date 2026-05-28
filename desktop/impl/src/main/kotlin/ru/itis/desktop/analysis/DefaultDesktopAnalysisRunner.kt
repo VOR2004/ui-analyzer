@@ -4,6 +4,7 @@ import java.io.File
 import ru.itis.analyzer.Analyzer
 import ru.itis.android.project.AndroidProjectPackageResolver
 import ru.itis.android.runtime.adb.provider.AdbUiAutomatorSnapshotProvider
+import ru.itis.compose.runtime.RuntimePackageGuard
 import ru.itis.compose.runtime.importer.ComposeRuntimeSnapshotImporter
 import ru.itis.compose.source.importer.ComposeProjectImporter
 import ru.itis.compose.source.model.ComposeFunction
@@ -11,6 +12,7 @@ import ru.itis.compose.source.parser.ComposeFunctionParser
 import ru.itis.compose.source.psi.ComposePsiLayoutParser
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.UiComponent
+import ru.itis.report.AnalysisReportBuilder
 import ru.itis.report.AutoReportGenerator
 import ru.itis.report.ReportGenerator
 import ru.itis.desktop.text.DesktopAnalysisText
@@ -28,6 +30,7 @@ class DefaultDesktopAnalysisRunner(
     private val runtimeSnapshotImporter: ComposeRuntimeSnapshotImporter = ComposeRuntimeSnapshotImporter(),
     private val adbSnapshotProvider: AdbUiAutomatorSnapshotProvider = AdbUiAutomatorSnapshotProvider(),
     private val projectPackageResolver: AndroidProjectPackageResolver = AndroidProjectPackageResolver(),
+    private val reportBuilder: AnalysisReportBuilder = AnalysisReportBuilder(),
     private val reportGenerator: ReportGenerator = AutoReportGenerator(),
     private val ruleRegistry: DefaultDesktopRuleRegistry = DefaultDesktopRuleRegistry()
 ) : DesktopAnalysisRunner {
@@ -79,12 +82,14 @@ class DefaultDesktopAnalysisRunner(
             composeFunctions = composeFunctions,
             request = request
         )
+        val report = reportBuilder.build(components, issues)
 
-        reportGenerator.writeReport(outputFile, components, issues)
+        reportGenerator.writeReport(outputFile, components, report.issues)
         return DesktopAnalysisResult(
-            componentCount = components.sumOf(::countComponents),
-            issueCount = issues.size,
-            outputPath = outputFile.path
+            componentCount = report.summary.totalComponents,
+            issueCount = report.summary.totalIssues,
+            outputPath = outputFile.path,
+            issues = report.issues
         )
     }
 
@@ -104,14 +109,20 @@ class DefaultDesktopAnalysisRunner(
             }
         }
         val expectedPackageName = projectPackageResolver.resolve(projectRoot)
-        val rules = ruleRegistry.runtimeRules(expectedPackageName, request.selectedRuleIds)
+        val rules = if (RuntimePackageGuard.hasPackageMismatch(runtimeComponents, expectedPackageName)) {
+            ruleRegistry.runtimeDiagnosticRules(expectedPackageName, request.selectedRuleIds)
+        } else {
+            ruleRegistry.runtimeRules(expectedPackageName, request.selectedRuleIds)
+        }
         val issues = Analyzer(rules = rules).analyze(runtimeComponents)
+        val report = reportBuilder.build(runtimeComponents, issues)
 
-        reportGenerator.writeReport(outputFile, runtimeComponents, issues)
+        reportGenerator.writeReport(outputFile, runtimeComponents, report.issues)
         return DesktopAnalysisResult(
-            componentCount = runtimeComponents.sumOf(::countComponents),
-            issueCount = issues.size,
-            outputPath = outputFile.path
+            componentCount = report.summary.totalComponents,
+            issueCount = report.summary.totalIssues,
+            outputPath = outputFile.path,
+            issues = report.issues
         )
     }
 

@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     implementation(kotlin("stdlib"))
+    implementation(project(":core:core-api"))
 }
 
 kotlin {

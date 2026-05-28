@@ -6,6 +6,7 @@ import ru.itis.analyzer.messages.cli.CliMessages
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.android.project.AndroidProjectPackageResolver
 import ru.itis.android.runtime.adb.provider.AdbUiAutomatorSnapshotProvider
+import ru.itis.compose.runtime.RuntimePackageGuard
 import ru.itis.compose.runtime.importer.ComposeRuntimeSnapshotImporter
 import ru.itis.compose.rules.ComposeRuleSet
 import ru.itis.model.AnalysisIssue
@@ -171,7 +172,12 @@ private fun analyzeByRuleMode(
     }
 
     val runtimeIssues = if (ruleMode.includesRuntime) {
-        Analyzer(rules = ComposeRuleSet.runtimeRules(expectedPackageName)).analyze(runtimeComponents)
+        val runtimeRules = if (RuntimePackageGuard.hasPackageMismatch(runtimeComponents, expectedPackageName)) {
+            ComposeRuleSet.runtimeDiagnosticRules(expectedPackageName)
+        } else {
+            ComposeRuleSet.runtimeRules(expectedPackageName)
+        }
+        Analyzer(rules = runtimeRules).analyze(runtimeComponents)
     } else {
         emptyList()
     }

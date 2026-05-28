@@ -1,6 +1,7 @@
 package ru.itis.model
 
 object RuntimeAttributes {
+    const val PACKAGE = "package"
     const val SCREEN = "runtime:screen"
     const val STATE = "runtime:state"
     const val LOCATOR = "runtime:locator"

@@ -5,6 +5,7 @@ import ru.itis.analyzer.messages.rules.RuleIds
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.analyzer.utils.ComponentUtils
 import ru.itis.model.AnalysisIssue
+import ru.itis.model.RuntimeAttributes
 import ru.itis.model.Severity
 import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
@@ -28,7 +29,7 @@ class RuntimeSystemAppSnapshotWarningRule(
         expectedPackage: String
     ): AnalysisIssue? {
         val packageCounts = ComponentUtils.flatten(root)
-            .mapNotNull { component -> component.properties.rawAttributes[PACKAGE_ATTRIBUTE] }
+            .mapNotNull { component -> component.properties.rawAttributes[RuntimeAttributes.PACKAGE] }
             .filter { packageName -> packageName.isNotBlank() }
             .groupingBy { packageName -> packageName }
             .eachCount()
@@ -54,7 +55,6 @@ class RuntimeSystemAppSnapshotWarningRule(
     }
 
     private companion object {
-        const val PACKAGE_ATTRIBUTE = "package"
         val runtimeSourceTypes = setOf(SourceType.COMPOSE_RUNTIME, SourceType.ANDROID_RUNTIME)
     }
 }

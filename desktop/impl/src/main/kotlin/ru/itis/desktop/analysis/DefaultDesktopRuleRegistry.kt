@@ -1,5 +1,6 @@
 package ru.itis.desktop.analysis
 
+import ru.itis.analyzer.messages.rules.RuleIds
 import ru.itis.analyzer.rules.base.Rule
 import ru.itis.compose.rules.ComposeRuleSet
 import ru.itis.desktop.text.DesktopRuleText
@@ -33,6 +34,19 @@ class DefaultDesktopRuleRegistry : DesktopRuleRegistry {
     ): List<Rule> {
         return ComposeRuleSet.runtimeRules(expectedPackageName)
             .filterSelected(selectedRuleIds)
+    }
+
+    fun runtimeDiagnosticRules(
+        expectedPackageName: String?,
+        selectedRuleIds: Set<String>
+    ): List<Rule> {
+        val diagnosticRules = ComposeRuleSet.runtimeDiagnosticRules(expectedPackageName)
+        val selectedRules = diagnosticRules
+            .filterSelected(selectedRuleIds)
+        val packageWarningRule = diagnosticRules
+            .first { rule -> rule.id == RuleIds.RUNTIME_SYSTEM_APP_SNAPSHOT_WARNING }
+
+        return (selectedRules + packageWarningRule).distinctBy { rule -> rule.id }
     }
 
     private fun staticRuleDescriptors(staticTarget: StaticSourceTarget): List<RuleDescriptor> {

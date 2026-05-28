@@ -108,3 +108,42 @@ fun CollapseIcon(
         )
     }
 }
+
+@Composable
+fun FilterIcon(
+    color: Color,
+    modifier: Modifier = Modifier
+) {
+    Canvas(modifier = modifier.size(18.dp)) {
+        val stroke = Stroke(width = 1.8.dp.toPx(), cap = StrokeCap.Round)
+        val top = 4.dp.toPx()
+        val left = 4.dp.toPx()
+        val right = size.width - 4.dp.toPx()
+        val middleY = 8.dp.toPx()
+        val stemTop = 10.dp.toPx()
+        val stemBottom = 14.dp.toPx()
+        val centerX = size.width / 2f
+
+        drawLine(
+            color = color,
+            start = Offset(left, top),
+            end = Offset(right, top),
+            strokeWidth = stroke.width,
+            cap = StrokeCap.Round
+        )
+        drawLine(
+            color = color,
+            start = Offset(left + 2.dp.toPx(), middleY),
+            end = Offset(right - 2.dp.toPx(), middleY),
+            strokeWidth = stroke.width,
+            cap = StrokeCap.Round
+        )
+        drawLine(
+            color = color,
+            start = Offset(centerX, stemTop),
+            end = Offset(centerX, stemBottom),
+            strokeWidth = stroke.width,
+            cap = StrokeCap.Round
+        )
+    }
+}

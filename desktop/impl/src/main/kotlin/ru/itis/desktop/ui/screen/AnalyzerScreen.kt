@@ -24,6 +24,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.itis.desktop.analysis.DesktopAnalysisMode
 import ru.itis.desktop.analysis.DesktopAnalysisRequest
+import ru.itis.desktop.analysis.DesktopAnalysisResult
 import ru.itis.desktop.analysis.DefaultDesktopAnalysisRunner
 import ru.itis.desktop.analysis.DefaultDesktopRuleRegistry
 import ru.itis.desktop.analysis.RuntimeSnapshotSource
@@ -55,6 +56,7 @@ fun AnalyzerScreen(
     var adbSerial by remember { mutableStateOf(DesktopAppText.EMPTY_VALUE) }
     var selectedRuleIds by remember { mutableStateOf(emptySet<String>()) }
     var status by remember { mutableStateOf(DesktopAnalysisText.READY_STATUS) }
+    var analysisResult by remember { mutableStateOf<DesktopAnalysisResult?>(null) }
     var isRunning by remember { mutableStateOf(false) }
     var rulesPanelVisible by remember { mutableStateOf(true) }
     var rulesPanelWidth by remember { mutableStateOf(460.dp) }
@@ -87,6 +89,7 @@ fun AnalyzerScreen(
         if (isRunning) return
 
         isRunning = true
+        analysisResult = null
         status = DesktopAnalysisText.STARTED_STATUS
         val request = DesktopAnalysisRequest(
             projectPath = projectPath,
@@ -103,7 +106,10 @@ fun AnalyzerScreen(
                 runCatching { runner.run(request) }
             }
             status = result.fold(
-                onSuccess = { value -> DesktopAnalysisText.success(value) },
+                onSuccess = { value ->
+                    analysisResult = value
+                    DesktopAnalysisText.success(value)
+                },
                 onFailure = { error -> DesktopAnalysisText.failure(error) }
             )
             isRunning = false
@@ -167,6 +173,7 @@ fun AnalyzerScreen(
                 rulesPanelVisible = rulesPanelVisible,
                 selectedRuleCount = selectedRuleIds.size,
                 totalRuleCount = rules.size,
+                analysisResult = analysisResult,
                 onToggleRulesPanel = { rulesPanelVisible = !rulesPanelVisible },
                 onRun = ::runAnalysis
             )

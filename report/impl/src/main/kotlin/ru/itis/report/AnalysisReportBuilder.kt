@@ -1,9 +1,10 @@
 package ru.itis.report
 
 import ru.itis.model.AnalysisIssue
+import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 
-internal class AnalysisReportBuilder {
+class AnalysisReportBuilder {
 
     fun build(
         components: List<UiComponent>,
@@ -30,20 +31,29 @@ internal class AnalysisReportBuilder {
         val issueCounters = mutableMapOf<IssueMatchKey, Int>()
 
         return issues.map { issue ->
-            if (issue.componentLocator != null) {
-                issue
-            } else {
-                val component = findComponentForIssue(componentsByKey, issue, issueCounters)
-                issue.copy(componentLocator = component?.let { buildComponentLocator(it) })
+            val component = findComponentForIssue(
+                flattenedComponents = flattenedComponents,
+                componentsByKey = componentsByKey,
+                issue = issue,
+                issueCounters = issueCounters
+            )
+            val locator = when {
+                issue.componentLocator == null -> component?.let { buildComponentLocator(it) }
+                component?.sourceType == SourceType.COMPOSE -> buildComponentLocator(component)
+                else -> issue.componentLocator
             }
+            issue.copy(componentLocator = locator)
         }
     }
 
     private fun findComponentForIssue(
+        flattenedComponents: List<UiComponent>,
         componentsByKey: Map<ComponentMatchKey, List<UiComponent>>,
         issue: AnalysisIssue,
         issueCounters: MutableMap<IssueMatchKey, Int>
     ): UiComponent? {
+        findComponentByLocatorPath(flattenedComponents, issue)?.let { component -> return component }
+
         val issueKey = issue.matchKey()
         val componentCandidates = componentsByKey[issueKey.componentKey].orEmpty()
         if (componentCandidates.isEmpty()) return null
@@ -52,6 +62,19 @@ internal class AnalysisReportBuilder {
         issueCounters[issueKey] = index + 1
 
         return componentCandidates.getOrElse(index) { componentCandidates.last() }
+    }
+
+    private fun findComponentByLocatorPath(
+        flattenedComponents: List<UiComponent>,
+        issue: AnalysisIssue
+    ): UiComponent? {
+        val path = issue.componentLocator?.extractLocatorDetail(PATH_LOCATOR_KEY) ?: return null
+
+        return flattenedComponents.firstOrNull { component ->
+            component.filePath == issue.filePath &&
+                component.type == issue.componentType &&
+                component.treePath == path
+        }
     }
 
     private fun buildComponentLocator(component: UiComponent): String {
@@ -127,5 +150,16 @@ internal class AnalysisReportBuilder {
         const val VISUAL_SOURCE_ATTRIBUTE = "visualSource"
         const val IMAGE_VECTOR_ATTRIBUTE = "imageVector"
         const val PAINTER_ATTRIBUTE = "painter"
+        const val PATH_LOCATOR_KEY = "path"
     }
+}
+
+private fun String.extractLocatorDetail(key: String): String? {
+    val value = substringAfter("$key=", missingDelimiterValue = "")
+    if (value.isBlank()) return null
+
+    return value
+        .substringBefore(", ")
+        .removeSuffix("]")
+        .takeIf { detail -> detail.isNotBlank() }
 }

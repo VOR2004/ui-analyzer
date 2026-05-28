@@ -19,8 +19,16 @@ import java.awt.GraphicsEnvironment
 import java.awt.MouseInfo
 import java.awt.Point
 import java.awt.Rectangle
+import java.nio.file.Files
+import java.nio.file.StandardOpenOption
+import kotlin.io.path.createDirectories
+import kotlin.io.path.div
+import kotlin.io.path.pathString
 
-fun main() = application {
+fun main() {
+    installDesktopExceptionHandler()
+
+    application {
     FileKit.init(appId = DesktopAppText.APP_ID)
     val windowState = rememberWindowState(width = 1280.dp, height = 820.dp)
     var dragStartPointer: Point? = null
@@ -77,5 +85,30 @@ fun main() = application {
             },
             isMaximized = isMaximized
         )
+    }
+    }
+}
+
+private fun installDesktopExceptionHandler() {
+    Thread.setDefaultUncaughtExceptionHandler { thread, error ->
+        val logPath = System.getProperty("java.io.tmpdir")
+            .let { value -> java.nio.file.Path.of(value) / "ui-analyzer" }
+            .also { path -> path.createDirectories() } / "desktop-errors.log"
+        val message = buildString {
+            appendLine("Thread: ${thread.name}")
+            appendLine("${error::class.qualifiedName}: ${error.message}")
+            appendLine(error.stackTraceToString())
+            appendLine()
+        }
+
+        runCatching {
+            Files.writeString(
+                logPath,
+                message,
+                StandardOpenOption.CREATE,
+                StandardOpenOption.APPEND
+            )
+        }
+        System.err.println("UI Analyzer desktop error. Details: ${logPath.pathString}")
     }
 }

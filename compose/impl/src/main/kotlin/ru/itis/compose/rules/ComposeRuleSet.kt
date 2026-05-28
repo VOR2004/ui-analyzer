@@ -47,14 +47,19 @@ object ComposeRuleSet {
     }
 
     fun runtimeRules(expectedPackageName: String? = null): List<Rule> {
-        return listOf(
-            RuntimeScreenDensitySnapshotInfoRule(),
-            RuntimeSystemAppSnapshotWarningRule(expectedPackageName),
+        return runtimeDiagnosticRules(expectedPackageName) + listOf(
             ComposeRuntimeOverlappingClickableComponentsRule(),
             ComposeRuntimeOffscreenOrClippedComponentRule(),
             RuntimeDuplicateVisibleTextActionsRule(),
             RuntimeSmallTouchTargetRule(),
             RuntimeTextTruncationRiskRule()
+        )
+    }
+
+    fun runtimeDiagnosticRules(expectedPackageName: String? = null): List<Rule> {
+        return listOf(
+            RuntimeScreenDensitySnapshotInfoRule(),
+            RuntimeSystemAppSnapshotWarningRule(expectedPackageName)
         )
     }
 }
