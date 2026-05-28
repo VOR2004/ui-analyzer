@@ -200,16 +200,22 @@ class MarkdownReportGenerator : ReportGenerator {
         issue: AnalysisIssue,
         message: String
     ) {
-        if (issue.ruleId == COMPOSE_RUNTIME_OVERLAPPING_CLICKABLE_COMPONENTS_RULE_ID) {
-            appendRuntimeOverlapMessage(message)
-        } else if (issue.ruleId == RUNTIME_DUPLICATE_VISIBLE_TEXT_ACTIONS_RULE_ID) {
-            appendRuntimeDuplicateVisibleTextActionsMessage(message)
-        } else if (issue.ruleId == RUNTIME_SMALL_TOUCH_TARGET_RULE_ID) {
-            appendRuntimeSmallTouchTargetMessage(message)
-        } else if (issue.ruleId == RUNTIME_TEXT_TRUNCATION_RISK_RULE_ID) {
-            appendRuntimeTextTruncationRiskMessage(message)
-        } else {
-            appendLine("- Message: ${message.escapeMarkdown()}")
+        when (issue.ruleId) {
+            COMPOSE_RUNTIME_OVERLAPPING_CLICKABLE_COMPONENTS_RULE_ID -> {
+                appendRuntimeOverlapMessage(message)
+            }
+            RUNTIME_DUPLICATE_VISIBLE_TEXT_ACTIONS_RULE_ID -> {
+                appendRuntimeDuplicateVisibleTextActionsMessage(message)
+            }
+            RUNTIME_SMALL_TOUCH_TARGET_RULE_ID -> {
+                appendRuntimeSmallTouchTargetMessage(message)
+            }
+            RUNTIME_TEXT_TRUNCATION_RISK_RULE_ID -> {
+                appendRuntimeTextTruncationRiskMessage(message)
+            }
+            else -> {
+                appendLine("- Message: ${message.escapeMarkdown()}")
+            }
         }
     }
 
@@ -412,8 +418,7 @@ class MarkdownReportGenerator : ReportGenerator {
 
     private fun String.toRuntimeLocatorTree(): String {
         val type = substringBefore('[', missingDelimiterValue = this)
-        val path = extractLocatorDetail(PATH_LOCATOR_KEY)
-        if (path == null) return this
+        val path = extractLocatorDetail(PATH_LOCATOR_KEY) ?: return this
 
         val header = "$type:"
         val tree = path.split(PATH_SEPARATOR)
@@ -495,7 +500,6 @@ class MarkdownReportGenerator : ReportGenerator {
         val ANCHOR_DASH_SEQUENCE_PATTERN = Regex("-+")
         val OVERLAP_AREA_PATTERN = Regex("""overlapArea=([^.\s]+)""")
         val FIRST_NUMBER_PATTERN = Regex("""\b(\d+)\b""")
-        val DUPLICATE_ACTIONS_COUNT_PATTERN = Regex("""найдено\s+(\d+)""")
         val DUPLICATE_ACTIONS_LABEL_PATTERN = Regex(""""([^"]+)"""")
         val ID_PATTERN = Regex("""\bid=([^,\]]+)""")
         val BOUNDS_PATTERN = Regex("""bounds=\[([^]]+)]""")
