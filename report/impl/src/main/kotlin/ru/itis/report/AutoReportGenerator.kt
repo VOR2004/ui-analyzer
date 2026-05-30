@@ -2,6 +2,8 @@ package ru.itis.report
 
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.UiComponent
+import ru.itis.report.json.JsonReportGenerator
+import ru.itis.report.markdown.MarkdownReportGenerator
 import java.io.File
 
 class AutoReportGenerator(

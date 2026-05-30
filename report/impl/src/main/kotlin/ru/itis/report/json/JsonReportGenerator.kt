@@ -1,9 +1,11 @@
-package ru.itis.report
+package ru.itis.report.json
 
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import ru.itis.model.AnalysisIssue
 import ru.itis.model.UiComponent
+import ru.itis.report.AnalysisReportBuilder
+import ru.itis.report.ReportGenerator
 import java.io.File
 
 class JsonReportGenerator : ReportGenerator {
@@ -24,4 +26,3 @@ class JsonReportGenerator : ReportGenerator {
         outputFile.writeText(json.encodeToString(report))
     }
 }
-

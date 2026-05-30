@@ -3,16 +3,13 @@ package ru.itis.compose.source.psi
 import java.io.File
 import ru.itis.analyzer.config.components.ComponentTypes
 import ru.itis.analyzer.utils.SourceTextUtils
-import ru.itis.compose.source.legacy.parser.ComposeLayoutParser
 import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 import ru.itis.model.UiProperties
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
-class ComposePsiLayoutParser(
-    private val fallbackParser: ComposeLayoutParser = ComposeLayoutParser()
-) {
+class ComposePsiLayoutParser {
     private val callExtractor = ComposePsiCallExtractor()
     private val argumentExtractor = ComposePsiArgumentExtractor()
     private val localValueResolver = ComposePsiLocalValueResolver()
@@ -43,9 +40,7 @@ class ComposePsiLayoutParser(
                     )
                 }
             }
-        }.getOrElse {
-            fallbackParser.parse(file)
-        }
+        }.getOrDefault(emptyList())
     }
 
     private fun buildComponent(
