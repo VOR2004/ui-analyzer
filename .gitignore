@@ -48,7 +48,3 @@ bin/
 ### UI analyzer local outputs ###
 analysis-report*.json
 runtime-snapshot*.json
-
-### Local research/source artifacts ###
-report_source.pdf
-report_source.txt
