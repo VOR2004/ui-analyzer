@@ -11,8 +11,8 @@ dependencies {
     implementation(project(":xml:xml-api"))
     implementation(project(":xml:xml-impl"))
     implementation(kotlin("stdlib"))
-    implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:2.3.20")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+    implementation(libs.kotlin.compiler.embeddable)
+    implementation(libs.kotlinx.serialization.json)
 }
 
 kotlin {

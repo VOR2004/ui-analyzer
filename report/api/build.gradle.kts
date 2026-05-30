@@ -6,7 +6,7 @@ plugins {
 dependencies {
     implementation(project(":core:core-api"))
     implementation(kotlin("stdlib"))
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.7.3")
+    implementation(libs.kotlinx.serialization.core)
 }
 
 kotlin {

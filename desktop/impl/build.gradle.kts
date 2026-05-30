@@ -5,19 +5,20 @@ plugins {
     application
 }
 
-fun unsafeAccessJvmArgs(): List<String> {
-    return if (JavaVersion.current().majorVersion.toInt() >= 24) {
-        listOf("--sun-misc-unsafe-memory-access=allow")
-    } else {
-        emptyList()
-    }
+val java24Launcher = javaToolchains.launcherFor {
+    languageVersion.set(JavaLanguageVersion.of(24))
 }
+
+val desktopJvmArgs = listOf(
+    "--sun-misc-unsafe-memory-access=allow",
+    "--enable-native-access=ALL-UNNAMED"
+)
 
 dependencies {
     implementation(project(":desktop:desktop-api"))
     implementation(compose.desktop.currentOs)
-    implementation("org.jetbrains.compose.material3:material3:1.9.0-beta03")
-    implementation("io.github.vinceglb:filekit-dialogs-compose:0.14.1")
+    implementation(libs.compose.material3)
+    implementation(libs.filekit.dialogs.compose)
     implementation(project(":core:core-api"))
     implementation(project(":core:core-utils"))
     implementation(project(":analyzer:analyzer-api"))
@@ -39,9 +40,11 @@ kotlin {
 
 application {
     mainClass.set("ru.itis.desktop.DesktopMainKt")
-    applicationDefaultJvmArgs = unsafeAccessJvmArgs()
+    applicationDefaultJvmArgs = desktopJvmArgs
 }
 
 tasks.named<JavaExec>("run") {
+    javaLauncher.set(java24Launcher)
     workingDir = rootProject.projectDir
+    jvmArgs(desktopJvmArgs)
 }

@@ -3,13 +3,11 @@ plugins {
     application
 }
 
-fun unsafeAccessJvmArgs(): List<String> {
-    return if (JavaVersion.current().majorVersion.toInt() >= 24) {
-        listOf("--sun-misc-unsafe-memory-access=allow")
-    } else {
-        emptyList()
-    }
+val java24Launcher = javaToolchains.launcherFor {
+    languageVersion.set(JavaLanguageVersion.of(24))
 }
+
+val unsafeAccessJvmArgs = listOf("--sun-misc-unsafe-memory-access=allow")
 
 dependencies {
     implementation(project(":core:core-api"))
@@ -34,14 +32,17 @@ kotlin {
 
 application {
     mainClass.set("ru.itis.MainKt")
-    applicationDefaultJvmArgs = unsafeAccessJvmArgs()
+    applicationDefaultJvmArgs = unsafeAccessJvmArgs
 }
 
 tasks.named<JavaExec>("run") {
+    javaLauncher.set(java24Launcher)
     workingDir = rootProject.projectDir
+    jvmArgs(unsafeAccessJvmArgs)
 }
 
 tasks.test {
+    javaLauncher.set(java24Launcher)
     useJUnitPlatform()
-    jvmArgs(unsafeAccessJvmArgs())
+    jvmArgs(unsafeAccessJvmArgs)
 }
