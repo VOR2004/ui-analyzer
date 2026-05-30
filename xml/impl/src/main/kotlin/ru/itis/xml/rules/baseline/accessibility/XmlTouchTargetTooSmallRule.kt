@@ -1,4 +1,4 @@
-package ru.itis.xml.rules.static.accessibility
+package ru.itis.xml.rules.baseline.accessibility
 import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
 import ru.itis.analyzer.messages.rules.RuleIds
 

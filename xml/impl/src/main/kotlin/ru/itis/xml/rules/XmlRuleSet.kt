@@ -8,19 +8,19 @@ import ru.itis.xml.rules.adaptive.text.XmlAdaptiveTextSizeOutlierRule
 import ru.itis.xml.rules.adaptive.text.XmlAdaptiveTextStyleOutlierRule
 import ru.itis.xml.rules.adaptive.text.XmlTextSizeNearDuplicateClusterRule
 import ru.itis.xml.rules.adaptive.text.XmlTooManyTextStylesOnScreenRule
-import ru.itis.xml.rules.static.accessibility.XmlTouchTargetTooSmallRule
-import ru.itis.xml.rules.static.color.XmlButtonColorPerLayoutConsistencyRule
-import ru.itis.xml.rules.static.color.XmlButtonColorProjectConsistencyRule
-import ru.itis.xml.rules.static.color.XmlHardcodedColorRule
-import ru.itis.xml.rules.static.color.XmlNearDuplicateButtonColorRule
-import ru.itis.xml.rules.static.common.XmlHardcodedDimensionRule
-import ru.itis.xml.rules.static.common.XmlMissingIdRule
-import ru.itis.xml.rules.static.image.XmlImageWithoutContentDescriptionRule
-import ru.itis.xml.rules.static.structure.XmlDeepLayoutNestingRule
-import ru.itis.xml.rules.static.text.XmlHardcodedTextRule
-import ru.itis.xml.rules.static.text.XmlSuspiciousTextSizeRule
-import ru.itis.xml.rules.static.text.XmlTextContrastRule
-import ru.itis.xml.rules.static.text.XmlTextSizeConsistencyRule
+import ru.itis.xml.rules.baseline.accessibility.XmlTouchTargetTooSmallRule
+import ru.itis.xml.rules.baseline.color.XmlButtonColorPerLayoutConsistencyRule
+import ru.itis.xml.rules.baseline.color.XmlButtonColorProjectConsistencyRule
+import ru.itis.xml.rules.baseline.color.XmlHardcodedColorRule
+import ru.itis.xml.rules.baseline.color.XmlNearDuplicateButtonColorRule
+import ru.itis.xml.rules.baseline.common.XmlHardcodedDimensionRule
+import ru.itis.xml.rules.baseline.common.XmlMissingIdRule
+import ru.itis.xml.rules.baseline.image.XmlImageWithoutContentDescriptionRule
+import ru.itis.xml.rules.baseline.structure.XmlDeepLayoutNestingRule
+import ru.itis.xml.rules.baseline.text.XmlHardcodedTextRule
+import ru.itis.xml.rules.baseline.text.XmlSuspiciousTextSizeRule
+import ru.itis.xml.rules.baseline.text.XmlTextContrastRule
+import ru.itis.xml.rules.baseline.text.XmlTextSizeConsistencyRule
 import ru.itis.xml.source.resource.ResourceRepository
 
 object XmlRuleSet {

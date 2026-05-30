@@ -10,7 +10,7 @@ import ru.itis.xml.rules.adaptive.layout.XmlAdaptiveSpacingOutlierRule
 import ru.itis.xml.rules.adaptive.text.XmlAdaptiveTextSizeOutlierRule
 import ru.itis.xml.rules.adaptive.text.XmlAdaptiveTextStyleOutlierRule
 import ru.itis.xml.rules.adaptive.text.XmlTooManyTextStylesOnScreenRule
-import ru.itis.xml.rules.static.accessibility.XmlTouchTargetTooSmallRule
+import ru.itis.xml.rules.baseline.accessibility.XmlTouchTargetTooSmallRule
 import ru.itis.xml.source.importer.XmlProjectImporter
 import ru.itis.xml.source.parser.XmlLayoutParser
 import ru.itis.xml.source.resource.DefaultResourceRepository

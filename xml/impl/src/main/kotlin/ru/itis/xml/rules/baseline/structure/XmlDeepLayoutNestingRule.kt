@@ -1,4 +1,4 @@
-package ru.itis.xml.rules.static.structure
+package ru.itis.xml.rules.baseline.structure
 import ru.itis.analyzer.messages.analyzer.AnalyzerMessages
 import ru.itis.analyzer.messages.rules.RuleIds
 

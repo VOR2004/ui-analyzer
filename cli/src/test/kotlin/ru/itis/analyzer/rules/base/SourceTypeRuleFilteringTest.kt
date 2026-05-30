@@ -4,10 +4,10 @@ import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import ru.itis.analyzer.config.components.ComponentTypes
-import ru.itis.xml.rules.static.accessibility.XmlTouchTargetTooSmallRule
-import ru.itis.xml.rules.static.color.XmlHardcodedColorRule
-import ru.itis.xml.rules.static.common.XmlHardcodedDimensionRule
-import ru.itis.xml.rules.static.text.XmlTextSizeConsistencyRule
+import ru.itis.xml.rules.baseline.accessibility.XmlTouchTargetTooSmallRule
+import ru.itis.xml.rules.baseline.color.XmlHardcodedColorRule
+import ru.itis.xml.rules.baseline.common.XmlHardcodedDimensionRule
+import ru.itis.xml.rules.baseline.text.XmlTextSizeConsistencyRule
 import ru.itis.model.SourceType
 import ru.itis.model.UiComponent
 import ru.itis.model.UiProperties

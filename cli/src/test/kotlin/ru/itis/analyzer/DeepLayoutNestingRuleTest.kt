@@ -4,7 +4,7 @@ import ru.itis.analyzer.messages.rules.RuleIds
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertTrue
-import ru.itis.xml.rules.static.structure.XmlDeepLayoutNestingRule
+import ru.itis.xml.rules.baseline.structure.XmlDeepLayoutNestingRule
 import ru.itis.xml.source.parser.XmlLayoutParser
 
 class XmlDeepLayoutNestingRuleTest {

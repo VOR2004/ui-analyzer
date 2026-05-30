@@ -6,11 +6,11 @@ import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import ru.itis.analyzer.rules.base.Rule
-import ru.itis.xml.rules.static.accessibility.XmlTouchTargetTooSmallRule
-import ru.itis.xml.rules.static.color.XmlNearDuplicateButtonColorRule
-import ru.itis.xml.rules.static.text.XmlHardcodedTextRule
-import ru.itis.xml.rules.static.text.XmlSuspiciousTextSizeRule
-import ru.itis.xml.rules.static.text.XmlTextContrastRule
+import ru.itis.xml.rules.baseline.accessibility.XmlTouchTargetTooSmallRule
+import ru.itis.xml.rules.baseline.color.XmlNearDuplicateButtonColorRule
+import ru.itis.xml.rules.baseline.text.XmlHardcodedTextRule
+import ru.itis.xml.rules.baseline.text.XmlSuspiciousTextSizeRule
+import ru.itis.xml.rules.baseline.text.XmlTextContrastRule
 import ru.itis.xml.source.parser.XmlLayoutParser
 import ru.itis.xml.source.resource.DefaultResourceRepository
 
