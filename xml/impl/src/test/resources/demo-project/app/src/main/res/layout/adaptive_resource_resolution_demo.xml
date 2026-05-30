@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="?attr/adaptiveCommonSpacing">
+
+    <TextView
+        android:id="@+id/adaptive_resource_body_one"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="?attr/adaptiveCommonSpacing"
+        android:padding="@dimen/adaptive_common_spacing"
+        android:text="@string/adaptive_body_text_one"
+        android:textSize="?attr/adaptiveBodyText"
+        android:textStyle="normal"
+        android:fontFamily="sans-serif" />
+
+    <TextView
+        android:id="@+id/adaptive_resource_body_two"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/adaptive_common_spacing"
+        android:padding="?attr/adaptiveCommonSpacing"
+        android:text="@string/adaptive_body_text_two"
+        android:textSize="@dimen/adaptive_body_text"
+        android:textStyle="normal"
+        android:fontFamily="sans-serif" />
+
+    <TextView
+        android:id="@+id/adaptive_resource_spacing_outlier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="?attr/adaptiveOutlierSpacing"
+        android:padding="@dimen/adaptive_outlier_spacing"
+        android:text="@string/adaptive_body_text_three"
+        android:textSize="@dimen/adaptive_body_text"
+        android:textStyle="normal"
+        android:fontFamily="sans-serif" />
+
+    <TextView
+        android:id="@+id/adaptive_resource_text_size_outlier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/adaptive_body_text_three"
+        android:textSize="?attr/adaptiveOutlierText"
+        android:textStyle="normal"
+        android:fontFamily="sans-serif" />
+
+    <TextView
+        android:id="@+id/adaptive_resource_text_style_outlier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/adaptive_body_text_three"
+        android:textSize="@dimen/adaptive_body_text"
+        android:textStyle="italic"
+        android:fontFamily="serif" />
+
+    <Button
+        android:id="@+id/adaptive_resource_button_one"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="?attr/adaptiveButtonPadding"
+        android:backgroundTint="?attr/adaptiveButtonPrimary"
+        android:text="@string/adaptive_button_primary_one"
+        android:textColor="?attr/adaptiveButtonText"
+        android:textSize="@dimen/adaptive_body_text" />
+
+    <Button
+        android:id="@+id/adaptive_resource_button_two"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/adaptive_button_padding"
+        android:backgroundTint="@color/adaptive_button_primary"
+        android:text="@string/adaptive_button_primary_two"
+        android:textColor="@color/adaptive_button_text"
+        android:textSize="?attr/adaptiveBodyText" />
+
+    <Button
+        android:id="@+id/adaptive_resource_button_outlier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="?attr/adaptiveButtonPaddingOutlier"
+        android:backgroundTint="?attr/adaptiveButtonOutlier"
+        android:text="@string/adaptive_button_outlier_text"
+        android:textColor="?attr/adaptiveButtonTextOutlier"
+        android:textSize="?attr/adaptiveOutlierText" />
+</LinearLayout>

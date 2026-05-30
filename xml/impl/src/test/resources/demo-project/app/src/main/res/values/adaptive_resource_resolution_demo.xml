@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="adaptive_button_primary">#3366FF</color>
+    <color name="adaptive_button_outlier">#FF8800</color>
+    <color name="adaptive_button_text">#FFFFFF</color>
+    <color name="adaptive_button_text_outlier">#000000</color>
+
+    <dimen name="adaptive_common_spacing">16dp</dimen>
+    <dimen name="adaptive_outlier_spacing">29dp</dimen>
+    <dimen name="adaptive_body_text">16sp</dimen>
+    <dimen name="adaptive_outlier_text">23sp</dimen>
+    <dimen name="adaptive_button_padding">16dp</dimen>
+    <dimen name="adaptive_button_padding_outlier">8dp</dimen>
+
+    <string name="adaptive_body_text_one">This is a regular body text.</string>
+    <string name="adaptive_body_text_two">This is another regular body text.</string>
+    <string name="adaptive_body_text_three">This body text intentionally differs.</string>
+    <string name="adaptive_button_primary_one">Continue</string>
+    <string name="adaptive_button_primary_two">Next</string>
+    <string name="adaptive_button_outlier_text">Skip</string>
+
+    <style name="Theme.AdaptiveResourceResolution">
+        <item name="adaptiveCommonSpacing">@dimen/adaptive_common_spacing</item>
+        <item name="adaptiveOutlierSpacing">@dimen/adaptive_outlier_spacing</item>
+        <item name="adaptiveBodyText">@dimen/adaptive_body_text</item>
+        <item name="adaptiveOutlierText">@dimen/adaptive_outlier_text</item>
+        <item name="adaptiveButtonPrimary">@color/adaptive_button_primary</item>
+        <item name="adaptiveButtonOutlier">@color/adaptive_button_outlier</item>
+        <item name="adaptiveButtonText">@color/adaptive_button_text</item>
+        <item name="adaptiveButtonTextOutlier">@color/adaptive_button_text_outlier</item>
+        <item name="adaptiveButtonPadding">@dimen/adaptive_button_padding</item>
+        <item name="adaptiveButtonPaddingOutlier">@dimen/adaptive_button_padding_outlier</item>
+    </style>
+</resources>

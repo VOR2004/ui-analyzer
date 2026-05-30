@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="?attr/ruleScreenBackground"
+    android:padding="16dp">
+
+    <Button
+        android:id="@+id/resource_tiny_button"
+        android:layout_width="?attr/ruleTinyTouchWidth"
+        android:layout_height="?attr/ruleTinyTouchHeight"
+        android:backgroundTint="?attr/ruleButtonBlue"
+        android:text="@string/rule_resource_text"
+        android:textColor="#FFFFFF" />
+
+    <TextView
+        android:id="@+id/resource_tiny_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/rule_resource_text"
+        android:textSize="?attr/ruleTinyTextSize" />
+
+    <TextView
+        android:id="@+id/resource_low_contrast_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/rule_resource_text"
+        android:textColor="?attr/ruleLowContrastText"
+        android:textSize="@dimen/rule_normal_text_size" />
+
+    <TextView
+        android:id="@+id/resource_safe_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/rule_resource_text"
+        android:textSize="@dimen/rule_normal_text_size" />
+
+    <TextView
+        android:id="@+id/raw_hardcoded_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hardcoded visible text"
+        android:textSize="@dimen/rule_normal_text_size" />
+
+    <Button
+        android:id="@+id/resource_button_one"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/rule_button_blue"
+        android:text="@string/rule_resource_text" />
+
+    <Button
+        android:id="@+id/resource_button_two"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/rule_button_almost_blue"
+        android:text="@string/rule_resource_text" />
+</LinearLayout>

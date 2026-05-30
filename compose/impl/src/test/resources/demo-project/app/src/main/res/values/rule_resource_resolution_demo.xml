@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="rule_background">#FFFFFF</color>
+    <color name="rule_low_contrast_text">#EEEEEE</color>
+    <color name="rule_button_blue">#3366FF</color>
+    <color name="rule_button_almost_blue">#3367FF</color>
+
+    <dimen name="rule_tiny_touch_width">32dp</dimen>
+    <dimen name="rule_tiny_touch_height">36dp</dimen>
+    <dimen name="rule_tiny_text_size">7sp</dimen>
+    <dimen name="rule_normal_text_size">16sp</dimen>
+
+    <string name="rule_resource_text">Text from string resource</string>
+
+    <style name="Theme.RuleResourceResolution">
+        <item name="ruleScreenBackground">@color/rule_background</item>
+        <item name="ruleLowContrastText">@color/rule_low_contrast_text</item>
+        <item name="ruleTinyTouchWidth">@dimen/rule_tiny_touch_width</item>
+        <item name="ruleTinyTouchHeight">@dimen/rule_tiny_touch_height</item>
+        <item name="ruleTinyTextSize">@dimen/rule_tiny_text_size</item>
+        <item name="ruleButtonBlue">@color/rule_button_blue</item>
+    </style>
+</resources>

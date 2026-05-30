@@ -13,8 +13,13 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation(libs.kotlin.compiler.embeddable)
     implementation(libs.kotlinx.serialization.json)
+    testImplementation(kotlin("test"))
 }
 
 kotlin {
     jvmToolchain(24)
+}
+
+tasks.test {
+    useJUnitPlatform()
 }

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="demo_primary">#3366FF</color>
+    <color name="demo_on_primary">#FFFFFF</color>
+
+    <dimen name="demo_button_height">48dp</dimen>
+    <dimen name="demo_body_text_size">16sp</dimen>
+
+    <string name="demo_action_continue">Continue</string>
+
+    <style name="Theme.Demo">
+        <item name="colorPrimary">@color/demo_primary</item>
+        <item name="colorOnPrimary">@color/demo_on_primary</item>
+        <item name="android:textColorPrimary">@color/demo_on_primary</item>
+        <item name="buttonHeight">@dimen/demo_button_height</item>
+        <item name="bodyTextSize">@dimen/demo_body_text_size</item>
+        <item name="buttonStyle">@style/Widget.Demo.Button</item>
+    </style>
+
+    <style name="Widget.Demo.Button">
+        <item name="android:minHeight">@dimen/demo_button_height</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+    </style>
+
+    <color name="manifest_demo_primary">#123456</color>
+
+    <style name="Theme.ManifestDemo">
+        <item name="manifestOnlyColor">@color/manifest_demo_primary</item>
+    </style>
+</resources>
