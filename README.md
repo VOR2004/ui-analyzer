@@ -119,4 +119,4 @@ Build everything:
 
 - Runtime analysis checks the package name captured in the snapshot against the Android project package. If they do not match, only diagnostic runtime rules run.
 - For ADB runtime analysis, open the target app on the emulator/device before running the command.
-- All text written in English so you have to KNOW IT TO READ THESE README FILE XDDDDD KKKKK XPPPP
+- All text written in English so you have to KNOW IT TO READ THIS README FILE XDDDDD KKKKK XPPPP
